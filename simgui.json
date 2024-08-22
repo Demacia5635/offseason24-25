@@ -1,0 +1,44 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Module Test/Set Module Entry": "Command",
+      "/SmartDashboard/BackLeft Steer Sysid": "Command",
+      "/SmartDashboard/BackRight Steer Sysid": "Command",
+      "/SmartDashboard/Chassis": "Command",
+      "/SmartDashboard/Chassis Move Sysid": "Command",
+      "/SmartDashboard/Chassis Move Sysid2": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/FrontLeft Steer Sysid": "Command",
+      "/SmartDashboard/FrontRight Steer Sysid": "Command",
+      "/SmartDashboard/Set Modules Angle": "Command",
+      "/SmartDashboard/Test Steer Velocity": "Command",
+      "/SmartDashboard/Traj": "Field2d",
+      "/SmartDashboard/go to 0": "Command",
+      "/SmartDashboard/go to angle position": "Command",
+      "/SmartDashboard/reset pose": "Command",
+      "/SmartDashboard/reset wheels": "Command",
+      "/SmartDashboard/set brake": "Command",
+      "/SmartDashboard/set coast": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  },
+  "NetworkTables View": {
+    "visible": false
+  }
+}
