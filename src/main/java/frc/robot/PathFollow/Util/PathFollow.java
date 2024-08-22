@@ -1,4 +1,4 @@
-package frc.robot.commands.chassis.Paths;
+package frc.robot.PathFollow.Util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,10 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc.robot.RobotContainer;
-import frc.robot.PathFollow.Util.Leg;
-import frc.robot.PathFollow.Util.RoundedPoint;
-import frc.robot.PathFollow.Util.Segment;
-import frc.robot.PathFollow.Util.pathPoint;
 import frc.robot.subsystems.chassis.*;
 import frc.robot.utils.TrapezoidNoam;
 
