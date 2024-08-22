@@ -1,33 +1,89 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
-
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
-public class RobotContainer {
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.chassis.DriveCommand;
+import frc.robot.subsystems.chassis.Chassis;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+public class RobotContainer implements Sendable {
+  public static RobotContainer robotContainer;
+  private Boolean isRed = true;
+  CommandXboxController commandController;
+  public CommandXboxController commandController2;
+  public Joystick gitar;
+
+
+  public Chassis chassis;
+
+
+  public Command shoot; // shoot to amp or to speaker
+  public Command driveToNote;
+  public Command manualIntake;
+  public Command activateAmp;
+  public Command disableCommand;
+  public Command resetOdometry;
+  public Command activatePodium;
+  public Command activateShooter;
+  public Command activateSubwoofer;
+  
+
+  
+
   public RobotContainer() {
+    robotContainer = this;
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
+    chassis = new Chassis();
+    
+    commandController2 = new CommandXboxController(1);
+    commandController = new CommandXboxController(0);
+    chassis.setDefaultCommand(new DriveCommand(chassis, commandController));
+
+      createCommands();
+    
+    SmartDashboard.putData("RobotContainer", this);
     configureBindings();
   }
 
-  private void configureBindings() {
 
+  public void createCommands() {
+    SmartDashboard.putNumber("VEL CALIBRATE", 0);
+
+    SmartDashboard.putNumber("ANGLE CALIBRATE", 0);
+
+
+
+
+    resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward()).ignoringDisable(true);
+
+}
+
+  public void isRed(boolean isRed) {
+    this.isRed = isRed;
+  }
+  public boolean isRed() {
+    return isRed;
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addBooleanProperty("is Red",this::isRed, this::isRed);
+  }
+
+
+  private void configureBindings() {
+  
+}
+
+   
   public Command getAutonomousCommand() {
     return null;
   }
