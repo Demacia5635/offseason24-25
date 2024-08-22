@@ -1,6 +1,5 @@
 package frc.robot.subsystems.chassis;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,8 +9,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,17 +16,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.PathFollow.Util.PathFollow;
 import frc.robot.PathFollow.Util.pathPoint;
 import frc.robot.Sysid.Sysid;
 import frc.robot.Sysid.Sysid.Gains;
-import frc.robot.commands.chassis.Paths.PathFollow;
 import frc.robot.commands.chassis.tests.DriveStraightLine;
 import frc.robot.subsystems.chassis.utils.SwerveKinematics;
-import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.subsystems.vision.utils.LimelightVisionUtils;
 import frc.robot.subsystems.vision.utils.UpdatedPoseEstimatorClasses.SwerveDrivePoseEstimator;
-import frc.robot.utils.Trapezoid;
 import frc.robot.utils.Utils;
 import static frc.robot.subsystems.chassis.ChassisConstants.*;
 
@@ -43,9 +37,6 @@ import com.ctre.phoenix.sensors.Pigeon2;
 public class Chassis extends SubsystemBase {
   private final SwerveModule[] modules;
   private final Pigeon2 gyro;
-  private Trapezoid rotationTrapezoid = new Trapezoid(Math.toRadians(300), Math.toRadians(500));
-  private Trapezoid rotationTrapezoidSpeaker = new Trapezoid(Math.toRadians(720), Math.toRadians(720));
-
   private double speakerAngleError;
   private PIDController angleSpeakerPID = new PIDController(0.05,0.0, 0.002);
   
