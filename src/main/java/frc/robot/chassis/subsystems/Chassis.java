@@ -1,5 +1,9 @@
-package frc.robot.subsystems.chassis;
+package frc.robot.chassis.subsystems;
 
+
+import java.util.Arrays;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,14 +22,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Sysid.Sysid;
 import frc.robot.Sysid.Sysid.Gains;
-import frc.robot.subsystems.chassis.utils.SwerveKinematics;
-
+import static frc.robot.chassis.ChassisConstants.BACK_LEFT;
+import static frc.robot.chassis.ChassisConstants.BACK_RIGHT;
+import static frc.robot.chassis.ChassisConstants.FRONT_LEFT;
+import static frc.robot.chassis.ChassisConstants.FRONT_RIGHT;
+import static frc.robot.chassis.ChassisConstants.GYRO_ID;
+import static frc.robot.chassis.ChassisConstants.KINEMATICS;
+import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.Utils;
-import static frc.robot.subsystems.chassis.ChassisConstants.*;
-
-import java.util.Arrays;
-
-import com.ctre.phoenix6.hardware.Pigeon2;
 
 
 

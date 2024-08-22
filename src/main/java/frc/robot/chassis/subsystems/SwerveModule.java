@@ -1,4 +1,4 @@
-package frc.robot.subsystems.chassis;
+package frc.robot.chassis.subsystems;
 
 
 import edu.wpi.first.math.MathUtil;
@@ -9,12 +9,12 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Sysid.FeedForward_SVA;
-import frc.robot.subsystems.chassis.ChassisConstants.SwerveModuleConstants;
+import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.TalonConfig;
 import frc.robot.utils.TalonMotor;
 import frc.robot.utils.Trapezoid;
 import frc.robot.utils.Utils;
-import static frc.robot.subsystems.chassis.ChassisConstants.*;
+import static frc.robot.chassis.ChassisConstants.*;
 
 
 import com.ctre.phoenix6.hardware.CANcoder;

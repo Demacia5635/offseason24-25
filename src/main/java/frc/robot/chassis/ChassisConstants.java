@@ -1,9 +1,9 @@
-package frc.robot.subsystems.chassis;
+package frc.robot.chassis;
 
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import frc.robot.subsystems.chassis.utils.SwerveKinematics;
+import frc.robot.chassis.utils.SwerveKinematics;
 
 public final class ChassisConstants {
 
