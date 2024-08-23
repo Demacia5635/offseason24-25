@@ -23,6 +23,8 @@ public class NewAutoIntake extends Command {
   double angle;
   double fieldRelativeAngle;
 
+  double DISTANCE_OFFSET = 0.1; //in meters
+
   double[] llpython;
   double distance;
   NetworkTableEntry llentry;
@@ -40,10 +42,6 @@ public class NewAutoIntake extends Command {
     distance = 0;
   }
 
-  private double calcTimeToRotate(double angle) {
-    angle = Math.toRadians(angle);
-    return 2 * (Math.sqrt(Math.abs(angle) / MAX_OMEGA_VELOCITY));
-  }
 
 
 
@@ -54,18 +52,20 @@ public class NewAutoIntake extends Command {
       lastCounter = (long)llpython[2];
       distance = llpython[0];
       angle = llpython[1] - chassis.getGyroRate() * 0.05;
-      fieldRelativeAngle = angle + chassis.getAngle().getDegrees();
 
-      distance = distance / METER_IN_CM;
-      notePos = chassis.getPose().getTranslation().plus(new Translation2d(distance, fieldRelativeAngle));
-      double curVx = chassis.getChassisSpeeds().vxMetersPerSecond;
-      double yLength = notePos.getY() - chassis.getPoseY();
-      ChassisSpeeds speeds = new ChassisSpeeds(curVx, yLength + 0.02 , MAX_OMEGA_VELOCITY);
-      chassis.setVelocitiesRotateToAngle(speeds, null);
+      notePos = chassis.getPose().getTranslation().plus(new Translation2d(distance, angle + chassis.getAngle().getDegrees()));
+      double verticalDistance = notePos.getX() - chassis.getPoseX();
+      double horizontalDistance = notePos.getY() - chassis.getPoseY();
+      double vY = getTimeToNote(verticalDistance) * horizontalDistance;
+      chassis.setVelocities(new ChassisSpeeds(chassis.getChassisSpeeds().vxMetersPerSecond, vY, 0));
 
 
 
     }
+  }
+
+  private double getTimeToNote(double distance){
+    return (distance - 0.1) / chassis.getVelocity().getNorm();
   }
 
   
