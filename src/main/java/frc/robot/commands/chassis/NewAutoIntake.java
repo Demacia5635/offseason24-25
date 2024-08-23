@@ -4,13 +4,24 @@
 
 package frc.robot.commands.chassis;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.chassis.Chassis;
+import frc.robot.Constants.ChassisConstants;
+import static frc.robot.subsystems.chassis.ChassisConstants.MAX_OMEGA_ACCELERATION;
+import static frc.robot.subsystems.chassis.ChassisConstants.MAX_OMEGA_VELOCITY;
+import static frc.robot.subsystems.chassis.ChassisConstants.METER_IN_CM;
 
 public class NewAutoIntake extends Command {
   Chassis chassis;
   double velocity;
   double maxVelocity;
   double lastDistance;
+  double angle;
+  double fieldRelativeAngle;
 
   double[] llpython;
   double distance;
@@ -31,8 +42,9 @@ public class NewAutoIntake extends Command {
 
   private double calcTimeToRotate(double angle) {
     angle = Math.toRadians(angle);
-    return 2 * (Math.sqrt(Math.abs(angle) / MAX_OMEGA_ACCELERATION));
+    return 2 * (Math.sqrt(Math.abs(angle) / MAX_OMEGA_VELOCITY));
   }
+
 
 
   @Override
@@ -43,7 +55,15 @@ public class NewAutoIntake extends Command {
       distance = llpython[0];
       angle = llpython[1] - chassis.getGyroRate() * 0.05;
       fieldRelativeAngle = angle + chassis.getAngle().getDegrees();
-      notePos = new Translation2d(chassis.getPose().getTranslation().plus(new Translation2d(distance, fieldRelativeAngle)));
+
+      distance = distance / METER_IN_CM;
+      notePos = chassis.getPose().getTranslation().plus(new Translation2d(distance, fieldRelativeAngle));
+      double curVx = chassis.getChassisSpeeds().vxMetersPerSecond;
+      double yLength = notePos.getY() - chassis.getPoseY();
+      ChassisSpeeds speeds = new ChassisSpeeds(curVx, yLength + 0.02 , MAX_OMEGA_VELOCITY);
+      chassis.setVelocitiesRotateToAngle(speeds, null);
+
+
 
     }
   }
