@@ -4,15 +4,19 @@
 
 package frc.robot.commands.chassis;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.chassis.Chassis;
 import frc.robot.Constants.ChassisConstants;
 import static frc.robot.subsystems.chassis.ChassisConstants.MAX_OMEGA_ACCELERATION;
 import static frc.robot.subsystems.chassis.ChassisConstants.MAX_OMEGA_VELOCITY;
+import static frc.robot.subsystems.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 import static frc.robot.subsystems.chassis.ChassisConstants.METER_IN_CM;
 
 public class NewAutoIntake extends Command {
@@ -24,14 +28,18 @@ public class NewAutoIntake extends Command {
   double fieldRelativeAngle;
 
   double DISTANCE_OFFSET = 0.1; //in meters
+  double SPEED_OFFSET_WHEN_MAX = -1;
 
   double[] llpython;
   double distance;
   NetworkTableEntry llentry;
   long lastCounter;
   Translation2d notePos;
-  public NewAutoIntake(Chassis chassis) {
+  CommandXboxController controller;
+  PIDController pid = new PIDController(0, 0, 0);
+  public NewAutoIntake(Chassis chassis, CommandXboxController controller) {
     this.chassis = chassis;
+    this.controller = controller;
   }
 
   
@@ -52,21 +60,40 @@ public class NewAutoIntake extends Command {
       lastCounter = (long)llpython[2];
       distance = llpython[0];
       angle = llpython[1] - chassis.getGyroRate() * 0.05;
+      fieldRelativeAngle = angle + chassis.getAngle().getDegrees();
 
-      notePos = chassis.getPose().getTranslation().plus(new Translation2d(distance, angle + chassis.getAngle().getDegrees()));
-      double verticalDistance = notePos.getX() - chassis.getPoseX();
-      double horizontalDistance = notePos.getY() - chassis.getPoseY();
-      double vY = getTimeToNote(verticalDistance) * horizontalDistance;
-      chassis.setVelocities(new ChassisSpeeds(chassis.getChassisSpeeds().vxMetersPerSecond, vY, 0));
+      ChassisSpeeds speeds;
+      if(Math.abs(chassis.getAngle().getDegrees()) >= 45 && Math.abs(chassis.getAngle().getDegrees()) <= 135){
+        speeds = new ChassisSpeeds(calcAligmentVel(), calcDriveVel(), 0);
+      }
+      else{
+        speeds = new ChassisSpeeds(calcDriveVel(), calcAligmentVel(), 0);
+      }
+      
+      chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(fieldRelativeAngle));
+      
+      
 
 
 
     }
   }
 
-  private double getTimeToNote(double distance){
-    return (distance - 0.1) / chassis.getVelocity().getNorm();
+  private double calcAligmentVel(){
+    return 0;
   }
+  private Translation2d getStickVector(){
+    return new Translation2d(controller.getLeftX(), controller.getLeftY());
+  } 
+  private double calcDriveVel(){
+    
+    double angle = fieldRelativeAngle;
+    double highBound = angle + 90;
+    double lowBound = angle - 90;
+    return getStickVector().getNorm() * MAX_DRIVE_VELOCITY *
+    angle > lowBound && angle < highBound ? 1 : -1;
+  }
+
 
   
   @Override
