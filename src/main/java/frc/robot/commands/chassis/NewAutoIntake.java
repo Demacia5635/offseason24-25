@@ -36,7 +36,7 @@ public class NewAutoIntake extends Command {
   long lastCounter;
   Translation2d notePos;
   CommandXboxController controller;
-  PIDController pid = new PIDController(0, 0, 0);
+  PIDController pid = new PIDController(1, 0, 0);
   public NewAutoIntake(Chassis chassis, CommandXboxController controller) {
     this.chassis = chassis;
     this.controller = controller;
@@ -63,13 +63,12 @@ public class NewAutoIntake extends Command {
       fieldRelativeAngle = angle + chassis.getAngle().getDegrees();
 
       ChassisSpeeds speeds;
-      if(Math.abs(chassis.getAngle().getDegrees()) >= 45 && Math.abs(chassis.getAngle().getDegrees()) <= 135){
-        speeds = new ChassisSpeeds(calcAligmentVel(), calcDriveVel(), 0);
-      }
-      else{
-        speeds = new ChassisSpeeds(calcDriveVel(), calcAligmentVel(), 0);
-      }
-      
+    
+      Translation2d vectorToNote = new Translation2d(calcVectorLength(), fieldRelativeAngle);
+      Translation2d alignmentVector = calcAlignmentVector();
+      Translation2d velocityVector = vectorToNote.plus(alignmentVector);
+      speeds = new ChassisSpeeds(velocityVector.getX(), velocityVector.getY(), 0);
+
       chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(fieldRelativeAngle));
       
       
@@ -79,13 +78,16 @@ public class NewAutoIntake extends Command {
     }
   }
 
-  private double calcAligmentVel(){
-    return 0;
+  private Translation2d calcAlignmentVector(){
+    double vectorLength = pid.calculate(angle, 0);
+    double vectorAngle = fieldRelativeAngle + (Math.signum(angle) * 90);
+    return new Translation2d(vectorLength, Rotation2d.fromDegrees(vectorAngle));
+    
   }
   private Translation2d getStickVector(){
     return new Translation2d(controller.getLeftX(), controller.getLeftY());
   } 
-  private double calcDriveVel(){
+  private double calcVectorLength(){
     
     double angle = fieldRelativeAngle;
     double highBound = angle + 90;
