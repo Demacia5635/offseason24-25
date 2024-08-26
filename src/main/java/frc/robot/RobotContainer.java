@@ -4,10 +4,11 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Intake.Intake;
+import frc.robot.Intake.Command.IntakeCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,12 +18,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private CommandXboxController controller;
+  private Intake intake;
+  private Command IntakeCommand;
   public RobotContainer() {
+    controller = new CommandXboxController(0);
+    this.intake = new Intake();
     // Configure the trigger bindings
     configureBindings();
   }
@@ -37,6 +38,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    IntakeCommand = new IntakeCommand(intake);
+
+    controller.a().onTrue(IntakeCommand);
 
   }
 
