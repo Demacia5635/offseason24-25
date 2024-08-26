@@ -93,7 +93,6 @@ public class TalonMotor extends TalonFX {
     
 
     getConfigurator().apply(cfg);
-    setMotorPosition(0);
     getPosition().setUpdateFrequency(200);
     getVelocity().setUpdateFrequency(200);
     getAcceleration().setUpdateFrequency(200);

@@ -44,6 +44,7 @@ public class Chassis extends SubsystemBase {
 
   private final Field2d field;
 
+  private ChassisSpeeds speed = new ChassisSpeeds(0,0,0);
 
 
   public Chassis() {
@@ -110,7 +111,7 @@ public class Chassis extends SubsystemBase {
    setBrake(true);
    SmartDashboard.putData("SetAngle45", new RunCommand(() -> {
     for (SwerveModule module : modules) {
-      module.setAngleByPositionPID(Rotation2d.fromDegrees(45));  
+      module.setSteerPosition(45);  
     }
    }, this));
   }
@@ -140,7 +141,7 @@ public class Chassis extends SubsystemBase {
 
   public void resetWheels() {
     for (var module : modules) {
-      module.setAngleByPositionPID(new Rotation2d());
+      module.setSteerPosition(0);
     }
   }
 
@@ -165,11 +166,7 @@ public class Chassis extends SubsystemBase {
     }
   }
 
-  public void setModulesSteerVelocity(double v) {
-    for (var m : modules) {
-      m.setSteerVelocity(v, false);
-    }
-  }
+
 
   public double[] getAngularVelocities() {
     double[] angularVelocities = new double[modules.length];
@@ -203,6 +200,7 @@ public class Chassis extends SubsystemBase {
    * @param speeds In m/s and rad/s
    */
   public void setVelocities(ChassisSpeeds speeds) {
+    speed = speeds;
     double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
     ChassisSpeeds relativeSpeeds = 
     ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
@@ -211,32 +209,13 @@ public class Chassis extends SubsystemBase {
     ChassisSpeeds newChassisSpeeds = new ChassisSpeeds(newSpeeds.getX(), newSpeeds.getY(), relativeSpeeds.omegaRadiansPerSecond);
     newChassisSpeeds.omegaRadiansPerSecond = SwerveKinematics.fixOmega(newChassisSpeeds.omegaRadiansPerSecond);
     SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(newChassisSpeeds);
+
+    // System.out.println("o" + speeds.omegaRadiansPerSecond);
+    // System.out.println("vX" + speeds.vxMetersPerSecond);
+    // System.out.println("vY" + speeds.vyMetersPerSecond);
     setModuleStates(states);
   }
 
-
-// public void setVelocities(ChassisSpeeds speeds) {
-//   ChassisSpeeds s = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-//   SwerveModuleState[] states = KINEMATICS_CORRECTED.toSwerveModuleStates(s);
-//   setModuleStates(states);
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-  /**
-   * Returns the velocity vector
-   * 
-   * @return Velocity in m/s
-   */
   public Translation2d getVelocity() {
     ChassisSpeeds speeds = getChassisSpeeds();
     return new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
@@ -345,12 +324,16 @@ public class Chassis extends SubsystemBase {
     builder.addDoubleProperty("Pose X", this::getPoseX, null);
     builder.addDoubleProperty("Pose Y", this::getPoseY, null);
     SmartDashboard.putData("Set Modules Angle", new RunCommand(() -> setModulesAngleFromSB(0)));
+
+    SmartDashboard.putNumber("speeds0",speed.omegaRadiansPerSecond);
+    SmartDashboard.putNumber("speedsVX",speed.vxMetersPerSecond);
+    SmartDashboard.putNumber("speedsVY",speed.vyMetersPerSecond);
+
   }
 
   public void setModulesAngleFromSB(double angle) {
-    Rotation2d a = Rotation2d.fromDegrees(angle);
     for (SwerveModule module : modules) {
-      module.setAngleByPositionPID(a);
+      module.setSteerPosition(angle);
     }
   }
 

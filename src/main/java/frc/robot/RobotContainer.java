@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.utils.LogManager;
 
 public class RobotContainer implements Sendable {
   public static RobotContainer robotContainer;
@@ -22,6 +23,7 @@ public class RobotContainer implements Sendable {
 
   public Chassis chassis;
 
+  private LogManager LM = new LogManager();
 
   public Command shoot; // shoot to amp or to speaker
   public Command driveToNote;

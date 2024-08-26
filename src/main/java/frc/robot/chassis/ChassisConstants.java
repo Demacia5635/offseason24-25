@@ -4,6 +4,7 @@ package frc.robot.chassis;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.chassis.utils.SwerveKinematics;
+import frc.robot.utils.TalonConfig;
 
 public final class ChassisConstants {
 
@@ -68,70 +69,59 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
 
 
   public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants(
-      4, 5, 6,
+      "FrontLeft",
+      new TalonConfig(4,"rio", "FrontLeft/Drive")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+      new TalonConfig(5,"rio", "FrontLeft/Steer")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
+      6,
       new Translation2d(0.332, 0.277),
-      (-0.354*360) - 90,
-      MOVE_PID,
-      FRONT_STEER_PID,
-      FRONT_POSITION_STEER_PID,
-      MOVE_FF_LESS,
-      MOVE_FF_MORE,
-      MOVE_FF_MORE2,
+      141.240234375);
 
-      FRONT_STEER_FF,
-      PULSES_PER_METER,
-      FRONT_PULSES_PER_DEGREE,
-      false,
-      FRONT_INTEGRAL_ZONE);
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
-      1, 2, 3,
-      new Translation2d(0.332, -0.277),
-      (-0.297*360) - 90,
-      MOVE_PID,
-      FRONT_STEER_PID,
-      FRONT_POSITION_STEER_PID,
-      MOVE_FF_LESS,
-      MOVE_FF_MORE,
-      MOVE_FF_MORE2,
 
-      FRONT_STEER_FF,
-      PULSES_PER_METER,
-      FRONT_PULSES_PER_DEGREE,
-      false,
-      FRONT_INTEGRAL_ZONE);
+      "FrontRight",
+      new TalonConfig(1,"rio", "FrontRight/Drive")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+      new TalonConfig(2,"rio", "FrontRight/Steer")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
+      3,
+      new Translation2d(0.332, -0.277),
+      159.9609375);
+      
+
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
-      10, 11, 12,
-      new Translation2d(-0.332, 0.288),
-      (-0.382*360) - 90,
-      MOVE_PID,
-      BACK_STEER_PID,
-      BACK_POSITION_STEER_PID,
-      MOVE_FF_LESS,
-      MOVE_FF_MORE,
-      MOVE_FF_MORE2,
 
-      BACK_STEER_FF,
-      PULSES_PER_METER,
-      BACK_PULSES_PER_DEGREE,
-      true,
-      BACK_INTEGRAL_ZONE);
+    "BackLeft",
+      new TalonConfig(10,"rio", "BackLeft/Drive")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+      new TalonConfig(11,"rio", "BackLeft/Steer")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
+      12,
+      new Translation2d(-0.332, 0.288),
+      47.197265625);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
-      7, 8, 9,
+
+      "BackRight",
+      new TalonConfig(7,"rio", "BackRight/Drive")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+      new TalonConfig(8,"rio", "BackRight/Steer")
+        .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
+        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
+      9,
       new Translation2d(-0.332, -0.288),
-      (-0.277*360) - 90,
-      MOVE_PID,
-      BACK_STEER_PID,
-      BACK_POSITION_STEER_PID,
-      MOVE_FF_LESS,
-      MOVE_FF_MORE,
-      MOVE_FF_MORE2,
-      BACK_STEER_FF,
-      PULSES_PER_METER,
-      BACK_PULSES_PER_DEGREE,
-      true,
-      BACK_INTEGRAL_ZONE);
+      170.595703125);
+
+      
 
   public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
       FRONT_LEFT.moduleTranslationOffset,
@@ -167,44 +157,21 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
   }
 
   public static class SwerveModuleConstants {
-    public final double INTEGRAL_ZONE;
-    public final int moveMotorId;
-    public final int angleMotorId;
+    String name;
+    public TalonConfig driveConfig;
+    public TalonConfig steerConfig;
     public final int absoluteEncoderId;
     public final Translation2d moduleTranslationOffset;
     public final double steerOffset;
-    public final PID_Constants movePID;
-    public final PID_Constants steerPID;
-    public final PID_Constants steerPositionPID;
-    public final FF_Constants moveFFSlow;
-    public final FF_Constants moveFFFast;
-    public final FF_Constants moveFFFast2;
 
-    public final FF_Constants steerFF;
-    public final double pulsePerMeter;
-    public final double pulsePerDegree;
-    public final boolean inverted;
-
-    public SwerveModuleConstants(int moveMotorId, int angleMotorId, int absoluteEncoderId,
-        Translation2d moduleTranslationOffset, double steerOffset,
-        PID_Constants movePID, PID_Constants steerPID, PID_Constants steerPositionPID, FF_Constants moveFFLess, FF_Constants moveFFMore, FF_Constants moveFFmore2, FF_Constants steerFF,
-        double pulsePerMeter, double pulsePerDegree, boolean inverted, double INTEGRAL_ZONE) {
-      this.moveMotorId = moveMotorId;
-      this.angleMotorId = angleMotorId;
-      this.absoluteEncoderId = absoluteEncoderId;
-      this.moduleTranslationOffset = moduleTranslationOffset;
-      this.steerOffset = steerOffset;
-      this.movePID = movePID;
-      this.moveFFSlow = moveFFLess;
-      this.moveFFFast = moveFFMore;
-      this.moveFFFast2 = moveFFmore2;
-      this.steerFF = steerFF;
-      this.steerPID = steerPID;
-      this.pulsePerDegree = pulsePerDegree;
-      this.pulsePerMeter = pulsePerMeter;
-      this.inverted = inverted;
-      this.steerPositionPID = steerPositionPID;
-      this.INTEGRAL_ZONE = INTEGRAL_ZONE;
-    }
+    public SwerveModuleConstants(String name, TalonConfig drive, TalonConfig steer, int cancoderID, 
+      Translation2d offset, double steerOffset) {
+        this.name = name;
+        this.driveConfig = drive;
+        this.steerConfig = steer;
+        this.absoluteEncoderId = cancoderID;
+        this.moduleTranslationOffset = offset;
+        this.steerOffset = steerOffset;
+      }
   }
 }
