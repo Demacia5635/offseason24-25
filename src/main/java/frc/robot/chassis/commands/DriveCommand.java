@@ -49,9 +49,9 @@ public class DriveCommand extends Command {
     double velRot = Math.pow(rot, 2) * MAX_OMEGA_VELOCITY * Math.signum(rot);
 
     if (precisionDrive) {
-      velX /= 4;
-      velY /= 4;
-      velRot /= 4;
+      // velX /= 4;
+      // velY /= 4;
+      // velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
     chassis.setVelocities(speeds);
