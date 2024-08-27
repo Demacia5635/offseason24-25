@@ -75,7 +75,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
       6,
       new Translation2d(0.332, 0.277),
-      141.240234375);
+      142.47);
 
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
 
@@ -88,7 +88,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
       3,
       new Translation2d(0.332, -0.277),
-      159.9609375);
+      -18.98);
       
 
 
@@ -103,7 +103,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
       12,
       new Translation2d(-0.332, 0.288),
-      47.197265625);
+      -134.121);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
 
@@ -116,7 +116,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
       9,
       new Translation2d(-0.332, -0.288),
-      170.595703125);
+      -11.777);
 
       
 
