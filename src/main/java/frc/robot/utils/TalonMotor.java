@@ -165,6 +165,32 @@ public class TalonMotor extends TalonFX {
     return getVelocity().getValueAsDouble();
   }
 
+  // public double getTimePosition(double time) {
+  //   if(time == 0) {
+  //       time = Utils.getCurrentTimeSeconds();
+  //   }
+  //   var p = getPosition();
+  //   double pTime = p.getTimestamp().getTime();
+  //   if(time < pTime) {
+  //       return p.getValue();
+  //   }
+  //   var v = getVelocity();
+  //   return p.getValue() + v.getValue()*(time-pTime);
+  // }
+
+  // public double getTimeVelocity(double time) {
+  //   if(time == 0) {
+  //       time = Utils.getCurrentTimeSeconds();
+  //   }
+  //   var v = getVelocity();
+  //   double vTime = v.getTimestamp().getTime();
+  //   if(time < vTime) {
+  //       return v.getValue();
+  //   }
+  //   var a = getAcceleration();
+  //   return v.getValue() + a.getValue()*(time-vTime);
+  // }
+
   public String name() {
     return name;
   }
