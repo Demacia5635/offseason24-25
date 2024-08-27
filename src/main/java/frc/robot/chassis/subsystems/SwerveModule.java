@@ -8,8 +8,6 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.TalonMotor;
-import frc.robot.utils.Utils;
-import static frc.robot.chassis.ChassisConstants.*;
 
 
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -181,16 +179,7 @@ public class SwerveModule implements Sendable {
 
 
 
-    /**
-     * Debug message
-     * @param s
-     */
-    private void debug(String s) {
-        debug = false;
-        if(debug){
-          System.out.println(name + ": " + s);
-        } 
-    }
+
 
 
     /**

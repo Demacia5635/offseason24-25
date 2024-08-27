@@ -3,7 +3,6 @@ package frc.robot.chassis;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.TalonConfig;
 
 public final class ChassisConstants {
@@ -29,8 +28,8 @@ public final class ChassisConstants {
   public static final double MOTOR_PULSES_PER_ROTATION = 2048;
   public static final double PULSES_PER_METER = MOTOR_PULSES_PER_ROTATION * MOVE_GEAR_RATIO / WHEEL_CIRCUMFERENCE;
 
-  public static final double BACK_STEER_RATIO = 151.0 / 7.0;
-  public static final double FRONT_STEER_RATIO = 12.8;
+  public static final double FRONT_STEER_RATIO = 151.0 / 7.0;
+  public static final double BACK_STEER_RATIO = 12.8;
 
   public static final double FRONT_PULSES_PER_DEGREE = FRONT_STEER_RATIO * MOTOR_PULSES_PER_ROTATION / 360.0;
   public static final double BACK_PULSES_PER_DEGREE =  BACK_STEER_RATIO * MOTOR_PULSES_PER_ROTATION / 360.0;
@@ -130,11 +129,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
       BACK_RIGHT.moduleTranslationOffset);
   
 
-  public static final SwerveKinematics KINEMATICS_CORRECTED = new SwerveKinematics(
-      FRONT_LEFT.moduleTranslationOffset,
-      FRONT_RIGHT.moduleTranslationOffset,
-      BACK_LEFT.moduleTranslationOffset,
-      BACK_RIGHT.moduleTranslationOffset);
+
 
   public static class PID_Constants {
     public final double KP, KI, KD;
