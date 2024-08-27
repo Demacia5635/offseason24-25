@@ -133,7 +133,7 @@ public class SwerveModule implements Sendable {
      * @return angle based on talon encoder
      */
     public double steerTalonAngle() {
-        return Utils.degrees(steerMotor.getCurrentPosition()*360);
+        return steerMotor.getCurrentPosition().getDegrees();
     }
 
 
@@ -220,7 +220,7 @@ public class SwerveModule implements Sendable {
      * @return
      */
     public double getAngleDegrees() {
-        return Utils.degrees(getAngle());
+        return getAngle().getDegrees();
     }
 
     /**
@@ -256,8 +256,8 @@ public class SwerveModule implements Sendable {
     public void setAngleByPositionPID(Rotation2d angle) {
             targetAngle = angle;
             Rotation2d currentAngle = getAngle();
-            double diff = Utils.degrees(angle.minus(currentAngle));
-            double currentPos = steerMotor.getCurrentPosition();
+            double diff = angle.minus(currentAngle).getDegrees();
+            double currentPos = steerMotor.getCurrentPosition().getDegrees();
             double targetPos = currentPos + diff*pulsePerDegree;
             steerMotor.setMotorPosition(targetPos);
 //        }
@@ -267,7 +267,7 @@ public class SwerveModule implements Sendable {
         if(useSteerPositionPID) {
             return Math.abs(steerMotor.getClosedLoopError().getValueAsDouble()) < MaxSteerClosedLoopError;
         } else {
-            return Math.abs(Utils.degrees(getAngle().minus(targetAngle))) < MAX_STEER_ERROR;
+            return Math.abs(getAngle().minus(targetAngle).getDegrees()) < MAX_STEER_ERROR;
         }
 
     }
@@ -278,7 +278,7 @@ public class SwerveModule implements Sendable {
      */
     public void setAngleByVelcoity(Rotation2d angle)  {
         targetAngle = angle;
-        double diff = Utils.degrees(angle.minus(getAngle()));
+        double diff = angle.minus(getAngle()).getDegrees();
         double v = 0;
         if(Math.abs(diff) > MAX_STEER_ERROR) {
             double cv = getSteerVelocity();
@@ -325,7 +325,7 @@ public class SwerveModule implements Sendable {
      * @return Position relative to the field
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moveMotor.getCurrentPosition() / pulsePerMeter, getAngle());
+        return new SwerveModulePosition(moveMotor.getCurrentPosition().getDegrees() / pulsePerMeter, getAngle());
     }
 
     public double talonVelocity(double v) {
@@ -345,7 +345,7 @@ public class SwerveModule implements Sendable {
     }
 
     public double getDistance() {
-        return moveMotor.getCurrentPosition()/pulsePerMeter;
+        return moveMotor.getCurrentPosition().getDegrees()/pulsePerMeter;
     }
 
     @Override
