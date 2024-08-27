@@ -93,7 +93,7 @@ public class SwerveModule implements Sendable {
     }
 
     public void setSteerPosition(double angle){
-        steerMotor.setMotorPosition(angle);
+        steerMotor.setMotorPosition(angle/360);
     }
 
     /**

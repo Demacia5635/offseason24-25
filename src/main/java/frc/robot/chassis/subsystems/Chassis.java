@@ -44,7 +44,6 @@ public class Chassis extends SubsystemBase {
 
   private final Field2d field;
 
-  private ChassisSpeeds speed = new ChassisSpeeds(0,0,0);
 
 
   public Chassis() {
@@ -200,14 +199,12 @@ public class Chassis extends SubsystemBase {
    * @param speeds In m/s and rad/s
    */
   public void setVelocities(ChassisSpeeds speeds) {
-    speed = speeds;
     double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
-    ChassisSpeeds relativeSpeeds = 
-    ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
+    ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
     Translation2d newSpeeds = new Translation2d(relativeSpeeds.vxMetersPerSecond,
-     relativeSpeeds.vyMetersPerSecond).rotateBy(Rotation2d.fromRadians(relativeSpeeds.omegaRadiansPerSecond * param));
+      relativeSpeeds.vyMetersPerSecond).rotateBy(Rotation2d.fromRadians(relativeSpeeds.omegaRadiansPerSecond * param));
     ChassisSpeeds newChassisSpeeds = new ChassisSpeeds(newSpeeds.getX(), newSpeeds.getY(), relativeSpeeds.omegaRadiansPerSecond);
-    newChassisSpeeds.omegaRadiansPerSecond = SwerveKinematics.fixOmega(newChassisSpeeds.omegaRadiansPerSecond);
+      newChassisSpeeds.omegaRadiansPerSecond = SwerveKinematics.fixOmega(newChassisSpeeds.omegaRadiansPerSecond);
     SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(newChassisSpeeds);
 
     // System.out.println("o" + speeds.omegaRadiansPerSecond);
@@ -325,9 +322,6 @@ public class Chassis extends SubsystemBase {
     builder.addDoubleProperty("Pose Y", this::getPoseY, null);
     SmartDashboard.putData("Set Modules Angle", new RunCommand(() -> setModulesAngleFromSB(0)));
 
-    SmartDashboard.putNumber("speeds0",speed.omegaRadiansPerSecond);
-    SmartDashboard.putNumber("speedsVX",speed.vxMetersPerSecond);
-    SmartDashboard.putNumber("speedsVY",speed.vyMetersPerSecond);
 
   }
 

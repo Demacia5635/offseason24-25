@@ -146,11 +146,11 @@ public class TalonMotor extends TalonFX {
     return Math.sin(positin*config.posToRad)*config.ksin;
   }
 
-  public void setMotorPosition(double position, double feedForward) {
+  public void setMotorPosition(double position/*in rotation */, double feedForward) {
     setControl(motionMagicVoltage.withPosition(position).withFeedForward(feedForward));
     positionEntry.log(position);
   }
-  public void setMotorPosition(double position) {
+  public void setMotorPosition(double position/*in rotation */) {
     setMotorPosition(position, 0);
   }
   public void setMotorPositionWithFeedForward(double position) {
