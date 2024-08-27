@@ -80,7 +80,7 @@ public class SwerveModule implements Sendable {
      * @return angle based on talon encoder
      */
     public double steerTalonAngle() {
-        return steerMotor.getCurrentPosition();
+        return steerMotor.getCurrentPosition().getDegrees();
     }
 
 
@@ -206,14 +206,11 @@ public class SwerveModule implements Sendable {
      * @return Position relative to the field
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moveMotor.getCurrentPosition(), getAngle());
+        return new SwerveModulePosition(moveMotor.getCurrentPosition().getDegrees(), getAngle());
     }
 
-
-
-
     public double getDistance() {
-        return moveMotor.getCurrentPosition();
+        return moveMotor.getCurrentPosition().getDegrees();
     }
 
     @Override
