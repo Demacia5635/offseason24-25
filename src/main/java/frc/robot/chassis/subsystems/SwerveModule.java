@@ -195,9 +195,11 @@ public class SwerveModule implements Sendable {
      */
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
+        if (Math.abs(optimized.angle.getDegrees() - getAngleDegrees()) >= 4) {
+            setSteerPosition(optimized.angle.getDegrees());
+        }
         setVelocity(optimized.speedMetersPerSecond);
 
-        setSteerPosition(optimized.angle.getDegrees());
         
     }
 

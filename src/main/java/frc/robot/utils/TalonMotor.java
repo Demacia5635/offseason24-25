@@ -85,9 +85,6 @@ public class TalonMotor extends TalonFX {
     cfg.MotionMagic.MotionMagicExpo_kA = config.pid.ka;
     cfg.MotionMagic.MotionMagicExpo_kV = config.pid.kv;
 
-    
-
-    velocityVoltage.Acceleration = config.motionMagicAccel;
     velocityVoltage.UpdateFreqHz = 200;
     dutyCycle.UpdateFreqHz = 200;
     motionMagicVoltage.UpdateFreqHz = 200;
@@ -130,7 +127,7 @@ public class TalonMotor extends TalonFX {
     dutyCycleEntry.log(power);
   }
   public void setVelocity(double velocity, double feedForward) {
-    setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
+    setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward).withAcceleration(velocity > 0 ? 10 : 0));
     velocityEntry.log(velocity);
   }
   public void setVelocity(double velocity) {
@@ -148,6 +145,11 @@ public class TalonMotor extends TalonFX {
   }
 
   public void setMotorPosition(double position/*in rotation */, double feedForward) {
+    System.out.println("==================");
+    System.out.println(name + " current pos: " + getCurrentPosition());
+    System.out.println(name + " target pos: " + position);
+    System.out.println(name + "current vel: " + getCurrentVelocity());
+    System.out.println("==================");
     setControl(motionMagicVoltage.withPosition(position).withFeedForward(feedForward));
     positionEntry.log(position);
   }
@@ -195,7 +197,7 @@ public class TalonMotor extends TalonFX {
     return name;
   }
   
-  public void setEncoderPosition(double angle){
-    cfg.Feedback.FeedbackRotorOffset = angle;
+  public void setEncoderPosition(double rotations){
+    cfg.Feedback.FeedbackRotorOffset = rotations;    
   }
 }

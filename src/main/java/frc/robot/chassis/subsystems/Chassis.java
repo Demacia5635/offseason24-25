@@ -305,6 +305,10 @@ public class Chassis extends SubsystemBase {
     }
   }
 
+  public void setPosition(){
+    modules[0].setSteerPosition(1);
+  }
+
   public SwerveDrivePoseEstimator getSwerveDrivePoseEstimator(){
     return this.poseEstimator;
   }
