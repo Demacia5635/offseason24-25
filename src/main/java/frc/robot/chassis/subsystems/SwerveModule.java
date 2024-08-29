@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
+import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
 
@@ -62,7 +63,8 @@ public class SwerveModule implements Sendable {
         moveMotor.setEncoderPosition(0);
         steerMotor.setEncoderPosition(getAngleDegrees()/360);
 
-    
+        LogManager.addEntry(name + "/angle", this::getAbsDegrees);
+
     }
 
 
@@ -80,7 +82,7 @@ public class SwerveModule implements Sendable {
      * @return angle based on talon encoder
      */
     public double steerTalonAngle() {
-        return steerMotor.getCurrentPosition().getDegrees();
+        return steerMotor.getCurrentPositionAsAngle().getDegrees();
     }
 
 
@@ -92,8 +94,9 @@ public class SwerveModule implements Sendable {
         return moveMotor.getCurrentVelocity();
     }
 
-    public void setSteerPosition(double angle){
-        steerMotor.setMotorPosition(angle/360);
+    public void setSteerPosition(Rotation2d angle){
+        double target = angle.minus(getAngle()).getDegrees() + steerMotor.getPosition().getValue();
+        steerMotor.setMotorPosition(target);
     }
 
     /**
@@ -142,7 +145,11 @@ public class SwerveModule implements Sendable {
      * @return
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition().getValueAsDouble()*360 - angleOffset);
+        return Rotation2d.fromDegrees(getAbsDegrees());
+    }
+
+    public double getAbsDegrees() {
+        return absoluteEncoder.getAbsolutePosition().getValue()*360 - angleOffset;
     }
 
 
@@ -174,14 +181,6 @@ public class SwerveModule implements Sendable {
         return steerMotor.getVelocity().getValueAsDouble();
     }
 
-
-
-
-
-
-
-
-
     /**
      * Returns the state of the module
      * @return Velocity in m/s
@@ -195,12 +194,8 @@ public class SwerveModule implements Sendable {
      */
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
-        if (Math.abs(optimized.angle.getDegrees() - getAngleDegrees()) >= 4) {
-            setSteerPosition(optimized.angle.getDegrees());
-        }
+        setSteerPosition(optimized.angle);
         setVelocity(optimized.speedMetersPerSecond);
-
-        
     }
 
     /**
@@ -208,22 +203,19 @@ public class SwerveModule implements Sendable {
      * @return Position relative to the field
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moveMotor.getCurrentPosition().getDegrees(), getAngle());
+        return new SwerveModulePosition(moveMotor.getCurrentPosition(), getAngle());
     }
 
     public double getDistance() {
-        return moveMotor.getCurrentPosition().getDegrees();
+        return moveMotor.getCurrentPosition();
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("angle", () -> getAngleDegrees(), null);
-        builder.addDoubleProperty("velocity", this::getVelocity, null);
-        builder.addDoubleProperty("Steer velocity", this::getSteerVelocity, null);
-        builder.addDoubleProperty("desired angle", () -> targetAngle.getDegrees(), null);
-        builder.addDoubleProperty("desired velocity", () -> targetVelocity, null);
-        builder.addDoubleProperty("Steer Talon Angle", this::steerTalonAngle, null);
-        builder.addDoubleProperty("distance", this::getDistance, null);
+//        builder.addDoubleProperty("desired angle", () -> targetAngle.getDegrees(), null);
+//        builder.addDoubleProperty("desired velocity", () -> targetVelocity, null);
+//        builder.addDoubleProperty("Steer Talon Angle", this::steerTalonAngle, null);
+//        builder.addDoubleProperty("distance", this::getDistance, null);
 
 
     }

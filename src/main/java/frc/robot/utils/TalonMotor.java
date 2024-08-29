@@ -127,7 +127,7 @@ public class TalonMotor extends TalonFX {
     dutyCycleEntry.log(power);
   }
   public void setVelocity(double velocity, double feedForward) {
-    setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward).withAcceleration(velocity > 0 ? 10 : 0));
+    setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
     velocityEntry.log(velocity);
   }
   public void setVelocity(double velocity) {
@@ -160,7 +160,11 @@ public class TalonMotor extends TalonFX {
     setMotorPosition(position, positionFeedForward(position));
   }
 
-  public Rotation2d getCurrentPosition() {
+  public double getCurrentPosition() {
+    return getPosition().getValueAsDouble();
+  }
+
+  public Rotation2d getCurrentPositionAsAngle() {
     return Rotation2d.fromDegrees(getPosition().getValueAsDouble());
   }
   public double getCurrentVelocity() {

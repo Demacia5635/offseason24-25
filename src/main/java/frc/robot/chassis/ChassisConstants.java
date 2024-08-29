@@ -35,16 +35,16 @@ public final class ChassisConstants {
   public static final double BACK_PULSES_PER_DEGREE =  BACK_STEER_RATIO * MOTOR_PULSES_PER_ROTATION / 360.0;
 
   // PID
-  public static final PID_Constants MOVE_PID = new PID_Constants(0.085598906233349*10*1023/PULSES_PER_METER, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.000209225899609*10*1023/FRONT_PULSES_PER_DEGREE, 0, 0);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.001104748806054*10*1023/BACK_PULSES_PER_DEGREE, 0, 0.001071468046139);
+  public static final PID_Constants MOVE_PID = new PID_Constants(0.01, 0.0001, 0);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0.0001, 0);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.01, 0.0001, 0);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
-  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.069108623637248, 0.00034365326824, 0.000702476229803);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.080821555555163, 0.000529165452406, 0.004994578577863);
-  public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.2, 0.223, 0.03251759948634);
+  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.2, 0.007, 0.000702476229803);
+  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.2, 0.007, 0);
+  public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
 //left front
@@ -69,10 +69,11 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
       "FrontLeft",
       new TalonConfig(4,"rio", "FrontLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO),
       new TalonConfig(5,"rio", "FrontLeft/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO)
+        .withMotionMagic(360, 1440, 3000),
       6,
       new Translation2d(0.332, 0.277),
       142.47);
@@ -82,25 +83,25 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
       "FrontRight",
       new TalonConfig(1,"rio", "FrontRight/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(false).withMotorRatio(1/MOVE_GEAR_RATIO),
       new TalonConfig(2,"rio", "FrontRight/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO)
+        .withMotionMagic(360, 1440, 3000),
       3,
       new Translation2d(0.332, -0.277),
       -18.98);
-      
-
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
 
     "BackLeft",
       new TalonConfig(10,"rio", "BackLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO),
       new TalonConfig(11,"rio", "BackLeft/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO)
+        .withMotionMagic(360, 1440, 3000),
       12,
       new Translation2d(-0.332, 0.288),
       -134.121);
@@ -110,10 +111,11 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
       "BackRight",
       new TalonConfig(7,"rio", "BackRight/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(true).withMotorRatio(1/MOVE_GEAR_RATIO),
       new TalonConfig(8,"rio", "BackRight/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO).withCurrent(8, 10, 0.1),
+        .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO)
+        .withMotionMagic(360, 1440, 3000),
       9,
       new Translation2d(-0.332, -0.288),
       -11.777);
