@@ -148,9 +148,9 @@ public class TalonMotor extends TalonFX {
     System.out.println("==================");
     System.out.println(name + " current pos: " + getCurrentPosition());
     System.out.println(name + " target pos: " + position);
-    System.out.println(name + "current vel: " + getCurrentVelocity());
+    System.out.println(name + " current vel: " + getCurrentVelocity());
     System.out.println("==================");
-    setControl(motionMagicVoltage.withPosition(position).withFeedForward(feedForward));
+    setControl(motionMagicVoltage.withPosition(position));
     positionEntry.log(position);
   }
   public void setMotorPosition(double position/*in rotation */) {

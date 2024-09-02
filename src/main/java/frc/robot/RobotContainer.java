@@ -94,27 +94,13 @@ public class RobotContainer implements Sendable {
 
 
   private void configureBindings() {
-    commandController.b().onTrue(new RunCommand(()->chassis.setPosition()));
+    // commandController.b().onTrue(new RunCommand(()->chassis.setPosition()));
   
 }
 
    
   public Command getAutonomousCommand() {
-    TalonFX motor = new TalonFX(5);
-    TalonFXConfiguration cfg = new TalonFXConfiguration();
-    cfg.Slot0.kP = 0.000209225899609*10*1023/122.71746031746032;
-    cfg.Slot0.kS = 0.069108623637248;
-    cfg.Slot0.kV = 0.00034365326824;
-    cfg.Slot0.kA = 0.000702476229803;
-    final double SensorToMechanismRatio = (151.0 / 7.0);
-    cfg.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
-    cfg.MotionMagic.MotionMagicAcceleration = 10;
-    cfg.MotionMagic.MotionMagicCruiseVelocity = 100;
-    cfg.MotionMagic.MotionMagicJerk = 10;
-    motor.getConfigurator().apply(cfg);
-    SwerveModuleState[] states = ChassisConstants.KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(0,0, 1));
-    SwerveModuleState state = SwerveModuleState.optimize(new SwerveModuleState(2, Rotation2d.fromDegrees(90)), Rotation2d.fromDegrees(0));
-    
-    return new RunCommand(()->motor.setControl((new MotionMagicVoltage(state.angle.getDegrees())).withSlot(0)));
+    return null;
+    // return new RunCommand(()->motor.setControl((new MotionMagicVoltage(state.angle.getDegrees())).withSlot(0)));
   }
 }
