@@ -100,7 +100,10 @@ public class RobotContainer implements Sendable {
 
    
   public Command getAutonomousCommand() {
-    return null;
+    // return null;
+    return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
+    // return new RunCommand(()-> chassis.setModulesPower(0.1), chassis);
+    // return new RunCommand(() -> chassis.setModulesPower(0.1), chassis);
     // return new RunCommand(()->motor.setControl((new MotionMagicVoltage(state.angle.getDegrees())).withSlot(0)));
   }
 }

@@ -162,9 +162,14 @@ public class Chassis extends SubsystemBase {
     }
   }
 
+  public void setModuleSteerVelocity(int moduleIndex, double velocity) {
+    modules[moduleIndex].setSteerVelocity(velocity);
+  }
+
   public void setModulesPower(double power) {
     for (var m : modules) {
       m.setPower(power);
+      m.setSteerPower(0);
     }
   }
 

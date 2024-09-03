@@ -17,7 +17,7 @@ public class TalonConfig {
     public boolean brake = true;    // brake/coast
     public double motorRatio = 1;   // motor to mechanism ratio
     public boolean inverted = false; // if to invert motor
-    public closeLoopParam pid = new closeLoopParam(0.1,0.01,0,0.2,0.12,0.1,0); // close loop argument - PID + FF
+    public closeLoopParam pid; // close loop argument - PID + FF
     public closeLoopParam pid1 = null; // pid for slot 1
     public closeLoopParam pid2 = null; // pid for slot 2
     public double motionMagicAccel = 10; // maximum motion magic (position) acceleration
@@ -147,7 +147,7 @@ public class TalonConfig {
      * @return TalonConfig
      */
     public TalonConfig withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        pid = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
+        pid = new closeLoopParam(kp, ki, kd, 0, kv, ka, kg);
         return this;
     }
 

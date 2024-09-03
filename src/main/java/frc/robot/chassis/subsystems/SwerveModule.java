@@ -61,9 +61,9 @@ public class SwerveModule implements Sendable {
         moveMotor.setBrake(true);
         steerMotor.setBrake(true);
         moveMotor.setEncoderPosition(0);
-        steerMotor.setEncoderPosition(getAngleDegrees()/360);
+        steerMotor.setEncoderPosition(getAngleDegrees()/180);
 
-        LogManager.addEntry(name + "/angle", this::getAbsDegrees);
+        LogManager.addEntry(name + "/angle", this::steerTalonAngle);
 
     }
 
@@ -149,7 +149,7 @@ public class SwerveModule implements Sendable {
     }
 
     public double getAbsDegrees() {
-        return absoluteEncoder.getAbsolutePosition().getValue()*360 - angleOffset;
+        return absoluteEncoder.getAbsolutePosition().getValue()*180 - angleOffset;
     }
 
 
@@ -173,6 +173,10 @@ public class SwerveModule implements Sendable {
         steerMotor.setDuty(p);
     }
 
+    public void setSteerVelocity(double v) {
+        steerMotor.setVelocity(v);
+    }
+
     /**
      * Returns the rotational velocity of the module
      * @return Velocity in deg/s
@@ -194,7 +198,7 @@ public class SwerveModule implements Sendable {
      */
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
-        setSteerPosition(optimized.angle);
+        if(optimized.speedMetersPerSecond != 0) setSteerPosition(optimized.angle);
         setVelocity(optimized.speedMetersPerSecond);
     }
 

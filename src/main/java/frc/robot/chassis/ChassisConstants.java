@@ -35,27 +35,19 @@ public final class ChassisConstants {
   public static final double BACK_PULSES_PER_DEGREE =  BACK_STEER_RATIO * MOTOR_PULSES_PER_ROTATION / 360.0;
 
   // PID
-  public static final PID_Constants MOVE_PID = new PID_Constants(0.01, 0.0001, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0.0001, 0);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.01, 0.0001, 0);
+  public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0, 0);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.01, 0, 0);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
-  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.2, 0.007, 0.000702476229803);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.2, 0.007, 0);
+  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0, 0.006, 0);
+  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0, 0.009, 0);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
-//left front
-  public static final PID_Constants FRONT_POSITION_STEER_PID_LEFT = new PID_Constants(0.067, 0.002, 0.098);
-  public static final FF_Constants FRONT_STEER_FF_LEFT = new FF_Constants(0.069108623637248, 0.00034365326824, 0.000702476229803);
 
-
-
-  // public static final PID_Constants BACK_POSITION_STEER_PID = new PID_Constants(0.036894342949841, 0.003689434294984, 0.000368943429498);
-  public static final PID_Constants FRONT_POSITION_STEER_PID = new PID_Constants(0.067, 0.002, 0.098);
-  public static final PID_Constants BACK_POSITION_STEER_PID = new PID_Constants(0.055, 0.0015, 0.000098);
   public static final double FRONT_INTEGRAL_ZONE = 9;
   public static final double BACK_INTEGRAL_ZONE = 8;
 
