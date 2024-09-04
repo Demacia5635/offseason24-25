@@ -238,6 +238,11 @@ public class Chassis extends SubsystemBase {
     setModuleStates(states);
   }
 
+  public void setVelocitiesRobotRel(ChassisSpeeds speeds){
+    
+    setModuleStates(KINEMATICS.toSwerveModuleStates(speeds));
+  }
+
 
 
 // public void setVelocities(ChassisSpeeds speeds) {
@@ -457,8 +462,6 @@ public class Chassis extends SubsystemBase {
       speakerAngleError = Utils.angelErrorInDegrees(fieldRelativeAngle, getAngle(),4);
       double rotateVel = angleSpeakerPID.calculate(-speakerAngleError,0);
 
-//        System.out.println("angle error1= " +  speakerAngleError + ", rotateVel1= " + rotateVel + 
-//           " angle = " + getAngle().getDegrees() + " rate=" + getGyroRate());
       return rotateVel;
   }
   
