@@ -73,4 +73,5 @@ public class Constants {
       HEIGHT_MAP = Collections.unmodifiableMap(idToHeights);
     }
     public static final double LimelightHight = 0.7;
+    public static final double LimelightAngle = 30;
 }
