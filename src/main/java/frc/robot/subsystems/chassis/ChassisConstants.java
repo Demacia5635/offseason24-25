@@ -4,29 +4,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import frc.robot.PathFollow.Util.RectanglePos;
+
 import frc.robot.subsystems.chassis.utils.SwerveKinematics;
 
 public final class ChassisConstants {
 
    /** from blue alliance, in meters */
-  public static RectanglePos rectAMP = new RectanglePos(   
-    new Translation2d(16.534, 0.502),
-    new Translation2d(13.229, 0));
-  /** from blue alliance, in meters */
-  public static RectanglePos rectSPEAKER = new RectanglePos(
-    new Translation2d(16.515, 4.076),
-    new Translation2d(14.596, 0.395));
-   
-  /** from blue alliance, in meters */
-  public static RectanglePos rectSOURCE = new RectanglePos(
-
-    new Translation2d(1.850, 8.156),
-    new Translation2d(0.027, 6.515));
-  /** from blue alliance, in meters */
-  public static RectanglePos rectSTAGE = new RectanglePos(
-    new Translation2d(13.443, 5.745),
-    new Translation2d(10.501, 2.35));
 
   public static final Translation2d noteTop = new Translation2d(); //TODO
   public static final Translation2d noteMid = new Translation2d();//TODO

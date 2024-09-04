@@ -41,20 +41,12 @@ public class RoundedPoint{
     
         }
         this.cornerDir = vectorAtoB.times(-1).getAngle().minus(this.cornerAngle.div(2));
-
-        
-        
-
     }
-    
-    
+
     public double getMaxRadius()
     {
         return Math.sin(Math.abs(this.cornerAngle.getRadians()) / 2) * Math.min(vectorAtoB.getNorm(), vectorBtoC.getNorm());
     }
-
-    
-
     /**
      * 
      * @return The position of the corner's circle center
@@ -89,9 +81,6 @@ public class RoundedPoint{
     {
         return new Translation2d(radius, vectorBtoC.getAngle().minus(new Rotation2d((Math.PI/2) * Math.signum(cornerAngle.getDegrees()))));
     }
-
-
-
     /**
      * 
      * @return An array of points that represent the corner's curve's structure
@@ -107,7 +96,6 @@ public class RoundedPoint{
         }
         return points;
     } 
-
     /**
      * 
      * @return the length of the corner's curve

@@ -13,7 +13,6 @@ public class Arc extends Segment{
 
     //p1 represents the start point, p2 represents the circle center
     Rotation2d angle;
-    double maxVel = 2;
 
 
     final Translation2d startVector;
@@ -71,10 +70,6 @@ public class Arc extends Segment{
         //bigger ratio - will turn more towards the center
         //smaller ratio - will turn less towards the center
         Rotation2d fixAngle = tAngle.times(dFromCenter / radius);
-
-
-
-      
       return new Translation2d(velocity, tanAngle.plus(fixAngle));
     }
 

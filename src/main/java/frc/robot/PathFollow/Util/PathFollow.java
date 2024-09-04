@@ -225,6 +225,7 @@ public class PathFollow extends Command {
     // current velocity vector
     Translation2d currentVelocity = new Translation2d(chassis.getChassisSpeeds().vxMetersPerSecond,
         chassis.getChassisSpeeds().vyMetersPerSecond);
+
     distancePassed = totalLeft - segments[segmentIndex].distancePassed(chassisPose.getTranslation());
 
     if (segments[segmentIndex].distancePassed(chassisPose.getTranslation()) >= segments[segmentIndex].getLength()
@@ -239,8 +240,6 @@ public class PathFollow extends Command {
 
     Translation2d velVector = segments[segmentIndex].calc(chassisPose.getTranslation(), driveVelocity);
 
-    // System.out.println("APRILTAG MODE: " +
-    // segments[segmentIndex].isAprilTagMode());
     if (segments[segmentIndex].isAprilTagMode()) {
       if (!foundAprilTag)
         wantedAngle = getAngleApriltag();
