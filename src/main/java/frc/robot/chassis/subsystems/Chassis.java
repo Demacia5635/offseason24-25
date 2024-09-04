@@ -314,8 +314,8 @@ public class Chassis extends SubsystemBase {
     }
   }
 
-  public void setPosition(){
-    modules[0].setSteerPosition(Rotation2d.fromDegrees(0));
+  public void setModulesSteerPosition(Double angle, int i){
+    modules[i].setSteerPosition(Rotation2d.fromDegrees(angle));
   }
 
   public SwerveDrivePoseEstimator getSwerveDrivePoseEstimator(){

@@ -36,8 +36,8 @@ public final class ChassisConstants {
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0, 0);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.01, 0, 0);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.3, 0, 0);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.53, 0, 0);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
@@ -68,7 +68,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       6,
       new Translation2d(0.332, 0.277),
-      142.47);
+      16.79);
 
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
 
@@ -82,7 +82,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       3,
       new Translation2d(0.332, -0.277),
-      -18.98);
+      161.28);
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
 
@@ -96,7 +96,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       12,
       new Translation2d(-0.332, 0.288),
-      -134.121);
+      48.24);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
 
@@ -110,7 +110,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       9,
       new Translation2d(-0.332, -0.288),
-      -11.777);
+      172.8);
 
       
 

@@ -46,6 +46,7 @@ public class RobotContainer implements Sendable {
   public Command activatePodium;
   public Command activateShooter;
   public Command activateSubwoofer;
+  public double num;
   
 
   
@@ -86,10 +87,17 @@ public class RobotContainer implements Sendable {
   public boolean isRed() {
     return isRed;
   }
+  public double get(){
+    return num;
+  }
+  public void set(double num){
+    this.num = num;
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.addBooleanProperty("is Red",this::isRed, this::isRed);
+    builder.addDoubleProperty("num",this::get, this:: set);
   }
 
 
@@ -101,7 +109,8 @@ public class RobotContainer implements Sendable {
    
   public Command getAutonomousCommand() {
     // return null;
-    return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
+    //return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
+    return new RunCommand(() -> chassis.setModulesSteerPosition(num, 1), chassis);
     // return new RunCommand(()-> chassis.setModulesPower(0.1), chassis);
     // return new RunCommand(() -> chassis.setModulesPower(0.1), chassis);
     // return new RunCommand(()->motor.setControl((new MotionMagicVoltage(state.angle.getDegrees())).withSlot(0)));
