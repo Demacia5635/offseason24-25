@@ -27,6 +27,10 @@ public class Lengtandangle {
 
         return (Math.abs(hight-Constants.LimelightHight) * Math.tan(ty+Constants.LimelightAngle)) + x_offset;
     }
+    public String GetObj(){
+        
+        return id == 0 ? "note" : "tag_" + id;
+    }
     public double GetAngle(){
         double angle_rad = Math.toRadians(tx);
         double mol = (this.GetDist()-x_offset)*Math.tan(angle_rad);

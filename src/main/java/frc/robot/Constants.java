@@ -47,7 +47,7 @@ public class Constants {
         tmp.put("tag_16",new Translation2d(inchToMeter(182.73),inchToMeter(146.19)));
 
 
-        tmp.put("Note", null);
+        tmp.put("note", null);
         dic = Collections.unmodifiableMap(tmp);
     }
 
