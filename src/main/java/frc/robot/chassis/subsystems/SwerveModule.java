@@ -4,7 +4,6 @@ package frc.robot.chassis.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.proto.Geometry2D;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -62,9 +61,8 @@ public class SwerveModule implements Sendable {
         // set motors paramters
         moveMotor.setBrake(true);
         steerMotor.setBrake(true);
-        moveMotor.setEncoderPosition(0);
-        // steerMotor.setEncoderPosition((getAngleDegrees()-getSteerTalonAngle())/180);
-        steerMotor.setEncoderPosition(absoluteEncoder.getAbsolutePosition().getValue()*180+180);
+        moveMotor.setPosition(0);
+        steerMotor.setPosition(absoluteEncoder.getAbsolutePosition().getValue()*180+180);
 
         SmartDashboard.putData(name, this);
 

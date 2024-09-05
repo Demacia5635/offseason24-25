@@ -201,9 +201,5 @@ public class TalonMotor extends TalonFX {
     return name;
   }
   
-  public void setEncoderPosition(double rotations){
-    // cfg.Feedback.FeedbackRotorOffset = rotations;
-    // getConfigurator().apply(cfg);
-    setPosition(rotations);
-  }
+
 }
