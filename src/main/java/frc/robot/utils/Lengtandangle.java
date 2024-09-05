@@ -16,12 +16,12 @@ public class Lengtandangle {
     private double y_offset;
     private double tx;
     private double ty;
-    public Lengtandangle(int id){
+    public Lengtandangle(int id, double tx, double ty){
         this.id = id;
-        this.hight = Constants.HEIGHT_MAP.get(id);
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        tx = table.getEntry("tx").getDouble(0);
-        ty = table.getEntry("ty").getDouble(0);
+        this.tx = tx;
+        this.ty = ty;
+        hight = Constants.HEIGHT_MAP.get(id);
+        
     }
     public double GetDist(){
 
