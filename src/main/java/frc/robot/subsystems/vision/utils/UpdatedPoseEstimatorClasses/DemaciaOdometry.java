@@ -94,7 +94,7 @@ public class DemaciaOdometry {
         }
         int correctModulesCount = 0;
         for(boolean bool : indexs){
-            if(bool) correctModulesCount++;
+            if(!bool) correctModulesCount++;
         }
 
         SwerveModulePosition[] modulesAfterCheckArr = new SwerveModulePosition[correctModulesCount];
