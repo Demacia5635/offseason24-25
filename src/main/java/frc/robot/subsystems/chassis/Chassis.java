@@ -96,7 +96,7 @@ public class Chassis extends SubsystemBase {
     pathPoint dummyPoint = new pathPoint(0, 0, new Rotation2d(), 0, false);
     pathPoint point = new pathPoint(2, 1, Rotation2d.fromDegrees(-20), 0, false);
 
-    Command cmdpf = new PathFollow(this, new pathPoint[] { dummyPoint, point }, 4.1, 10, 0, false);
+    Command cmdpf = new PathFollow(this, new pathPoint[] { dummyPoint, point }, 4.1, 10, 0);
    
     SmartDashboard.putData("check offset spin", new DriveStraightLine(this));
     SmartDashboard.putData("Path Follow Check", cmdpf);
