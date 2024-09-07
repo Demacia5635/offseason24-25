@@ -25,9 +25,7 @@ public class Constants {
     public static final Map<String,Translation2d> dic;
     static{
         Hashtable<String,Translation2d> tmp = new Hashtable<String,Translation2d>();
-        //ימין אדום שמאל כחול☺
-        //במטרים  
-        //קצר : Y ארוך : X
+
 
         tmp.put("tag_1",new Translation2d(inchToMeter(593.68), inchToMeter(9.68)));
         tmp.put("tag_2",new Translation2d(inchToMeter(637.21), inchToMeter(34.79)));
