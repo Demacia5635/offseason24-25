@@ -4,13 +4,11 @@ package frc.robot.chassis.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.LogManager;
-import frc.robot.utils.TalonConfig;
 import frc.robot.utils.TalonMotor;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;

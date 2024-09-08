@@ -96,7 +96,7 @@ public class Chassis extends SubsystemBase {
         1,
         1,
         this)).getCommand());
-    ntTab.add("Set Modules Angle", new RunCommand(() -> setModulesAngleFromSB(0)));
+    ntTab.add("Set Modules Angle", new RunCommand(() -> setModulesAngleFromSB(0)).ignoringDisable(true));
    // SmartDashboard.putData("Test Steer Velocity", (new CheckModulesSteerVelocity(this, 200)));
    // SmartDashboard.putData("Set Modules Angle", (new SetModuleAngle(this)));
    // new TestVelocity("Chassis", this::setVelocity, this::getMoveVelocity, 0.05, this);
