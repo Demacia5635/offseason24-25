@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
 /** Creates a new intake. */
-  private TalonFX intakeMotor;
+  private TalonFX intakeMotorDown;
+  private TalonFX intakeMotorUp;
   public AnalogInput analogInput;
   public Intake() {
-    intakeMotor = new TalonFX(INTAKE_MOTOR_ID,CANBUS);
+    intakeMotorDown = new TalonFX(INTAKE_MOTOR_UP_ID,CANBUS);
+    intakeMotorUp = new TalonFX(INTAKE_MOTOR_DOWN_ID,CANBUS);
   }
 
   @Override
@@ -22,10 +24,17 @@ public class Intake extends SubsystemBase {
 
   }
   public void setPower(double power){
-    intakeMotor.set(power);
+    intakeMotorDown.set(power);
+    intakeMotorUp.set(power);
   }
+
   public boolean isNote(){
     return analogInput.getVoltage() > NOTE_VOLTEGE;
 
+  }
+
+  public void setPowerMotorUp(double power) {
+    intakeMotorUp.set(power);
+    
   }
 }
