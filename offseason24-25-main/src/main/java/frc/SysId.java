@@ -1,5 +1,8 @@
 package frc;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -8,6 +11,7 @@ import frc.robot.commands.SysIdCmd;
 import frc.robot.subsystems.ModuleS;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import static frc.robot.Constants.*;
 
 public class SysId {
 
@@ -15,38 +19,20 @@ public class SysId {
     private static TalonFX motor;
     public static double velocity1;
     public static double velocity2;
-    public static ModuleS module;
 
-   /*  public double[] simpleFeedForward(double P1, double P2, double velocity1, double velocity2){ //P1 = KS + KV * V1,   P2 = KS + KV * V2 
-        //(P2 - P1) = (KS + KV * 10) - (KS + KV * 5)
-        // 0.1 = KV * 5
-        // KV = 5/0.1 = 0.02
-        // 0.1 = KS + 0.02 * 5 
-        //Command myCommand = new InstantCommand(() -> mySubsystem.setMotorSpeed(1.0), mySubsystem);
-        feedForwardData = new double[3];
-        double deltaP = P2 - P1;
-        double deltaV = velocity2 - velocity1;
-        double KV = deltaV/deltaP;
-        double KS = P1 - KV * velocity1;
-        feedForwardData[0] = KV;
-        feedForwardData[1] = KS;
-        return feedForwardData;
+  
 
-    }
-    */
-
-    public static double[] simpleFeedForward(int id, String canbus, double power1, double power2, double Scope){
+    public static double[] simpleFeedForward(double power1, double power2, double Scope){
         //testRunOne(0, null, 0.1, 0.638);
         //testRunTwo(id,canbus,power2,Scope);
-        runner(power1);
-        velocity1 = SmartDashboard.getNumber("velocity1", 0.0);
-        runner(power2);
-        velocity2 = SmartDashboard.getNumber("velocity1", 0.0);
+        velocity1 = SmartDashboard.getNumber("v1", 0.0);
+        velocity2 = SmartDashboard.getNumber("v2", 0.0);
         
 
         double KV = getKV(power1, power2, velocity1, velocity2);
         double KS = getKS(power1, KV, velocity1);
-        double[] feedForwardData = {KV,KS};
+        double KA = getKA(power1, power2, power1, power2, Scope, KS, KV);
+        double[] feedForwardData = {KV,KS,KA};
         return feedForwardData;
     }
 
@@ -58,9 +44,20 @@ public class SysId {
         return power - KV * velocity;
     }
 
-    public static Command runner(double power){
-        module = new ModuleS();
-        return new SysIdCmd(module, power, 1);
+    public static double getKA(double power1, double power2, double velocity1, double velocity2, double acceleration1, double acceleration2, double KV) {
+        return ((power2 - power1) - KV * (velocity2 - velocity1)) / (acceleration2 - acceleration1);
+    }
+    
+        //p1 = ks * Math.signum(velocity1) + kv * velocity1 + ka * acceleration1;
+        //p2 = ks * Math.signum(velocity2) + kv * velocity2 + ka * acceleration2
+        /*
+         * 0.1 = 2kv 
+         * 
+         */
+
+    public static Command runner(double power, int motorId, String nameForShuffleBoard){
+        motor = new TalonFX(motorId, CANBUS);
+        return new SysIdCmd(motor, power, nameForShuffleBoard);
     }
 
 

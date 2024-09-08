@@ -4,25 +4,30 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ModuleS;
+import static frc.robot.Constants.*;
 
 public class SysIdCmd extends Command {
   /** Creates a new SysIdCmd. */
-  private ModuleS module;
+  private TalonFX motor;
   private double power;
+  private String nameForShuffleBoard;
 
-  public SysIdCmd(ModuleS module, double power, int id) {
-    this.module = module;
+  public SysIdCmd(TalonFX motor, double power, String nameForShuffleBoard) {
+    this.motor = motor;
     this.power = power;
+    this.nameForShuffleBoard = nameForShuffleBoard;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    module.power(power);
+    motor.set(power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,8 +37,8 @@ public class SysIdCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("velocity1", module.getVelocity());
-    module.power(0);
+    SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*Scope);
+    motor.set(0);
   }
     
   // Returns true when the command should end.
