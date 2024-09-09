@@ -23,16 +23,16 @@ public class PathsTrapezoid {
     
 
     private double getDistanceAccel(double curVel){
-        return (curVel * t) + (0.5 * accel * t * t);
+        return (curVel * t) + (0.5 * (accel / deAccelParam) * t * t);
     }
     private double getDistanceCruise(double curVel){
         return curVel * t;
     }
 
-    private boolean canAccel(double wantedVel, double distanceLeft){
+    private boolean isAbleToAccel(double wantedVel, double distanceLeft){
         return getDistanceAccel(wantedVel) < distanceLeft;
     }
-    private boolean canCruise(double curVel, double distanceLeft){
+    private boolean isAbleToCruise(double curVel, double distanceLeft){
         return getDistanceCruise(curVel) < distanceLeft;
     }
     private boolean isMaxVel(double wantedVel){
@@ -42,8 +42,8 @@ public class PathsTrapezoid {
         if(distanceLeft < 0) {
             return -calc(-distanceLeft, -currentVel, -targetVel);
         }
-        if(isMaxVel(currentVel + deltaV) && canCruise(maxVel, distanceLeft)) return maxVel;
-        else if(canAccel(currentVel + deltaV, distanceLeft)) return currentVel + deltaV;
+        if(isMaxVel(currentVel + deltaV) && isAbleToCruise(maxVel, distanceLeft)) return maxVel;
+        else if(isAbleToAccel(currentVel + deltaV, distanceLeft)) return currentVel + deltaV;
         else {
             return Math.max(currentVel - (deltaV * deAccelParam), targetVel);
         }
