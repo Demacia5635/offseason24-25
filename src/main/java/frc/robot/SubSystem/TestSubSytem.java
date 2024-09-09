@@ -35,7 +35,7 @@ public class TestSubSytem extends SubsystemBase {
   public void resetPigeon(){
     pigeon.resetPigeon();
   }
-  public void setOfset(double offset){
+  public void setOffset(double offset){
     cancoder.setOfset(offset);
   }
   public void setCanCoderClockwise(Boolean boolDirection){

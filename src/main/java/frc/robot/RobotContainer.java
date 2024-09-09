@@ -6,11 +6,15 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.SubSystem.TestSubSytem;
+import frc.robot.commands.ResetPigeonCommand;
+import frc.robot.commands.SetCanCoderClockwiseCommand;
+import frc.robot.commands.SetOffsetCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import static frc.robot.Constants.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,7 +23,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private CommandXboxController controller;
   private TestSubSytem testSubSytem;
+  private Command ResetPigeonCommand;
+  private Command SetOffsetCommand;
+  private Command SetCanCoderClockwiseCommand;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -28,7 +37,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
+    controller = new CommandXboxController(0);
+    testSubSytem = new TestSubSytem(CANCODERID, CANCODERCANBUS, PIGEONID, PIGEONCANBUS);
     configureBindings();
   }
 
@@ -45,7 +55,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    ResetPigeonCommand = new ResetPigeonCommand(testSubSytem);
+    SetOffsetCommand = new SetOffsetCommand(testSubSytem, OFFSET);
+    SetCanCoderClockwiseCommand = new SetCanCoderClockwiseCommand(testSubSytem, BOOLDIRECTION);
+    controller.a().onTrue(ResetPigeonCommand);
+    controller.b().onTrue(SetOffsetCommand);
+    controller.x().onTrue(SetCanCoderClockwiseCommand);
   }
 
   /**
