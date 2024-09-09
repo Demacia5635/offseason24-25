@@ -15,6 +15,7 @@ public class SetCanCoderClockwiseCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.testSubSytem = testSubSytem;
     this.boolDirection = boolDirection;
+    addRequirements(testSubSytem);
   }
 
   // Called when the command is initially scheduled.

@@ -13,6 +13,7 @@ public class ResetPigeonCommand extends Command {
   public ResetPigeonCommand(TestSubSytem testSubSytem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.testSubSytem = testSubSytem;
+    addRequirements(testSubSytem);
   }
 
   // Called when the command is initially scheduled.

@@ -15,6 +15,7 @@ public class SetOffsetCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.testSubSytem = testSubSytem;
     this.Offset = Offset;
+    addRequirements(testSubSytem);
   }
 
   // Called when the command is initially scheduled.
