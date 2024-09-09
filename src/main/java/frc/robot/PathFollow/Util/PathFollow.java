@@ -49,16 +49,6 @@ public class PathFollow extends Command {
   double finishVel;
   
 
-  /**
-   * Creates a new path follower using the given points.
-   * 
-   * @param chassis
-   * @param points   from blue alliance
-   * @param maxVel   the max velocity in m/s
-   * @param maxAccel the max accel in m/s2 (squared)
-   * 
-   */
-
   public PathFollow(pathPoint[] points, double velocity) {
     this(RobotContainer.robotContainer.chassis, points, velocity, velocity * 2, 0);
   }
@@ -99,14 +89,10 @@ public class PathFollow extends Command {
 
 
   private void setFirstPoint(boolean isRed){
-    if(isRed){
-      points[0] = new pathPoint(convertAlliance(chassis.getPose().getX()), chassis.getPose().getY(), points[1].getRotation(),
-        points[0].getRadius(), false);
-    }
-    else {
-      points[0] = new pathPoint(chassis.getPose().getX(), chassis.getPose().getY(), points[1].getRotation(),
-        points[0].getRadius(), false);
-    }
+
+    points[0] = isRed ? new pathPoint(convertAlliance(chassis.getPose().getX()), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius(), false)
+      : new pathPoint(chassis.getPose().getX(), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius(), false);
+
   }
   
   private void convertPoints(){
@@ -165,6 +151,7 @@ public class PathFollow extends Command {
     trajField.getObject("TrajTEST").setTrajectory(traj);
     
   }
+  
   @Override
   public void initialize() {
     isRed = RobotContainer.robotContainer.isRed();
