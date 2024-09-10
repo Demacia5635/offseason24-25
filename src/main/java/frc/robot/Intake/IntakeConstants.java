@@ -10,5 +10,6 @@ public static final int INTAKE_MOTOR_DOWN_ID = -1;
 public static final int INTAKE_MOTOR_UP_ID = -1;
   public static final String CANBUS = "canivore";
   public static final double NOTE_VOLTEGE = 4;
-  public static final double POWER = 0.3;
+  public static final double POWER =1;
+  public static final double NOTE_CURRENT = 0.0;
 }
