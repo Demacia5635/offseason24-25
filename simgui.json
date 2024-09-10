@@ -1,0 +1,26 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Robot": {
+        "open": true
+      },
+      "datatable": {
+        "chassis": {
+          "open": true
+        },
+        "open": true,
+        "tbl": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
