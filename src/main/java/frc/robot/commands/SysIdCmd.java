@@ -31,8 +31,8 @@ public class SysIdCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //motor.set(power);
-    sysId.showFeedForward(0.1,0.2,Scope);
+    motor.set(power);
+    sysId.showFeedForward(0.1,0.2,SCOPE);
 
   }
 
@@ -43,11 +43,11 @@ public class SysIdCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*Scope);
-    Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
-    Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
-    System.out.println(Kv);
-    System.out.println(Ks);
+    SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*SCOPE);
+    //Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
+    //Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
+    //System.out.println(Kv);
+    //System.out.println(Ks);
     motor.set(0);
   }
     

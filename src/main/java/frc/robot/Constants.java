@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -14,10 +16,14 @@ package frc.robot;
  */
 public final class Constants {
 
-  public static double GEAR_RATIO = 8.14;
+  public static final double GEAR_RATIO = 8.14;
   public static final double R = 2.54*2/100;
-  public static final double Scope = 2*R*Math.PI;
+  public static final double SCOPE = 2*R*Math.PI;
+  public static final double METER_PER_TURN = SCOPE/GEAR_RATIO;
   public static final String CANBUS = "canivore";
+  public static final double KS = SmartDashboard.getNumber("KS", 0);
+  public static final double KV = SmartDashboard.getNumber("KV", 0);
+  public static final double KP = 0.3;
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;

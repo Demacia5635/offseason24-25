@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.SysIdCmd;
+import frc.robot.commands.TestCmd;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -54,6 +55,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new SysIdCmd(motor, 0.1, "v1").withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
+    //return new SysIdCmd(motor, 0.1, "v1");//.withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
+    //return new SysIdCmd(motor, 0.2, "v2");
+    return new TestCmd(0.1);
   }
 }
