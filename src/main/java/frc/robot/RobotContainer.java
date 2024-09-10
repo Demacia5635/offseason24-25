@@ -5,7 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.SysIdCmd;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -17,6 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  private TalonFX motor = new TalonFX(1);
+  private SysIdCmd sysId = new SysIdCmd(motor, 0.1, "v1");
+  //private SequentialCommandGroup cmd = sysId.andThen(new SysIdCmd(motor, 0.2, "v2")) ;
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -46,6 +54,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return new SysIdCmd(motor, 0.1, "v1").withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
   }
 }

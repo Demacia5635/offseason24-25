@@ -15,13 +15,13 @@ import static frc.robot.Constants.*;
 public class SysId {
 
   
-    private static TalonFX motor;
-    public static double velocity1;
-    public static double velocity2;
+    private  TalonFX motor;
+    public  double velocity1;
+    public  double velocity2;
 
   
 
-    public static double[] simpleFeedForward(double power1, double power2, double Scope){
+    public  double[] simpleFeedForward(double power1, double power2, double Scope){
         //testRunOne(0, null, 0.1, 0.638);
         //testRunTwo(id,canbus,power2,Scope);
         velocity1 = SmartDashboard.getNumber("v1", 0.0);
@@ -35,16 +35,27 @@ public class SysId {
         return feedForwardData;
     }
 
-    public static double getKV(double power1, double power2, double velocity1, double velocity2){
+    public  double getKV(double power1, double power2, double velocity1, double velocity2){
         return (velocity2 - velocity1)/(power2 - power1);
     }
 
-    public static double getKS(double power, double KV, double velocity){
+    public  double getKS(double power, double KV, double velocity){
         return power - KV * velocity;
     }
 
-    public static double getKA(double power1, double power2, double velocity1, double velocity2, double acceleration1, double acceleration2, double KV) {
+    public  double getKA(double power1, double power2, double velocity1, double velocity2, double acceleration1, double acceleration2, double KV) {
         return ((power2 - power1) - KV * (velocity2 - velocity1)) / (acceleration2 - acceleration1);
+    }
+
+    public void showFeedForward(double power1, double power2, double Scope){
+        velocity1 = SmartDashboard.getNumber("v1", 0.0);
+        velocity2 = SmartDashboard.getNumber("v2", 0.0);
+
+        double KV = getKV(power1,power2,velocity1,velocity2);
+        double KS = getKS(power1, KV, velocity1);
+        //double KA = getKA(power1, power2,velocity1,velocity2)
+        SmartDashboard.putNumber("KV", KV);
+        SmartDashboard.putNumber("KS", KS);
     }
     
         //p1 = ks * Math.signum(velocity1) + kv * velocity1 + ka * acceleration1;
@@ -54,7 +65,7 @@ public class SysId {
          * 
          */
 
-    public static Command runner(double power, int motorId, String nameForShuffleBoard){
+    public  Command runner(double power, int motorId, String nameForShuffleBoard){
         motor = new TalonFX(motorId, CANBUS);
         return new SysIdCmd(motor, power, nameForShuffleBoard);
     }

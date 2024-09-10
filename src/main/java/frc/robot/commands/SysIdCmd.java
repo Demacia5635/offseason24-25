@@ -8,6 +8,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.SysId;
+
 import static frc.robot.Constants.*;
 
 public class SysIdCmd extends Command {
@@ -15,6 +17,9 @@ public class SysIdCmd extends Command {
   private TalonFX motor;
   private double power;
   private String nameForShuffleBoard;
+  private SysId sysId = new SysId();
+  private double Kv;
+  private double Ks;
 
   public SysIdCmd(TalonFX motor, double power, String nameForShuffleBoard) {
     this.motor = motor;
@@ -26,7 +31,9 @@ public class SysIdCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    motor.set(power);
+    //motor.set(power);
+    sysId.showFeedForward(0.1,0.2,Scope);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +43,11 @@ public class SysIdCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*Scope);
+    //SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*Scope);
+    Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
+    Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
+    System.out.println(Kv);
+    System.out.println(Ks);
     motor.set(0);
   }
     
