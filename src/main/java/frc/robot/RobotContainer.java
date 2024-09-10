@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -35,7 +36,7 @@ public class RobotContainer implements Sendable {
   public Command activatePodium;
   public Command activateShooter;
   public Command activateSubwoofer;
-  public double num;
+  public double num = 0;
   
 
   
@@ -91,6 +92,7 @@ public class RobotContainer implements Sendable {
 
 
   private void configureBindings() {
+  
     // commandController.b().onTrue(new RunCommand(()->chassis.setPosition()));
   
 }
@@ -98,9 +100,14 @@ public class RobotContainer implements Sendable {
    
   public Command getAutonomousCommand() {
     // return null;
-    //return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
-    return new RunCommand(() -> chassis.setModulesSteerPosition(num, 1), chassis);
-    // return new RunCommand(()-> chassis.setModulesPower(0.1), chassis);
+    // return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
+    // return new RunCommand(() -> {
+    //   chassis.setModulesSteerPosition(0.0,0);
+    //   chassis.setModulesSteerPosition(0.0,1);
+    //   chassis.setModulesSteerPosition(0.0,2);
+    //   chassis.setModulesSteerPosition(0.0,3);
+    // }, chassis);
+    return new RunCommand(()-> chassis.setModulesPower(0.1), chassis);
     // return new RunCommand(() -> chassis.setModulesPower(0.1), chassis);
     // return new RunCommand(()->motor.setControl((new MotionMagicVoltage(state.angle.getDegrees())).withSlot(0)));
   }

@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
 /** 
  * Class to hold all Talon FX/SRX configuration
  * Applicable to Phoenix 6

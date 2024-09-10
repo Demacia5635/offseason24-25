@@ -6,8 +6,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.utils.TalonConfig;
 
 public final class ChassisConstants {
-
-
   public static final int GYRO_ID = 14;
 
   public static final double CYCLE_DT = 0.02;
@@ -36,14 +34,14 @@ public final class ChassisConstants {
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.3, 0, 0);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.53, 0, 0);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(1.3, 0, 0);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.6, 0, 0);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
-  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0, 0.006, 0);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0, 0.009, 0);
+  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0, 0.0057, 0);
+  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0, 0.0002, 0.0003);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
@@ -68,7 +66,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       6,
       new Translation2d(0.332, 0.277),
-      16.79);
+      -0.39599609375);
 
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
 
@@ -82,7 +80,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       3,
       new Translation2d(0.332, -0.277),
-      161.28);
+      -0.448974609375);
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
 
@@ -96,7 +94,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       12,
       new Translation2d(-0.332, 0.288),
-      48.24);
+      -0.1357421875);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
 
@@ -110,7 +108,7 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
         .withMotionMagic(360, 1440, 3000),
       9,
       new Translation2d(-0.332, -0.288),
-      172.8);
+      -0.48095703125);
 
       
 

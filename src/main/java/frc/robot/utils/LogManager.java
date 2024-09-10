@@ -5,6 +5,7 @@
 package frc.robot.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -12,6 +13,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
@@ -118,6 +120,7 @@ public class LogManager extends SubsystemBase {
 
     // array of log entries
     ArrayList<LogEntry> logEntries = new ArrayList<>();
+    HashMap<String, Pose2d> poses = new HashMap<>();
 
     // Log managerconstructor
     public LogManager() {
@@ -159,6 +162,10 @@ public class LogManager extends SubsystemBase {
             }
         }
         return null;
+    }
+
+    public void add(Pose2d pose2d) {
+
     }
 
     /*
