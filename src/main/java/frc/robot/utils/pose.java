@@ -4,12 +4,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 
 public class pose {
-    private String[] objects;
-    private double[] dists;
-    private double[] angles;
+    private String objects;
+    private double dists;
+    private double angles;
     private Translation2d pose;
 
-    public pose(String[] objects, double[] dists, double[] angles) {
+    public pose(String objects, double dists, double angles) {
         this.objects = objects;
         this.dists = dists;
         this.angles = angles;
@@ -17,13 +17,13 @@ public class pose {
 
     // Calculate the robot's pose based on detected objects
     public Translation2d calcMyPose() {
-        for (int i = 0; i < objects.length; i++) {
-            Translation2d obj = Constants.dic.get(objects[i]);
-            if (obj != null) {
-                Translation2d point = calculatePoint(obj, dists[i], angles[i]);
-                pose = average(pose, point);
-            }
+
+        Translation2d obj = Constants.dic.get(objects);
+        if (obj != null) {
+            Translation2d point = calculatePoint(obj, dists, angles);
+            pose = average(pose, point);
         }
+
         return pose;
     }
 

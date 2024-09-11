@@ -8,7 +8,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Lengtandangle;
+import frc.robot.utils.calc;
 import frc.robot.utils.pose;
 
 public class subpose extends SubsystemBase {
@@ -22,34 +22,31 @@ public class subpose extends SubsystemBase {
   
   // Pose and distance calculation utilities
   private pose pose;
-  private Lengtandangle dist;
+  private calc calc;
   
   // Field visualization
   private Field2d field;
 
   // Arrays to store object data
-  private String[] objects;
-  private double[] dists;
-  private double[] angles;
+  private String objects;
+  private double dists;
+  private double angles;
 
   public subpose() {
-    // Initialize arrays
-    objects = new String[10]; // Adjust size as needed
-    dists = new double[10];
-    angles = new double[10];
 
     // Initialize Field2d for visualization
     field = new Field2d();
     
     // Add this subsystem to SmartDashboard
-    SmartDashboard.putData("RobotContainer", this);
+    SmartDashboard.putData(this);
   }
 
   public void initSendable(SendableBuilder builder) {
     // Add properties to be displayed on SmartDashboard
-    builder.addDoubleProperty("tx", () -> tx, null);
-    builder.addDoubleProperty("ty", () -> ty, null);
-    builder.addDoubleProperty("id", () -> id, null);
+    
+    builder.addStringProperty("name", ()->objects, null);
+    builder.addDoubleProperty("dist", () -> dists, null);
+    builder.addDoubleProperty("angle", () -> angles, null);
   }
 
   @Override
@@ -63,14 +60,12 @@ public class subpose extends SubsystemBase {
     id = table.getEntry("tid").getDouble(0);
 
     // Calculate distance and angle
-    dist = new Lengtandangle((int)id, tx, ty);
+    calc = new calc(id, tx, ty);
     
     // Populate arrays with object data
-    for (int i = 0; i < objects.length; i++) {
-      objects[i] = dist.GetObj();
-      dists[i] = dist.GetDist();
-      angles[i] = dist.GetAngle();
-    }
+      objects = calc.GetObj();
+      dists = calc.GetDist();
+      angles = calc.GetAngle();
     
     // Calculate pose
     pose = new pose(objects, dists, angles);

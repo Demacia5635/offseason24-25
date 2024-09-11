@@ -2,15 +2,15 @@ package frc.robot.utils;
 
 import frc.robot.Constants;
 
-public class Lengtandangle {
+public class calc {
     private double height;
-    private int id;
+    private double id;
     private double x_offset;
     private double y_offset;
     private double tx;
     private double ty;
 
-    public Lengtandangle(int id, double tx, double ty) {
+    public calc(double id, double tx, double ty) {
         this.id = id;
         this.tx = tx;
         this.ty = ty;
