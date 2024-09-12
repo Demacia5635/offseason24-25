@@ -12,6 +12,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import static frc.robot.Constants.*;
 
@@ -54,7 +56,21 @@ public class Shooter extends SubsystemBase {
     motorUp.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
   }
 
-  
+  public void pidDownMotorVelocity(double desiredRotationsPerSec){
+    motorUp.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
+  }
+
+  public void setFeedingPower(double power){
+    motorFeeding.set(ControlMode.PercentOutput, power);
+  }
+
+  public double DownMotorVelocity(){
+    return motorDown.getVelocity().getValue();
+  }
+
+  public double UpMotorVelocity(){
+    return motorUp.getVelocity().getValue();
+  }
 
   @Override
   public void periodic() {
