@@ -2,6 +2,7 @@ package frc.robot.subsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -38,24 +39,33 @@ public class subpose extends SubsystemBase {
     dists = new double[10];
     angles = new double[10];
 
+
+
     // Initialize Field2d for visualization
     field = new Field2d();
     
     // Add this subsystem to SmartDashboard
-    SmartDashboard.putData("RobotContainer", this);
+    SmartDashboard.putData(this);
   }
 
+  @Override
   public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+
     // Add properties to be displayed on SmartDashboard
     builder.addDoubleProperty("tx", () -> tx, null);
     builder.addDoubleProperty("ty", () -> ty, null);
     builder.addDoubleProperty("id", () -> id, null);
+    builder.addStringProperty("name",() -> objects[0] != null ? objects[0] : "st", null);
+    System.out.println(objects[0]);
+    builder.addDoubleProperty("dist", () -> dists[0], null);
+    builder.addDoubleProperty("angle", () -> angles[0], null);
   }
 
   @Override
   public void periodic() {
     // Get the Limelight NetworkTable
-    table = NetworkTableInstance.getDefault().getTable("limelight");
+    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
     
     // Fetch Limelight data
     tx = table.getEntry("tx").getDouble(0);
@@ -63,20 +73,21 @@ public class subpose extends SubsystemBase {
     id = table.getEntry("tid").getDouble(0);
 
     // Calculate distance and angle
-    dist = new Lengtandangle((int)id, tx, ty);
+    dist = new Lengtandangle(id, tx, ty);
     
     // Populate arrays with object data
     for (int i = 0; i < objects.length; i++) {
       objects[i] = dist.GetObj();
       dists[i] = dist.GetDist();
       angles[i] = dist.GetAngle();
+      
     }
     
     // Calculate pose
     pose = new pose(objects, dists, angles);
     
     // Update field visualization
-    field.setRobotPose(new Pose2d(pose.calcMyPose(), new Rotation2d()));
+    field.setRobotPose(new Pose2d(pose.calcMyPose() == null? new Translation2d(0,0):pose.calcMyPose(), new Rotation2d()));
 
     // Display field on SmartDashboard
     SmartDashboard.putData("field", field);

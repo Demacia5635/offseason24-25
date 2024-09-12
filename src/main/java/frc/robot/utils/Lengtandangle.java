@@ -4,13 +4,13 @@ import frc.robot.Constants;
 
 public class Lengtandangle {
     private double height;
-    private int id;
-    private double x_offset;
+    private double id;
+    private double x_offset =  0.3;
     private double y_offset;
     private double tx;
     private double ty;
 
-    public Lengtandangle(int id, double tx, double ty) {
+    public Lengtandangle(double id, double tx, double ty) {
         this.id = id;
         this.tx = tx;
         this.ty = ty;
@@ -25,6 +25,7 @@ public class Lengtandangle {
     // Get object identifier (note or AprilTag)
     public String GetObj() {
         return id == 0 ? "note" : ("tag_" + id);
+
     }
 
     // Calculate angle to the object
