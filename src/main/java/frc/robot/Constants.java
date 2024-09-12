@@ -13,6 +13,26 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final int Motor_UP_ID = 1;
+  public static final int Motor_DOWN_ID = 2;
+  public static final int MOTOR_FEEDING_ID = 3;
+
+  public static final String CANBUS = "canivore";
+
+  public static final double kP = 0.0;
+  public static final double kI = 0.0;
+  public static final double kD = 0.0;
+  public static final double kS = 0.0;
+  public static final double kV = 0.0;
+
+  //public static final double SCOPE = 
+  public static final double Radios = 0.035;
+  public static final double spinPerMeter = (Radios*2)*Math.PI;//the gear ratio is 1 in motor up and motordown
+  public static final double meterPerSpin = 1/spinPerMeter;
+
+
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
