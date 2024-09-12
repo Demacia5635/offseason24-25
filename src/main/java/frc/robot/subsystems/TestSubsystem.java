@@ -30,8 +30,10 @@ public class TestSubsystem extends SubsystemBase {
     motor.getConfigurator().apply(config);
   }
 
+  //0.638/8.14 = x; 300/63.8
+
   public void moveWithPid(double speed){
-    motor.setControl(velocityVoltage.withVelocity(speed));
+    motor.setControl(velocityVoltage.withVelocity(speed/SCOPE));
   }
 
   @Override
@@ -39,6 +41,7 @@ public class TestSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putData(this);
   }
+  
   
   public double getTrueVelocity(){
     return motor.getVelocity().getValue()/GEAR_RATIO*SCOPE;

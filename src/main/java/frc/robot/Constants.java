@@ -23,7 +23,10 @@ public final class Constants {
   public static final String CANBUS = "canivore";
   public static final double KS = SmartDashboard.getNumber("KS", 0);
   public static final double KV = SmartDashboard.getNumber("KV", 0);
-  public static final double KP = 0.3;
+  public static final double KP = 0.5;
+  public static final double KI = KP/10;
+  public static final double KD = KI/10;
+  
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
