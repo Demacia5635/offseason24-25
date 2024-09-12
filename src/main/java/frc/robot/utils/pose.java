@@ -19,10 +19,12 @@ public class pose {
     public Translation2d calcMyPose() {
 
         Translation2d obj = Constants.dic.get(objects);
+        //System.out.println(objects);
         if (obj != null) {
             Translation2d point = calculatePoint(obj, dists, angles);
             pose = average(pose, point);
         }
+
 
         return pose;
     }
