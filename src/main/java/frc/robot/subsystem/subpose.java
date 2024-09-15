@@ -9,6 +9,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utils.calc;
 import frc.robot.utils.pose;
 
@@ -36,11 +37,11 @@ public class subpose extends SubsystemBase {
   private double dists;
   private double angles;
 
-  public subpose() {
+  public subpose(double x_offset) {
 
     // Initialize Field2d for visualization
     field = new Field2d();
-    
+    this.x_offset = Constants.LimelightXOfset;
     // Add this subsystem to SmartDashboard
     SmartDashboard.putData(this);
   }

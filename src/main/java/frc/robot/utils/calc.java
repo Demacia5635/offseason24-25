@@ -10,7 +10,6 @@ public class calc {
     private double ty;
     private double id;
     private double sumdegry;
-    private double RadiansSumDegry;
 
     public calc(double height, double tx, double ty, double x_offset, double y_offset, double id) {
         this.x_offset = x_offset;
@@ -23,13 +22,9 @@ public class calc {
 
     // Calculate distance to the object
     public double GetDist() {
-        //if(ty < 0){
-          //  ty= ty*-1+90;
-          //}
         sumdegry = ty + Constants.LimelightAngle;
-        RadiansSumDegry = Math.toRadians(sumdegry);
-          //System.out.println("height:"+(height-Constants.LimelightHight)+",ty+LimelightAngle:"+(Math.toRadians(ty + Constants.LimelightAngle)+"dists:"+(Math.abs(height - Constants.LimelightHight) / Math.tan(Math.toRadians(ty + Constants.LimelightAngle)))));
-        return ((Math.abs(height - Constants.LimelightHight)) / (Math.tan(RadiansSumDegry))) + x_offset;
+        sumdegry = Math.toRadians(sumdegry);
+        return ((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry))) + x_offset;
     }
 
     // Get object identifier (note or AprilTag)
