@@ -27,7 +27,7 @@ public class AngleChanging extends SubsystemBase {
 
   private MotionMagicVoltage motionMagicVoltage;
   public AngleChanging() {
-    angleChangingMotor = new TalonFX(ANGLE_CHAGING_ID, CANBUS);
+    angleChangingMotor = new TalonFX(ANGLE_CHANGING_ID, CANBUS);
     analogInput = new AnalogInput(ANALOG_INPUT_ID);
     config = new TalonFXConfiguration();
     config.Slot0.kP = ANGLE_CHANGING_KP;
@@ -41,6 +41,10 @@ public class AngleChanging extends SubsystemBase {
     m_request  = new DutyCycleOut(0.0);
     velocityVoltage = new VelocityVoltage(0);
     motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+    var motionMagicConfigs = config.MotionMagic;
+    motionMagicConfigs.MotionMagicCruiseVelocity = ANGLE_CHANGING_MAX_VELOCITY;
+    motionMagicConfigs.MotionMagicAcceleration = ANGLE_CHANGING_MAX_Acceleration;
+    motionMagicConfigs.MotionMagicJerk = ANGLE_CHANGING_MAX_Jerk;
     angleChangingMotor.getConfigurator().apply(config);
   }
 

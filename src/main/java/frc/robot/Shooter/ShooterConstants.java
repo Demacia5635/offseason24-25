@@ -10,7 +10,7 @@ public class ShooterConstants {
   public static final int MOTOR_DOWN_ID = 2;
   public static final int MOTOR_FEEDING_ID = 3;
   public static final int ANALOG_INPUT_ID = 4;
-  public static final int ANGLE_CHAGING_ID = 5;
+  public static final int ANGLE_CHANGING_ID = 5;
 
   public static final String CANBUS = "canivore";
 
@@ -38,6 +38,10 @@ public static final double ANGLE_CHANGING_KP = 0.0;
   public static final double Motor_UP_VELOCITY = 0;
   public static final double Motor_DOWN_VELOCITY = 0;
   public static final double CALIBRITION_ANGLE_CHAGING_VELOCITY = 0;
+  
+  public static final double ANGLE_CHANGING_MAX_VELOCITY = 0;
+  public static final double ANGLE_CHANGING_MAX_Acceleration  = 0;
+  public static final double ANGLE_CHANGING_MAX_Jerk = 0;
 
   public static final double SHOOOTER_VOLTAGE = 0;
 }
