@@ -44,12 +44,15 @@ public class Constants {
         tmp.put("tag_15.0",new Translation2d(inchToMeter(182.73), inchToMeter(177.10)));
         tmp.put("tag_16.0",new Translation2d(inchToMeter(182.73),inchToMeter(146.19)));
 
+        //if bottom left is (0,0)
         tmp.put("red_stage_leg_mid",new Translation2d(inchToMeter(121),inchToMeter(161.64)));
-        tmp.put("red_stage_leg_bottom",new Translation2d(inchToMeter(231.2),inchToMeter(95.64)));
-        tmp.put("red_stage_leg_top",new Translation2d(inchToMeter(231.2),inchToMeter(218.26)));
+        tmp.put("red_stage_leg_bottom",new Translation2d(inchToMeter(231.2),inchToMeter(97.64)));
+        tmp.put("red_stage_leg_top",new Translation2d(inchToMeter(231.2),inchToMeter(220.26)));
         tmp.put("blue_stage_leg_mid",new Translation2d(inchToMeter(532.22),inchToMeter(161.64)));
-        tmp.put("blue_stage_leg_bottom",new Translation2d(inchToMeter(422.02),inchToMeter(95.64)));
-        tmp.put("blue_stage_leg_top",new Translation2d(inchToMeter(422.02),inchToMeter(218.26)));
+        tmp.put("blue_stage_leg_bottom",new Translation2d(inchToMeter(422.02),inchToMeter(97.64)));
+        tmp.put("blue_stage_leg_top",new Translation2d(inchToMeter(422.02),inchToMeter(220.26)));
+        tmp.put("red_speaker_middle",new Translation2d(inchToMeter(36.68),inchToMeter(104.64)));
+        tmp.put("blue_speaker_middle",new Translation2d(inchToMeter(616.52),inchToMeter(104.64)));
 
         //tmp.put("note", null);
         dic = Collections.unmodifiableMap(tmp);
