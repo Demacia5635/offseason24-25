@@ -22,15 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveKinematics extends SwerveDriveKinematics {
     
 
-    public static final double VX_VY_CHANGE_RATIO = -0.1;
-    public static final double MIN_RATIO_CHANGE = Math.toRadians(20);
-    public static final double MIN_OMEGA_TO_CHANGE = 0.1;
-    public static final double MAX_OMEGA_TO_CHANGE = 1;
-    public static final double MIN_OMEGA_CHANGE_AMOUNT = 1.2;
-    public static final double MAX_OMEGA_CHANGE_AMOUNT = 1;
-
-    private static final double _A = (MAX_OMEGA_CHANGE_AMOUNT-MIN_OMEGA_CHANGE_AMOUNT)/(MAX_OMEGA_TO_CHANGE-MIN_OMEGA_TO_CHANGE);
-    private static final double _B = MAX_OMEGA_CHANGE_AMOUNT - MAX_OMEGA_TO_CHANGE*_A;
+    
+    
 
     /**
      * Constructor we use
@@ -41,13 +34,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
         super(moduleTranslationsMeters);
     }
 
-    public static double fixOmega(double omega) {
-        if(Math.abs(omega) > MIN_OMEGA_TO_CHANGE && Math.abs(omega) < MAX_OMEGA_TO_CHANGE) {
-            return (omega * _A + _B)*Math.signum(omega);
-        }
-        return omega;
-    }
-
+    
 
     /**
      * Rotate the speeds counter to omega - to drive stright
