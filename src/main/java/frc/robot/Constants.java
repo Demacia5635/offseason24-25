@@ -44,6 +44,12 @@ public class Constants {
         tmp.put("tag_15.0",new Translation2d(inchToMeter(182.73), inchToMeter(177.10)));
         tmp.put("tag_16.0",new Translation2d(inchToMeter(182.73),inchToMeter(146.19)));
 
+        tmp.put("red_stage_leg_mid",new Translation2d(inchToMeter(121),inchToMeter(161.64)));
+        tmp.put("red_stage_leg_bottom",new Translation2d(inchToMeter(231.2),inchToMeter(95.64)));
+        tmp.put("red_stage_leg_top",new Translation2d(inchToMeter(231.2),inchToMeter(218.26)));
+        tmp.put("blue_stage_leg_mid",new Translation2d(inchToMeter(532.22),inchToMeter(161.64)));
+        tmp.put("blue_stage_leg_bottom",new Translation2d(inchToMeter(422.02),inchToMeter(95.64)));
+        tmp.put("blue_stage_leg_top",new Translation2d(inchToMeter(422.02),inchToMeter(218.26)));
 
         //tmp.put("note", null);
         dic = Collections.unmodifiableMap(tmp);
