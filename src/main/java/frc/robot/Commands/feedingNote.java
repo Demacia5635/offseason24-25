@@ -7,11 +7,11 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Shooter;
 
-public class feedingNote extends Command {
+public class FeedingNote extends Command {
   /** Creates a new feedingNote. */
   private Shooter shooter;
   private double feedingPower;
-  public feedingNote(Shooter shooter, double feedingPower) {
+  public FeedingNote(Shooter shooter, double feedingPower) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.feedingPower =  feedingPower;

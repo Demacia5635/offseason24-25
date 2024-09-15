@@ -80,6 +80,19 @@ public class Shooter extends SubsystemBase {
     return analogInput.getVoltage() < NOTE_VOLTAGE;
   }
 
+  private enum ShooterState{
+    AMP,
+    SPEAKER
+  }
+
+  public Enum getState(boolean isAmp){
+    if(isAmp){
+      return ShooterState.AMP;
+    }
+    return ShooterState.SPEAKER;
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
