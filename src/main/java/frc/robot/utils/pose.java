@@ -8,11 +8,13 @@ public class pose {
     private double dists;
     private double angles;
     private Translation2d pose;
+    private double robotAngle;
 
-    public pose(String objects, double dists, double angles) {
+    public pose(String objects, double dists, double angles, double robotAngle) {
         this.objects = objects;
         this.dists = dists;
         this.angles = angles;
+        this.robotAngle = robotAngle;
     }
 
     // Calculate the robot's pose based on detected objects
@@ -32,8 +34,11 @@ public class pose {
     // Calculate a point based on object position, distance, and angle
     private Translation2d calculatePoint(Translation2d obj, double dist, double angle) {
         Translation2d trigo = trigo(dist, angle % 90);
-        double x = obj.getX() + (angle > 90 && angle <= 270 ? trigo.getX() : -trigo.getX());
-        double y = obj.getY() + (angle > 180 ? trigo.getY() : -trigo.getY());
+        double x;
+        double y;
+        x = obj.getX() + (angle > 90 && angle <= 270 ? trigo.getX() : -trigo.getX());
+        y = obj.getY() + (angle > 180 ? trigo.getY() : -trigo.getY());
+        
         return new Translation2d(x, y);
     }
 

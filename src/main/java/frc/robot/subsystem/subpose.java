@@ -1,5 +1,8 @@
 package frc.robot.subsystem;
 
+
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,6 +39,7 @@ public class subpose extends SubsystemBase {
   private String objects;
   private double dists;
   private double angles;
+  private Pigeon2 giro;
 
   public subpose() {
 
@@ -45,6 +49,8 @@ public class subpose extends SubsystemBase {
     this.y_offset = Constants.LimelightYOfset;
     // Add this subsystem to SmartDashboard
     SmartDashboard.putData(this);
+
+    giro = new Pigeon2(19);
   }
 
   
@@ -72,13 +78,14 @@ public class subpose extends SubsystemBase {
     this.angles = calc.GetAngle();
     
     // Calculate pose
-    pose = new pose(objects, dists, angles);
+    pose = new pose(objects, dists, angles, giro.getYaw());
     
     // Update field visualization
     field.setRobotPose(new Pose2d(pose.calcMyPose() == null? new Translation2d(): pose.calcMyPose(), new Rotation2d()));
 
     // Display field on SmartDashboard
     SmartDashboard.putData("field", field);
+
   }
 
   public void initSendable(SendableBuilder builder) {
@@ -87,5 +94,6 @@ public class subpose extends SubsystemBase {
     builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
     builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
     builder.addDoubleProperty("dist", () -> this.dists, null);
+
   }
 }

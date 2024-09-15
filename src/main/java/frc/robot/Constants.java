@@ -48,6 +48,7 @@ public class Constants {
         //tmp.put("note", null);
         dic = Collections.unmodifiableMap(tmp);
     }
+    
 
     public static double inchToMeter(double inch){
       return inch*0.0254;
