@@ -88,13 +88,14 @@ public class Constants {
       idToHeights.put(16.0,Low_Height);
   
       idToHeights.put(-1.0,0.0);
+      idToHeights.put(0.0,0.0);
   
       HEIGHT_MAP = Collections.unmodifiableMap(idToHeights);
     }
-    public static final double LimelightHight = 0.355;
-    public static final double LimelightAngle = 38;
+    public static final double LimelightHight = 0.317;
+    public static final double LimelightAngle = 33;
 
-    public static final double LimelightXOfset = -0.08;
-    public static final double LimelightYOfset = -0.36;
+    public static final double LimelightXOfset = 0.08;
+    public static final double LimelightYOfset = 0.36;
 
 }//1.095

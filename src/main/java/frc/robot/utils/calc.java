@@ -11,13 +11,13 @@ public class calc {
     private double id;
     private double sumdegry;
 
-    public calc(double height, double tx, double ty, double x_offset, double y_offset, double id) {
+    public calc(double tx, double ty, double x_offset, double y_offset, double id) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
         this.tx = tx;
         this.ty = ty;
-        this.height = height;
+        this.height = Constants.HEIGHT_MAP.get(id);
     }
 
     // Calculate distance to the object

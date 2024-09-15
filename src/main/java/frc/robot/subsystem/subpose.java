@@ -37,22 +37,17 @@ public class subpose extends SubsystemBase {
   private double dists;
   private double angles;
 
-  public subpose(double x_offset) {
+  public subpose() {
 
     // Initialize Field2d for visualization
     field = new Field2d();
     this.x_offset = Constants.LimelightXOfset;
+    this.y_offset = Constants.LimelightYOfset;
     // Add this subsystem to SmartDashboard
     SmartDashboard.putData(this);
   }
 
-  public void initSendable(SendableBuilder builder) {
-    // Add properties to be displayed on SmartDashboard
-    
-    builder.addStringProperty("name", objects != null?()->objects: ()->"r", null);
-    builder.addDoubleProperty("dist", () -> dists , null);
-    builder.addDoubleProperty("angle", () -> angles, null);
-  }
+  
 
   @Override
   public void periodic() {
@@ -69,12 +64,12 @@ public class subpose extends SubsystemBase {
 
 
     // Calculate distance and angle
-    calc = new calc(height, tx, ty, x_offset, y_offset, id);
+    calc = new calc(tx, ty, x_offset, y_offset, id);
     //System.out.println(calc.GetDist());
     // Populate arrays with object data
-      objects = calc.GetObj();
-      dists = calc.GetDist();
-      angles = calc.GetAngle();
+    this.objects = calc.GetObj();
+    this.dists = calc.GetDist();
+    this.angles = calc.GetAngle();
     
     // Calculate pose
     pose = new pose(objects, dists, angles);
@@ -84,5 +79,13 @@ public class subpose extends SubsystemBase {
 
     // Display field on SmartDashboard
     SmartDashboard.putData("field", field);
+  }
+
+  public void initSendable(SendableBuilder builder) {
+    // Add properties to be displayed on SmartDashboard
+    
+    builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
+    builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
+    builder.addDoubleProperty("dist", () -> this.dists, null);
   }
 }
