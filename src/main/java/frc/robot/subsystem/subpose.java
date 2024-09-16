@@ -1,11 +1,11 @@
 package frc.robot.subsystem;
 
 
+
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -21,12 +21,13 @@ public class subpose extends SubsystemBase {
   private NetworkTable table;
   
   // Limelight data
-  private double height;
   private double x_offset;
   private double y_offset;
   private double tx;
   private double ty;
   private double id;
+  
+  private Pigeon2 giro;
   
   // Pose and distance calculation utilities
   private pose pose;
@@ -39,7 +40,6 @@ public class subpose extends SubsystemBase {
   private String objects;
   private double dists;
   private double angles;
-  private Pigeon2 giro;
 
   public subpose() {
 
@@ -51,6 +51,7 @@ public class subpose extends SubsystemBase {
     SmartDashboard.putData(this);
 
     giro = new Pigeon2(19);
+
   }
 
   
@@ -81,10 +82,13 @@ public class subpose extends SubsystemBase {
     pose = new pose(objects, dists, angles, giro.getYaw());
     
     // Update field visualization
-    field.setRobotPose(new Pose2d(pose.calcMyPose() == null? new Translation2d(): pose.calcMyPose(), new Rotation2d()));
+    Pose2d robotPose = pose.calcMyPose();
+        if (robotPose != null) {
+            field.setRobotPose(robotPose);
+        }
 
-    // Display field on SmartDashboard
-    SmartDashboard.putData("field", field);
+        // Display field on SmartDashboard
+        SmartDashboard.putData("field", field);
 
   }
 

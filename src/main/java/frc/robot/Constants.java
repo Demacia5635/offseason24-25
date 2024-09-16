@@ -57,6 +57,35 @@ public class Constants {
         //tmp.put("note", null);
         dic = Collections.unmodifiableMap(tmp);
     }
+
+    public static final Map<String,Double> ang;
+    static{
+        Hashtable<String,Double> tmp = new Hashtable<String,Double>();
+
+
+        tmp.put("tag_1.0",120.0);
+        tmp.put("tag_2.0",120.0);
+        tmp.put("tag_3.0",180.0);
+        tmp.put("tag_4.0",180.0);
+        tmp.put("tag_5.0",270.0);
+        tmp.put("tag_6.0",270.0);
+        tmp.put("tag_7.0",0.0);
+        tmp.put("tag_8.0",0.0);
+        tmp.put("tag_9.0",90.0);
+        tmp.put("tag_10.0",60.0);
+        tmp.put("tag_11.0",300.0);
+        tmp.put("tag_12.0",60.0);
+        tmp.put("tag_13.0",180.0);
+        tmp.put("tag_14.0",0.0);
+        tmp.put("tag_15.0",120.0);
+        tmp.put("tag_16.0",240.0);
+        
+
+
+
+        //tmp.put("note", null);
+        ang = Collections.unmodifiableMap(tmp);
+    }
     
 
     public static double inchToMeter(double inch){
