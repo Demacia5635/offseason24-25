@@ -20,7 +20,7 @@ public class ShooterConstants {
   public static final double SHOOTER_KS = 0.0;
   public static final double SHOOTER_KV = 0.0;
 
-public static final double ANGLE_CHANGING_KP = 0.0;
+  public static final double ANGLE_CHANGING_KP = 0.0;
   public static final double ANGLE_CHANGING_KI = 0.0;
   public static final double ANGLE_CHANGING_KD = 0.0;
   public static final double ANGLE_CHANGING_KS = 0.0;
@@ -35,15 +35,21 @@ public static final double ANGLE_CHANGING_KP = 0.0;
   public static final double OOM_SPIN_PER_METER = 0;
 
   public static final double FEEDING_MOTOR_POWER = 0;
-  public static final double Motor_UP_VELOCITY = 0;
-  public static final double Motor_DOWN_VELOCITY = 0;
+  public static final double Motor_UP_AMP_VELOCITY = 0;
+  public static final double Motor_DOWN_AMP_VELOCITY = 0;
   public static final double CALIBRITION_ANGLE_CHAGING_VELOCITY = 0;
   public static final double UP_SPEED_CALIBRATION = 0;
   public static final double DOWN_SPEED_CALIBRATION = 0;
-  
+  public static final double AMP_ANGLE = 0;
+
   public static final double ANGLE_CHANGING_MAX_VELOCITY = 0;
   public static final double ANGLE_CHANGING_MAX_Acceleration  = 0;
   public static final double ANGLE_CHANGING_MAX_Jerk = 0;
 
   public static final double SHOOOTER_VOLTAGE = 0;
+
+
+  public enum STATE{
+    AMP, DELIVERY, SPEAKER;
+  }
 }
