@@ -1,43 +1,49 @@
 package frc.robot.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.StatusCode;
-
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.RobotController;
 
 public abstract class LogEntry {
-    protected String name;
-    protected HashMap<String, DoubleSupplier> attributes;
+    private static final NetworkTableInstance INSTANCE = NetworkTableInstance.getDefault();
+    private static final String ROOT = "/Robot/";
+    private static final NetworkTable ROOT_TABLE = INSTANCE.getTable(ROOT);
 
-    protected LogEntry(String name, int dataAmount) {
-        this.name = name;
-        attributes = new HashMap<>();
-    }
+    public class EntryData {
+        private String name;
+        private DoubleLogEntry entry;
+        private DoubleTopic topic;
+        private DoubleSupplier supplier;
 
-    public void log() {
-        for (Entry<String, DoubleSupplier> attrib : attributes.entrySet()) {
-            double v = attrib.getValue().getAsDouble();
-            double time = (long) (RobotController.getFPGATime() * 1000);
-        
-            log(v, time);
+        public EntryData(String name, DoubleSupplier supplier) {
+            this.name = name;
+            this.supplier = supplier;
+        }
+
+        public void log() {
+
         }
     }
 
-    public void log(double v) {
-        log(v, 0);
+    protected List<EntryData> data;
+
+    protected LogEntry() {
+        data = new ArrayList<>();
     }
 
-    public void log(double v, long time) {
-        entry.append(v, time);
-        if (ntPublisher != null) {
-            ntPublisher.set(v);
+    public void update() {
+        for (EntryData entryData : data) {
+            entryData.log();
         }
-        if(consumer != null) {
-            consumer.accept(v, time);
-        }
-        lastValue = v;
     }
 }
