@@ -7,6 +7,7 @@ package frc.robot.Shooter.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Shooter.Subsystems.AngleChanging;
 import frc.robot.Shooter.Subsystems.Shooter;
+import static frc.robot.Shooter.ShooterConstants.*;
 
 public class SetShootingAndShoot extends CommandBase {
   /** Creates a new setShooting. */
@@ -14,6 +15,10 @@ public class SetShootingAndShoot extends CommandBase {
   private AngleChanging angleChanging;
   private double angle;
   private double distance;
+  private double upMotorVelocity;
+  private double downMotorVelocity;
+  private STATE anglerState;
+  
 
   public SetShootingAndShoot(Shooter shooter, AngleChanging angleChanging) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,12 +31,26 @@ public class SetShootingAndShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    switch(anglerState){
+      case AMP:
+        angle = AMP_ANGLE;
+        
+      
+      case SPEAKER:
+      
 
+      case DELIVERY:
+      
+
+        
+
+    }
   }
 
   // Called once the command ends or is interrupted.

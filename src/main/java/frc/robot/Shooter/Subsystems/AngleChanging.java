@@ -25,6 +25,8 @@ public class AngleChanging extends SubsystemBase {
   private DutyCycleOut m_request;
   private VelocityVoltage velocityVoltage;
 
+
+
   private MotionMagicVoltage motionMagicVoltage;
   public AngleChanging() {
     angleChangingMotor = new TalonFX(ANGLE_CHANGING_ID, CANBUS);
@@ -76,5 +78,5 @@ public class AngleChanging extends SubsystemBase {
   public boolean isTopAngle(){
     return analogInput.getVoltage() > SHOOOTER_VOLTAGE;
   }
-  
+
 }
