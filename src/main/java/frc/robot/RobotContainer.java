@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystem.subpose;
 
 /**
@@ -16,20 +20,26 @@ import frc.robot.subsystem.subpose;
 public class RobotContainer {
 
   private subpose pose;
+  private CommandXboxController controller;
+  private Pigeon2 giro;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     pose = new subpose();
     configureBindings();
 
-    
+    giro = new Pigeon2(14);
+
+    controller = new CommandXboxController(0);
   }
 
 
 
 
   private void configureBindings() {
-
+    controller.a().onTrue(new InstantCommand(()->subpose.resetGiro(giro)));
   }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

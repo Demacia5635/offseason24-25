@@ -2,7 +2,8 @@ package frc.robot.subsystem;
 
 
 
-import com.ctre.phoenix.sensors.Pigeon2;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 
@@ -12,6 +13,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.utils.calc;
 import frc.robot.utils.pose;
@@ -40,7 +42,6 @@ public class subpose extends SubsystemBase {
   private String objects;
   private double dists;
   private double angles;
-
   public subpose() {
 
     // Initialize Field2d for visualization
@@ -50,8 +51,11 @@ public class subpose extends SubsystemBase {
     // Add this subsystem to SmartDashboard
     SmartDashboard.putData(this);
 
-    giro = new Pigeon2(19);
+    giro = new Pigeon2(14);
 
+  }
+  public static void resetGiro(Pigeon2 giro){
+    giro.reset();
   }
 
   
@@ -79,7 +83,7 @@ public class subpose extends SubsystemBase {
     this.angles = calc.GetAngle();
     
     // Calculate pose
-    pose = new pose(objects, dists, angles, giro.getYaw());
+    pose = new pose(objects, dists, angles, giro.getAngle());
     
     // Update field visualization
     Pose2d robotPose = pose.calcMyPose();
