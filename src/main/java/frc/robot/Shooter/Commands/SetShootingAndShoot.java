@@ -4,41 +4,42 @@
 
 package frc.robot.Shooter.Commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Shooter.Subsystems.AngleChanging;
 import frc.robot.Shooter.Subsystems.Shooter;
 
-public class ShootNote extends Command {
-  /** Creates a new ShootNote. */
+public class SetShootingAndShoot extends CommandBase {
+  /** Creates a new setShooting. */
   private Shooter shooter;
-  private double upMotorVelocity;
-  private double downMotorVelocity;
-  private double feedingPower;
-  public ShootNote(double upMotorVelocity, double downMotorVelocity, double feedingPower) {
+  private AngleChanging angleChanging;
+  private double angle;
+  private double distance;
+
+  public SetShootingAndShoot(Shooter shooter, AngleChanging angleChanging) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.upMotorVelocity = upMotorVelocity;
-    this.downMotorVelocity = downMotorVelocity;
-    this.feedingPower = feedingPower;
+    this.shooter = shooter;
+    this.angleChanging = angleChanging;
     addRequirements(shooter);
+    addRequirements(angleChanging);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setFeedingPower(feedingPower);
-    shooter.setUpMotorVelocityPid(upMotorVelocity);
-    shooter.setDownMotorVelocityPid(downMotorVelocity);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setFeedingPower(0);
     shooter.setUpMotorPower(0);
     shooter.setDownMotorPower(0);
+    angleChanging.setAngleChangingMotorPower(0);
   }
 
   // Returns true when the command should end.

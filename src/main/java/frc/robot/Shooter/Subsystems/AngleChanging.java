@@ -59,7 +59,10 @@ public class AngleChanging extends SubsystemBase {
 
   public void setAngleChangingVelocityMotionMagic(double position){
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(position));
+  }
 
+  public void anglerPID(double desiredRotationsPerSec){
+    angleChangingMotor.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
   }
 
   public void setAngle(Double rotation){
@@ -67,10 +70,11 @@ public class AngleChanging extends SubsystemBase {
   }
 
   public double getShooterAngle(){
-    return angleChangingMotor.getPosition().getValue() * OOM_SPIN_PER_METER / ANGLE_CHANGING_GEAR_RATIO;
+    return angleChangingMotor.getPosition().getValue();//and more
   }
 
   public boolean isTopAngle(){
     return analogInput.getVoltage() > SHOOOTER_VOLTAGE;
   }
+  
 }

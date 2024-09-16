@@ -38,6 +38,8 @@ public static final double ANGLE_CHANGING_KP = 0.0;
   public static final double Motor_UP_VELOCITY = 0;
   public static final double Motor_DOWN_VELOCITY = 0;
   public static final double CALIBRITION_ANGLE_CHAGING_VELOCITY = 0;
+  public static final double UP_SPEED_CALIBRATION = 0;
+  public static final double DOWN_SPEED_CALIBRATION = 0;
   
   public static final double ANGLE_CHANGING_MAX_VELOCITY = 0;
   public static final double ANGLE_CHANGING_MAX_Acceleration  = 0;
