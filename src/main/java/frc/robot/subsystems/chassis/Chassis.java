@@ -21,7 +21,7 @@ import frc.robot.PathFollow.Util.pathPoint;
 import frc.robot.Sysid.Sysid;
 import frc.robot.Sysid.Sysid.Gains;
 import frc.robot.commands.chassis.tests.DriveStraightLine;
-import frc.robot.subsystems.chassis.utils.SwerveKinematics;
+import frc.robot.subsystems.chassis.Kinematics.SwerveKinematics;
 import frc.robot.subsystems.vision.utils.LimelightVisionUtils;
 import frc.robot.subsystems.vision.utils.UpdatedPoseEstimatorClasses.SwerveDrivePoseEstimator;
 import frc.robot.utils.Utils;
