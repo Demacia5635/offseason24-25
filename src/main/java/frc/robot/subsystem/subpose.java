@@ -9,14 +9,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.utils.calc;
-import frc.robot.utils.pose;
+import frc.robot.utils.TagPoseCalc;
 
 public class subpose extends SubsystemBase {
   // NetworkTable for Limelight communication
@@ -32,16 +29,12 @@ public class subpose extends SubsystemBase {
   private Pigeon2 giro;
   
   // Pose and distance calculation utilities
-  private pose pose;
-  private calc calc;
+  private TagPoseCalc Pose;
   
   // Field visualization
   private Field2d field;
 
-  // Arrays to store object data
-  private String objects;
-  private double dists;
-  private double angles;
+
   public subpose() {
 
     // Initialize Field2d for visualization
@@ -75,18 +68,12 @@ public class subpose extends SubsystemBase {
 
 
     // Calculate distance and angle
-    calc = new calc(tx, ty, x_offset, y_offset, id);
-    //System.out.println(calc.GetDist());
-    // Populate arrays with object data
-    this.objects = calc.GetObj();
-    this.dists = calc.GetDist();
-    this.angles = calc.GetAngle();
-    
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id, giro.getAngle());
+
     // Calculate pose
-    pose = new pose(objects, dists, angles, giro.getAngle());
     
     // Update field visualization
-    Pose2d robotPose = pose.calcMyPose();
+    Pose2d robotPose = Pose.calcMyPose();
         if (robotPose != null) {
             field.setRobotPose(robotPose);
         }
@@ -96,12 +83,12 @@ public class subpose extends SubsystemBase {
 
   }
 
-  public void initSendable(SendableBuilder builder) {
-    // Add properties to be displayed on SmartDashboard
+  // public void initSendable(SendableBuilder builder) {
+  //   // Add properties to be displayed on SmartDashboard
     
-    builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
-    builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
-    builder.addDoubleProperty("dist", () -> this.dists, null);
+  //   builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
+  //   builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
+  //   builder.addDoubleProperty("dist", () -> this.dists, null);
 
-  }
+  // }
 }
