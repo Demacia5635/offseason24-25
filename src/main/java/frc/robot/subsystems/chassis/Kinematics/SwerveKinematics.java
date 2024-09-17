@@ -1,5 +1,6 @@
-package frc.robot.subsystems.chassis.utils;
+package frc.robot.subsystems.chassis.Kinematics;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -22,9 +23,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveKinematics extends SwerveDriveKinematics {
     
 
-    
-    
+   
 
+    public SwerveModuleState[] states;
+    Translation2d[] moduleTranslationsMeters;
     /**
      * Constructor we use
      * 
@@ -32,23 +34,26 @@ public class SwerveKinematics extends SwerveDriveKinematics {
      */
     public SwerveKinematics(Translation2d... moduleTranslationsMeters) {
         super(moduleTranslationsMeters);
+        this.moduleTranslationsMeters = moduleTranslationsMeters;
+        
     }
 
-    
-
+    private double getCycleDistance(double vel){
+        return vel * 0.02;
+    }
+   
     /**
      * Rotate the speeds counter to omega - to drive stright
      */
-    @Override
-    public SwerveModuleState[] toSwerveModuleStates(ChassisSpeeds speeds) {
-        speeds.omegaRadiansPerSecond = fixOmega(speeds.omegaRadiansPerSecond);
-        double ratio = speeds.omegaRadiansPerSecond > MIN_RATIO_CHANGE ? VX_VY_CHANGE_RATIO : 0;
-        ChassisSpeeds s = speeds;
-        if(ratio != 0) {
-            Translation2d newV = new Translation2d(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond).rotateBy(Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * ratio));
-            s = new ChassisSpeeds(newV.getX(), newV.getY(), speeds.omegaRadiansPerSecond);
+    public SwerveModuleState[] toSwerveModuleStates(ChassisSpeeds speeds, Pose2d curPose, SwerveModuleState[] prevStates) {
+        Pose2d estimatedPose = new Pose2d(curPose.getX() + getCycleDistance(speeds.vxMetersPerSecond), curPose.getY() + getCycleDistance(speeds.vyMetersPerSecond),
+            curPose.getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond * 0.02)));
+        for(int i = 0; i < 4; i++){
+            Translation2d modulePos = estimatedPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(estimatedPose.getRotation()));
+            Translation2d prevToEstimated = modulePos.minus(curPose.getTranslation().plus(moduleTranslationsMeters[i]));
+            
         }
-        return super.toSwerveModuleStates(s);
+        return new SwerveModuleState[4];
     }
 
     /**
@@ -56,14 +61,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
      */
     @Override
     public ChassisSpeeds toChassisSpeeds(SwerveModuleState... moduleStates) {
-        ChassisSpeeds speeds = super.toChassisSpeeds(moduleStates);
-        double ratio = speeds.omegaRadiansPerSecond > MIN_RATIO_CHANGE ? -VX_VY_CHANGE_RATIO : 0;
-        ChassisSpeeds s = speeds;
-        if(ratio != 0) {
-            Translation2d newV = new Translation2d(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond).rotateBy(Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * ratio));
-            s = new ChassisSpeeds(newV.getX(), newV.getY(), speeds.omegaRadiansPerSecond);
-        }
-        return s;
+        return new ChassisSpeeds();
     }
 
     @Override

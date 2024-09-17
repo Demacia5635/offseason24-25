@@ -19,7 +19,7 @@ import edu.wpi.first.math.kinematics.WheelPositions;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import frc.robot.subsystems.chassis.Chassis;
 import frc.robot.subsystems.chassis.ChassisConstants;
-import frc.robot.subsystems.chassis.utils.SwerveKinematics;
+import frc.robot.subsystems.chassis.Kinematics.SwerveKinematics;
 
 public class DemaciaOdometry {
     private final double DISTANCE_OFFSET = -1; //meters
@@ -65,11 +65,6 @@ public class DemaciaOdometry {
 
 
     /**
-     * 
-     *  0 = FRONT_LEFT;
-        1 = FRONT_RIGHT;
-        2 = BACK_LEFT;
-        3 = BACK_RIGHT
      * @param gyroAngle
      * @param wheelPositions
      * @return 
