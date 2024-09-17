@@ -5,6 +5,7 @@
 package frc.robot.Shooter.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanging;
 import frc.robot.Shooter.Subsystems.Shooter;
 import static frc.robot.Shooter.ShooterConstants.*;
@@ -17,6 +18,8 @@ public class SetShootingAndShoot extends CommandBase {
   private double distance;
   private double upMotorVelocity;
   private double downMotorVelocity;
+  private boolean isReady;
+  private boolean isfinished;
   private STATE anglerState;
   
 
@@ -39,18 +42,29 @@ public class SetShootingAndShoot extends CommandBase {
   public void execute() {
     switch(anglerState){
       case AMP:
-        angle = AMP_ANGLE;
-        
-      
+          angle = AMP_ANGLE;
+          upMotorVelocity = MOTOR_UP_AMP_VELOCITY;
+          downMotorVelocity = MOTOR_DOWN_AMP_VELOCITY;
       case SPEAKER:
-      
-
-      case DELIVERY:
-      
-
-        
-
+          //distance = ?;
+          //angle = ?;
+          //upMotorVelocity = ?;
+          //downMotorVelocity = ?;
+     case DELIVERY:
+          angle = DELIVERY_ANGLE;
+          upMotorVelocity = MOTOR_UP_DELIVERY_VELOCITY;
+          downMotorVelocity = MOTOR_DOWN_DELIVERY_VELOCITY;
     }
+    angleChanging.setAngleChangingVelocityMotionMagic(angle);
+    shooter.setUpMotorVelocityPid(upMotorVelocity);
+    shooter.setDownMotorVelocityPid(downMotorVelocity);
+    if ((angle == angleChanging.getShooterAngle() && upMotorVelocity == shooter.getUpMotorVelocity() && downMotorVelocity == shooter.getDownMotorVelocity()) /*|| (הנהג לחץ על קפתור)*/){
+      isReady = true;
+    }
+    if (isReady){
+      shooter.setFeedingPower(FEEDING_MOTOR_POWER);
+    }
+    //פונקציה שמגדירה את isFinished כtrue אחרי שהרובוט ירה
   }
 
   // Called once the command ends or is interrupted.
@@ -58,12 +72,12 @@ public class SetShootingAndShoot extends CommandBase {
   public void end(boolean interrupted) {
     shooter.setUpMotorPower(0);
     shooter.setDownMotorPower(0);
-    angleChanging.setAngleChangingMotorPower(0);
+    angleChanging.setAngleChangingVelocityMotionMagic(DEFULT_ANGLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isfinished;
   }
 }

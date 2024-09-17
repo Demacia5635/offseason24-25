@@ -67,12 +67,16 @@ public class AngleChanging extends SubsystemBase {
     angleChangingMotor.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
   }
 
-  public void setAngle(Double rotation){
-    angleChangingMotor.setPosition(rotation);
+  public void setAngle(Double angle){
+    angleChangingMotor.setPosition(2*a*Math.cos(angle)*OOM_METER_PER_SPIN*ANGLE_CHANGING_GEAR_RATIO);
+  }
+
+  public double getc(){
+    return angleChangingMotor.getPosition().getValue()/ANGLE_CHANGING_GEAR_RATIO*OOM_SPIN_PER_METER + cAtTop;
   }
 
   public double getShooterAngle(){
-    return angleChangingMotor.getPosition().getValue();//and more
+    return Math.acos(-(a*a-b*b-Math.pow(getc(), 2))/(2*b*getc()));
   }
 
   public boolean isTopAngle(){

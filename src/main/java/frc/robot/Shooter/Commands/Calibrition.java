@@ -32,6 +32,7 @@ public class Calibrition extends Command {
       isFinished = 1;
     }
     if(!angleChanging.isTopAngle() && isFinished == 1){
+      angleChanging.setAngle(TOP_ANGLE);
       isFinished = 2;
     }
   }
