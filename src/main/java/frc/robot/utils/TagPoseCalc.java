@@ -39,6 +39,10 @@ public class TagPoseCalc {
         return id == 0 ? "note" : ("tag_" + id);
         
     }
+    public String GetObjWithDouble(double objId) {
+        return id == 0 ? "note" : ("tag_" + objId);
+        
+    }
 
     // Calculate angle to the object
     public double GetAngle() {
@@ -59,9 +63,29 @@ public class TagPoseCalc {
 
     // Calculate a point based on object position, distance, and angle
     private Pose2d calculatePoint(Translation2d obj, double dist, double angle) {
-        double globalAngle = (robotYaw + angle) % 360;
+        Translation2d globalPosition;
+        double globalAngle = ((robotYaw + angle) % 360);
+        // System.out.println("globalAngle:"+globalAngle);
         Translation2d relativePosition = new Translation2d(dist, Rotation2d.fromDegrees(globalAngle));
-        Translation2d globalPosition = obj.minus(relativePosition);
+        
+        if(globalAngle<-90|| globalAngle>90){
+            globalPosition = relativePosition.plus(obj);
+
+        }
+        else{
+            globalPosition = obj.minus(relativePosition);
+
+        }
+
+
+        
+        // Translation2d globalPosition = relativePosition.minus(obj);
+        // if(){
+        //     resetAngle = angle -90;
+        //     angle = angle - resetAngle; 
+        // }
         return new Pose2d(globalPosition, Rotation2d.fromDegrees(robotYaw));
     }
+
+
 }

@@ -83,7 +83,7 @@ public class Constants {
 
 
 
-        //tmp.put("note", null);
+        tmp.put("note", 0.0);
         ang = Collections.unmodifiableMap(tmp);
     }
     
