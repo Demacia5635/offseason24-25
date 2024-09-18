@@ -81,7 +81,7 @@ public class subpose extends SubsystemBase {
 
     // Calculate distance and angle
     Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id, giro.getYaw());
-
+    
     // Calculate pose
     
     // Update field visualization
@@ -91,7 +91,7 @@ public class subpose extends SubsystemBase {
         }
 
         // Display field on SmartDashboard
-        System.out.println("giro:"+giro.getYaw());
+        // System.out.println("giro:"+giro.getYaw());
 
   }
 

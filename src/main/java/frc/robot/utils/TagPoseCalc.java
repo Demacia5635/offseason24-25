@@ -15,6 +15,7 @@ public class TagPoseCalc {
     private double sumdegry;
     private Pose2d point;
     private double robotYaw;
+    public boolean isIedMostly;
 
 
     public TagPoseCalc(double tx, double ty, double x_offset, double y_offset, double id, double robotYaw) {
@@ -26,11 +27,36 @@ public class TagPoseCalc {
         this.height = Constants.HEIGHT_MAP.get(id);
         this.robotYaw = robotYaw;
     }
+    public boolean checkIfRightRotation(){
+        switch ((int)this.id) {
+            case 7,8,9,10,11,14:
+                return false;
+            //case 7:
+                // return false;
+                
+            // case 8:
+            //     return false;
+                
+            // case 9:
+            //     return false;
+                
+            // case 10:
+            //     return false;
+                
+            // case 11:
+            //     return false;
+            // case 12:
+            //     return false;                             
+        }
+        return true;
+    }
+    
 
     // Calculate distance to the object
     public double GetDist() {
         sumdegry = ty + Constants.LimelightAngle;
         sumdegry = Math.toRadians(sumdegry);
+        System.out.println((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry)) + x_offset);
         return ((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry))) + x_offset;
     }
 
@@ -56,15 +82,16 @@ public class TagPoseCalc {
         }
         return point;
     }
+    
 
     // Calculate a point based on object position, distance, and angle
     private Pose2d calculatePoint(Translation2d obj, double dist, double angle) {
         Translation2d globalPosition;
-        double globalAngle = ((robotYaw + angle) % 360);
+        double globalAngle = ((robotYaw+angle) % 360);
         // System.out.println("globalAngle:"+globalAngle);
         Translation2d relativePosition = new Translation2d(dist, Rotation2d.fromDegrees(globalAngle));
-        
-        if(globalAngle<-90|| globalAngle>90){
+        // System.out.println("obgAngle:"+obj.getAngle().getDegrees());
+        if(relativePosition.getAngle().getDegrees()<-90.0|| relativePosition.getAngle().getDegrees()>90.0){
             globalPosition = relativePosition.plus(obj);
 
         }
@@ -80,7 +107,12 @@ public class TagPoseCalc {
         //     resetAngle = angle -90;
         //     angle = angle - resetAngle; 
         // }
+        this.isIedMostly = checkIfRightRotation();
+        if(this.isIedMostly){
+            return new Pose2d(globalPosition, Rotation2d.fromDegrees(robotYaw+180));
+        }
         return new Pose2d(globalPosition, Rotation2d.fromDegrees(robotYaw));
+        
     }
 
 
