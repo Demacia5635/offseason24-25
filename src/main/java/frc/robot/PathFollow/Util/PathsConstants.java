@@ -15,4 +15,5 @@ public class PathsConstants {
     public final static double ROTATION_ACCEL = 360;
     public final static double FINISH_OFFSET = 0.05;
     public final static double MIN_SEGMENT_LENGTH = 0.15;
+    public final static double MAX_RADIAL_ACCEL = -1;
 }

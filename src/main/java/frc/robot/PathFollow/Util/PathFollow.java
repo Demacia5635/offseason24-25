@@ -30,6 +30,8 @@ public class PathFollow extends Command {
   double distanceLeft;
   int segmentIndex = 0;
 
+  double maxVel;
+
   Segment[] segments;
   Translation2d vecVel;
   Rotation2d wantedAngle;
@@ -61,6 +63,7 @@ public class PathFollow extends Command {
     this.points = points;
     this.finishVel = finishVel;
     this.chassis = chassis;
+    this.maxVel = maxVel;
     addRequirements(chassis);
 
     // creates trapezoid object for drive and rotation
@@ -87,6 +90,12 @@ public class PathFollow extends Command {
    * }
    */
 
+
+   private void setMaxRadiusPoints(){
+    for(int i = 0; i < points.length; i++){
+      points[i].setRadius(getMaxRadius(maxVel));
+    }
+   }
 
   private void setFirstPoint(boolean isRed){
 
@@ -151,6 +160,10 @@ public class PathFollow extends Command {
     trajField.getObject("TrajTEST").setTrajectory(traj);
     
   }
+
+  public double getMaxRadius(double velocity){
+    return (velocity * velocity) / MAX_RADIAL_ACCEL;
+  }
   
   @Override
   public void initialize() {
@@ -164,6 +177,7 @@ public class PathFollow extends Command {
     }
 
     corners = new RoundedPoint[points.length - 2];
+    setMaxRadiusPoints();
     createCorners();
     createSegments();
 
