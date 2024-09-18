@@ -7,7 +7,7 @@ package frc.robot.subsystem;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
-
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -28,8 +28,8 @@ public class subpose extends SubsystemBase {
   private double tx;
   private double ty;
   private double id;
-  private double angle = 0.0;
   private static Pigeon2 giro;
+
   
   // Pose and distance calculation utilities
   private TagPoseCalc Pose;
@@ -79,11 +79,8 @@ public class subpose extends SubsystemBase {
 
     
 
-    if(Constants.ang.get(TPC.GetObjWithDouble(7.0)) != null){
-      angle = giro.getYaw()+(Constants.ang.get(TPC.GetObjWithDouble(7.0)));
-    }
     // Calculate distance and angle
-    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id, angle);
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id, giro.getYaw());
 
     // Calculate pose
     
@@ -94,9 +91,8 @@ public class subpose extends SubsystemBase {
         }
 
         // Display field on SmartDashboard
-        System.out.println("Constants.ang.get(TPC.GetObj(id)):"+Constants.ang.get(TPC.GetObjWithDouble(7.0)));
-        System.out.println("giro                   "+giro.getYaw());
-        System.out.println("angle:"+angle);
+        System.out.println("giro:"+giro.getYaw());
+
   }
 
   public void initSendable(SendableBuilder builder) {

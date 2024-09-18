@@ -39,10 +39,6 @@ public class TagPoseCalc {
         return id == 0 ? "note" : ("tag_" + id);
         
     }
-    public String GetObjWithDouble(double objId) {
-        return id == 0 ? "note" : ("tag_" + objId);
-        
-    }
 
     // Calculate angle to the object
     public double GetAngle() {
