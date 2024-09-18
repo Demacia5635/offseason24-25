@@ -17,6 +17,7 @@ public class TestSubsystem extends SubsystemBase {
 
   
   private TalonFX motor = new TalonFX(1);
+  public static double num;
   private TalonFXConfiguration config;
   private VelocityVoltage velocityVoltage;
   /** Creates a new TestSubsystem. */
@@ -42,7 +43,9 @@ public class TestSubsystem extends SubsystemBase {
     SmartDashboard.putData(this);
   }
   
-  
+  public void setPower(double power){
+    motor.set(power);
+  }
   public double getTrueVelocity(){
     return motor.getVelocity().getValue()/GEAR_RATIO*SCOPE;
   }
@@ -51,9 +54,17 @@ public class TestSubsystem extends SubsystemBase {
     return 0.1;
   }
 
+  public void setNum(double num){
+    this.num = num;
+  }
+  public double getNum(){
+    return num;
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
       builder.addDoubleProperty("true velocity", this::getTrueVelocity, null);
       builder.addDoubleProperty("wanted Velocity", this::getWantedSpeed, null);
+      builder.addDoubleProperty("Speed", this::getNum, this::setNum);
   }
 }

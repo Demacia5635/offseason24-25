@@ -7,10 +7,14 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.SysIdCmd;
 import frc.robot.commands.TestCmd;
+import frc.robot.subsystems.TestSubsystem;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  public double power;
   private TalonFX motor = new TalonFX(1);
   private SysIdCmd sysId = new SysIdCmd(motor, 0.1, "v1");
   //private SequentialCommandGroup cmd = sysId.andThen(new SysIdCmd(motor, 0.2, "v2")) ;
@@ -35,6 +40,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
   }
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -49,6 +55,8 @@ public class RobotContainer {
 
   }
 
+  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -57,6 +65,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //return new SysIdCmd(motor, 0.1, "v1");//.withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
     //return new SysIdCmd(motor, 0.2, "v2");
-    return new TestCmd(0.1);
+    return new RunCommand(()->motor.set(TestSubsystem.num));
   }
 }
