@@ -93,7 +93,7 @@ public class RobotContainer implements Sendable {
 
   private void configureBindings() {
   
-    // commandController.b().onTrue(new RunCommand(()->chassis.setPosition()));
+    commandController.b().onTrue(new RunCommand(()->chassis.setGyroAngle(0)));
   
 }
 

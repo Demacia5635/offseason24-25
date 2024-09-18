@@ -114,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
 
     public void setSteerPosition(Rotation2d angle){
         double target = angle.minus(getAbsDegrees()).getDegrees() + steerMotor.getPosition().getValue();
-        System.out.println("target is"+ target);
+        //System.out.println("target is"+ target);
         steerMotor.setMotorPosition(angle.getDegrees());
     }
 

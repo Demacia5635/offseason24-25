@@ -1,13 +1,28 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Chassis/Change gyro angle ": "Command",
+      "/Shuffleboard/Chassis/Chassis Move Sysid": "Command",
+      "/Shuffleboard/Chassis/Chassis Move Sysid2": "Command",
+      "/Shuffleboard/Chassis/Set Modules Angle": "Command",
+      "/Shuffleboard/Chassis/SetAngle45": "Command",
+      "/Shuffleboard/Chassis/calibrate": "Command",
+      "/Shuffleboard/Chassis/reset wheels": "Command",
+      "/Shuffleboard/Chassis/run command": "Command",
+      "/Shuffleboard/Chassis/set brake": "Command",
+      "/Shuffleboard/Chassis/set coast": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/reset pose": "Command"
     }
   },
   "NetworkTables": {
     "transitory": {
       "Robot": {
-        "open": true
+        "open": true,
+        "test": {
+          "open": true
+        }
       },
       "datatable": {
         "chassis": {

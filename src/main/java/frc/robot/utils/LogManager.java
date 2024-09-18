@@ -120,7 +120,6 @@ public class LogManager extends SubsystemBase {
 
     // array of log entries
     ArrayList<LogEntry> logEntries = new ArrayList<>();
-    HashMap<String, Pose2d> poses = new HashMap<>();
 
     // Log managerconstructor
     public LogManager() {
@@ -162,10 +161,6 @@ public class LogManager extends SubsystemBase {
             }
         }
         return null;
-    }
-
-    public void add(Pose2d pose2d) {
-
     }
 
     /*
