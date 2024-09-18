@@ -10,23 +10,26 @@ import frc.robot.subsystems.TestSubsystem;
 
 public class TestCmd extends Command {
   /** Creates a new TestCmd. */
-  TestSubsystem subsystem = new TestSubsystem();
+  TestSubsystem subsystem;
   private double speed;
   public TestCmd(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed;
+    subsystem = new TestSubsystem();
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.moveWithPid(speed);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    subsystem.moveWithPid(speed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

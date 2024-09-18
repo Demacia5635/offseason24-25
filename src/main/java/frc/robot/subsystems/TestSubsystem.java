@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import static frc.robot.Constants.*;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -16,7 +18,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TestSubsystem extends SubsystemBase {
 
   
-  private TalonFX motor = new TalonFX(1);
+  private TalonFX motor1 = new TalonFX(1);
+  private TalonFX motor2 = new TalonFX(4);
+  private TalonFX motor3 = new TalonFX(7);
+  private TalonFX motor4 = new TalonFX(10);
   public static double num;
   private TalonFXConfiguration config;
   private VelocityVoltage velocityVoltage;
@@ -24,17 +29,26 @@ public class TestSubsystem extends SubsystemBase {
   public TestSubsystem() {
     config = new TalonFXConfiguration();
     config.Slot0.kP = KP;
-    config.Slot0.kS = KS;
-    config.Slot0.kV = KV;
+    //config.Slot0.kS = KS;
+    //config.Slot0.kV = KV;
+    velocityVoltage = new VelocityVoltage(0);
     config.Voltage.PeakForwardVoltage = 8;
     config.Voltage.PeakReverseVoltage = -8;
-    motor.getConfigurator().apply(config);
+    config.MotorOutput.NeutralMode =  NeutralModeValue.Brake;
+    motor1.getConfigurator().apply(config);
+    motor2.getConfigurator().apply(config);
+    motor3.getConfigurator().apply(config);
+    motor4.getConfigurator().apply(config);
   }
 
   //0.638/8.14 = x; 300/63.8
 
+
   public void moveWithPid(double speed){
-    motor.setControl(velocityVoltage.withVelocity(speed/SCOPE));
+    motor1.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
+    motor2.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
+    motor3.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
+    motor4.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
   }
 
   @Override
@@ -42,12 +56,19 @@ public class TestSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putData(this);
   }
+
+  public void setPowers(double power){
+    motor1.set(power);
+    motor2.set(power);
+    motor3.set(power);
+    motor4.set(power);
+  }
   
   public void setPower(double power){
-    motor.set(power);
+    motor1.set(power);
   }
   public double getTrueVelocity(){
-    return motor.getVelocity().getValue()/GEAR_RATIO*SCOPE;
+    return motor1.getVelocity().getValue()*GEAR_RATIO/SCOPE;
   }
 
   public double getWantedSpeed(){
@@ -59,6 +80,10 @@ public class TestSubsystem extends SubsystemBase {
   }
   public double getNum(){
     return num;
+  }
+
+  public double getVelocity(){
+    return 1;
   }
 
   @Override

@@ -12,6 +12,7 @@ import frc.robot.subsystems.TestSubsystem;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -29,7 +30,9 @@ public class RobotContainer {
 
   public double power;
   private TalonFX motor = new TalonFX(1);
-  private SysIdCmd sysId = new SysIdCmd(motor, 0.1, "v1");
+  private TestSubsystem subsystem = new TestSubsystem();
+
+  //private SysIdCmd sysId = new SysIdCmd(motor, 0.1, "v1");
   //private SequentialCommandGroup cmd = sysId.andThen(new SysIdCmd(motor, 0.2, "v2")) ;
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -65,6 +68,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //return new SysIdCmd(motor, 0.1, "v1");//.withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
     //return new SysIdCmd(motor, 0.2, "v2");
-    return new RunCommand(()->motor.set(TestSubsystem.num));
+    //return new RunCommand(()->motor.set(TestSubsystem.num));
+    SmartDashboard.putNumber("plsWORK", 5);
+    return new SysIdCmd(-0.1, "v1").withTimeout(5).andThen(new SysIdCmd(0.2, "v2"));
   }
 }

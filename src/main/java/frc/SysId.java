@@ -64,13 +64,13 @@ public class SysId {
          * 0.1 = 2kv 
          * 
          */
-
+/*
     public  Command runner(double power, int motorId, String nameForShuffleBoard){
         motor = new TalonFX(motorId, CANBUS);
         return new SysIdCmd(motor, power, nameForShuffleBoard);
     }
 
-
+ */
 
 
 

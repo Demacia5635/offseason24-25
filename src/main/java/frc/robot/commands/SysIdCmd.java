@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.SysId;
+import frc.robot.subsystems.TestSubsystem;
 
 import static frc.robot.Constants.*;
 
@@ -17,12 +18,13 @@ public class SysIdCmd extends Command {
   private TalonFX motor;
   private double power;
   private String nameForShuffleBoard;
+  private TestSubsystem subsystem = new TestSubsystem();
   private SysId sysId = new SysId();
   private double Kv;
   private double Ks;
 
-  public SysIdCmd(TalonFX motor, double power, String nameForShuffleBoard) {
-    this.motor = motor;
+  public SysIdCmd(double power, String nameForShuffleBoard) {
+    //this.motor = motor;
     this.power = power;
     this.nameForShuffleBoard = nameForShuffleBoard;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,7 +33,7 @@ public class SysIdCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    motor.set(power);
+    subsystem.setPowers(power);
     sysId.showFeedForward(0.1,0.2,SCOPE);
 
   }
@@ -43,7 +45,7 @@ public class SysIdCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber(nameForShuffleBoard, motor.getVelocity().getValue()/GEAR_RATIO*SCOPE);
+    SmartDashboard.putNumber(nameForShuffleBoard, subsystem.getVelocity().getValue()/GEAR_RATIO*SCOPE);
     //Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
     //Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
     //System.out.println(Kv);
