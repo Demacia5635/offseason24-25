@@ -47,8 +47,11 @@ public class SysIdCmd extends Command {
     SmartDashboard.putNumber(nameForShuffleBoard, subsystem.getTrueVelocity());
     //Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
     //Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
-    //System.out.println(Kv);
-    //System.out.println(Ks);
+
+    System.out.println(SmartDashboard.getNumber("ks", 0));
+    System.out.println(SmartDashboard.getNumber("kv", 0));
+    System.out.println(SmartDashboard.getNumber("KV", 0));
+    System.out.println(SmartDashboard.getNumber("KS", 0));
     subsystem.setPower(0);
   }
     

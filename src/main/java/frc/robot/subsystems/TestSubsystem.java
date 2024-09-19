@@ -55,7 +55,8 @@ public class TestSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    SmartDashboard.putNumber("kv", KV);
+    SmartDashboard.putNumber("ks", KS);
   }
 
   public void setPowers(double power){
@@ -85,6 +86,14 @@ public class TestSubsystem extends SubsystemBase {
 
   public double getVelocity(){
     return 1;
+  }
+
+  public double KS(){
+    return KS;
+  }
+
+  public double KV(){
+    return KV;
   }
 
   @Override
