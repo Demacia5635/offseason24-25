@@ -49,7 +49,7 @@ public class SysIdCmd extends Command {
     //Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
     //System.out.println(Kv);
     //System.out.println(Ks);
-    motor.set(0);
+    subsystem.setPower(0);
   }
     
   // Returns true when the command should end.

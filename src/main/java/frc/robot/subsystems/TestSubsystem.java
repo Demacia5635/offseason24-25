@@ -39,6 +39,7 @@ public class TestSubsystem extends SubsystemBase {
     motor2.getConfigurator().apply(config);
     motor3.getConfigurator().apply(config);
     motor4.getConfigurator().apply(config);
+    SmartDashboard.putData(this);
   }
 
   //0.638/8.14 = x; 300/63.8
@@ -54,7 +55,7 @@ public class TestSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putData(this);
+    
   }
 
   public void setPowers(double power){
