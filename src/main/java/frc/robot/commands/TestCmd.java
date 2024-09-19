@@ -29,12 +29,15 @@ public class TestCmd extends Command {
   @Override
   public void execute() {
     subsystem.moveWithPid(speed);
+    System.out.println("speed " + speed + " vel " + subsystem.getVelocity());
+    System.out.println(((speed-subsystem.getVelocity())*360)/100);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     subsystem.moveWithPid(0);
+    subsystem.setPowers(0);
   }
 
   // Returns true when the command should end.

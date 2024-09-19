@@ -69,7 +69,7 @@ public class RobotContainer {
     //return new SysIdCmd(motor, 0.1, "v1");//.withTimeout(3).andThen(new SysIdCmd(motor, 0.2, "v2"));
     //return new SysIdCmd(motor, 0.2, "v2");
     //return new RunCommand(()->motor.set(TestSubsystem.num));
-    SmartDashboard.putNumber("plsWORK", 5);
-    return new SysIdCmd(-0.1, "v1").withTimeout(4).andThen(new SysIdCmd(0.2, "v2")).withTimeout(2);
+    //return new SysIdCmd(0.3, "v1").withTimeout(4).andThen(new SysIdCmd(-0.4, "v2")).withTimeout(2);
+    return new TestCmd(100).withTimeout(5);
   }
 }

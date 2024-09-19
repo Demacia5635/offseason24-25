@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TestSubsystem extends SubsystemBase {
 
   
-  private TalonFX motor1 = new TalonFX(1);
-  private TalonFX motor2 = new TalonFX(4);
-  private TalonFX motor3 = new TalonFX(7);
-  private TalonFX motor4 = new TalonFX(10);
+  private TalonFX motor1 = new TalonFX(2);
+  private TalonFX motor2 = new TalonFX(5);
+  private TalonFX motor3 = new TalonFX(8);
+  private TalonFX motor4 = new TalonFX(11);
+
+  
   public static double num;
   private TalonFXConfiguration config;
   private VelocityVoltage velocityVoltage;
@@ -29,14 +31,19 @@ public class TestSubsystem extends SubsystemBase {
   public TestSubsystem() {
     config = new TalonFXConfiguration();
     config.Slot0.kP = KP;
-    //config.Slot0.kS = KS;
-    //config.Slot0.kV = KV;
+    config.Slot0.kS = FORWORD_ANGLE_KS;
+    config.Slot0.kV = FORWORD_ANGLE_KV;
     velocityVoltage = new VelocityVoltage(0);
-    config.Voltage.PeakForwardVoltage = 8;
-    config.Voltage.PeakReverseVoltage = -8;
+    config.Voltage.PeakForwardVoltage = 12;
+    config.Voltage.PeakReverseVoltage = -12;
     config.MotorOutput.NeutralMode =  NeutralModeValue.Brake;
+
+    
     motor1.getConfigurator().apply(config);
     motor2.getConfigurator().apply(config);
+
+    config.Slot0.kS = BACKWARD_MOVE_KS;
+    config.Slot0.kV = BACKWARD_ANGLE_KV;
     motor3.getConfigurator().apply(config);
     motor4.getConfigurator().apply(config);
     SmartDashboard.putData(this);
@@ -46,10 +53,17 @@ public class TestSubsystem extends SubsystemBase {
 
 
   public void moveWithPid(double speed){
+    /*
     motor1.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
     motor2.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
     motor3.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
     motor4.setControl(velocityVoltage.withVelocity(speed*GEAR_RATIO/SCOPE));
+     */
+    motor1.setControl(velocityVoltage.withVelocity(speed));
+    motor2.setControl(velocityVoltage.withVelocity(speed));
+    motor3.setControl(velocityVoltage.withVelocity(speed));
+    motor4.setControl(velocityVoltage.withVelocity(speed));
+
   }
 
   @Override
@@ -80,12 +94,13 @@ public class TestSubsystem extends SubsystemBase {
   public void setNum(double num){
     this.num = num;
   }
-  public double getNum(){
-    return getTrueVelocity()/1;
+  public double getError(){
+    return (100 - getTrueVelocity())/100;
   }
+  //
 
   public double getVelocity(){
-    return 1;
+    return motor1.getVelocity().getValue();
   }
 
   public double KS(){
@@ -100,6 +115,8 @@ public class TestSubsystem extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
       builder.addDoubleProperty("true velocity", this::getTrueVelocity, null);
       builder.addDoubleProperty("wanted Velocity", this::getWantedSpeed, null);
-      builder.addDoubleProperty("Error", this::getNum, null);
+      builder.addDoubleProperty("Error", this::getError, null);
+      builder.addDoubleProperty("KS", this::KS, null);
+      builder.addDoubleProperty("KV", this::KV, null);
   }
 }
