@@ -35,7 +35,10 @@ public final class ChassisConstants {
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
   public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.55, 0.02, 0.0001);
+  /*TODO kill who forgot to finish the merge */
+  // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
+  // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains

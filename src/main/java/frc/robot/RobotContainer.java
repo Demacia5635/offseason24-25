@@ -99,8 +99,8 @@ public class RobotContainer implements Sendable {
 
    
   public Command getAutonomousCommand() {
-    return null;
     // return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
+    return new RunCommand(()->chassis.setModulesSteerPosition(num, 2));
     // return new RunCommand(() -> {
     //   chassis.setModulesSteerPosition(0.0,0);
     //   chassis.setModulesSteerPosition(0.0,1);
