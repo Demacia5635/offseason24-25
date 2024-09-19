@@ -46,8 +46,9 @@ public class Shooter extends SubsystemBase {
     velocityVoltage = new VelocityVoltage(0).withSlot(0);
   }
 
-  public void setUpMotorPower(double power){
+  public void setMotorPower(double power){
     motorUp.setControl(m_request.withOutput(power));
+    motorDown.setControl(m_request.withOutput(power));
   }
   
   public void setDownMotorPower(double power){

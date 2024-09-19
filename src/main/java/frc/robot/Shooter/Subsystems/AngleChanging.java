@@ -32,21 +32,27 @@ public class AngleChanging extends SubsystemBase {
     angleChangingMotor = new TalonFX(ANGLE_CHANGING_ID, CANBUS);
     analogInput = new AnalogInput(ANALOG_INPUT_ID);
     config = new TalonFXConfiguration();
+
     config.Slot0.kP = ANGLE_CHANGING_KP;
     config.Slot0.kI = ANGLE_CHANGING_KI;
     config.Slot0.kD = ANGLE_CHANGING_KD;
     config.Slot0.kS = ANGLE_CHANGING_KS;
     config.Slot0.kV = ANGLE_CHANGING_KV;
     config.Slot0.kA = ANGLE_CHANGING_KA;
-    config.Voltage.PeakForwardVoltage = 8;
-    config.Voltage.PeakReverseVoltage = -8;
+
+    config.Voltage.PeakForwardVoltage = 12;
+    config.Voltage.PeakReverseVoltage = 12;
+
     m_request  = new DutyCycleOut(0.0);
     velocityVoltage = new VelocityVoltage(0);
     motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+
     var motionMagicConfigs = config.MotionMagic;
+
     motionMagicConfigs.MotionMagicCruiseVelocity = ANGLE_CHANGING_MAX_VELOCITY;
     motionMagicConfigs.MotionMagicAcceleration = ANGLE_CHANGING_MAX_Acceleration;
     motionMagicConfigs.MotionMagicJerk = ANGLE_CHANGING_MAX_Jerk;
+    
     angleChangingMotor.getConfigurator().apply(config);
   }
 
@@ -55,16 +61,16 @@ public class AngleChanging extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setAngleChangingMotorPower(double power){
+  public void setMotorPower(double power){
     angleChangingMotor.setControl(m_request.withOutput(power));
   }
 
-  public void setAngleChangingVelocityMotionMagic(double position){
+  public void MotionMagic(double position){
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(position));
   }
 
-  public void anglerPID(double desiredRotationsPerSec){
-    angleChangingMotor.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
+  public void angleChangingPID(double vel){
+    angleChangingMotor.setControl(velocityVoltage.withVelocity(vel));
   }
 
   public void setAngle(Double angle){
@@ -79,7 +85,7 @@ public class AngleChanging extends SubsystemBase {
     return Math.acos(-(a*a-b*b-Math.pow(getc(), 2))/(2*b*getc()));
   }
 
-  public boolean isTopAngle(){
+  public boolean isMaxAngle(){
     return analogInput.getVoltage() > SHOOOTER_VOLTAGE;
   }
 

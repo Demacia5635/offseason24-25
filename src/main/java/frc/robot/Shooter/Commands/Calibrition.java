@@ -21,17 +21,17 @@ public class Calibrition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angleChanging.anglerPID(UP_SPEED_CALIBRATION);
+    angleChanging.angleChangingPID(UP_SPEED_CALIBRATION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(angleChanging.isTopAngle()){
-      angleChanging.anglerPID(-DOWN_SPEED_CALIBRATION);
+    if(angleChanging.isMaxAngle()){
+      angleChanging.angleChangingPID(-DOWN_SPEED_CALIBRATION);
       isFinished = 1;
     }
-    if(!angleChanging.isTopAngle() && isFinished == 1){
+    if(!angleChanging.isMaxAngle() && isFinished == 1){
       angleChanging.setAngle(TOP_ANGLE);
       isFinished = 2;
     }
@@ -40,7 +40,7 @@ public class Calibrition extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    angleChanging.setAngleChangingMotorPower(0);
+    angleChanging.setMotorPower(0);
   }
 
   // Returns true when the command should end.

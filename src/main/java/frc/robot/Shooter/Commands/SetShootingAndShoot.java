@@ -55,10 +55,14 @@ public class SetShootingAndShoot extends CommandBase {
           upMotorVelocity = MOTOR_UP_DELIVERY_VELOCITY;
           downMotorVelocity = MOTOR_DOWN_DELIVERY_VELOCITY;
     }
-    angleChanging.setAngleChangingVelocityMotionMagic(angle);
+    angleChanging.MotionMagic(angle);
     shooter.setUpMotorVelocityPid(upMotorVelocity);
     shooter.setDownMotorVelocityPid(downMotorVelocity);
-    if ((angle == angleChanging.getShooterAngle() && upMotorVelocity == shooter.getUpMotorVelocity() && downMotorVelocity == shooter.getDownMotorVelocity()) /*|| (הנהג לחץ על קפתור)*/){
+
+    if (angle == angleChanging.getShooterAngle()
+        && upMotorVelocity == shooter.getUpMotorVelocity()
+        && downMotorVelocity == shooter.getDownMotorVelocity()) /*|| (הנהג לחץ על קפתור)*/{
+
       isReady = true;
     }
     if (isReady){
@@ -70,9 +74,9 @@ public class SetShootingAndShoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setUpMotorPower(0);
+    shooter.setMotorPower(0);
     shooter.setDownMotorPower(0);
-    angleChanging.setAngleChangingVelocityMotionMagic(DEFULT_ANGLE);
+    angleChanging.MotionMagic(DEFULT_ANGLE);
   }
 
   // Returns true when the command should end.
