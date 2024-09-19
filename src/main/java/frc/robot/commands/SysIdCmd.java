@@ -20,13 +20,12 @@ public class SysIdCmd extends Command {
   private String nameForShuffleBoard;
   private TestSubsystem subsystem = new TestSubsystem();
   private SysId sysId = new SysId();
-  private double Kv;
-  private double Ks;
 
   public SysIdCmd(double power, String nameForShuffleBoard) {
     //this.motor = motor;
     this.power = power;
     this.nameForShuffleBoard = nameForShuffleBoard;
+    addRequirements(subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -34,7 +33,7 @@ public class SysIdCmd extends Command {
   @Override
   public void initialize() {
     subsystem.setPowers(power);
-    sysId.showFeedForward(0.1,0.2,SCOPE);
+    sysId.showFeedForward(-0.1,0.2,SCOPE);
 
   }
 
@@ -45,7 +44,7 @@ public class SysIdCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber(nameForShuffleBoard, subsystem.getVelocity().getValue()/GEAR_RATIO*SCOPE);
+    SmartDashboard.putNumber(nameForShuffleBoard, subsystem.getTrueVelocity());
     //Kv = sysId.getKV(0.1,0.2,SmartDashboard.getNumber("v1", 0),SmartDashboard.getNumber("v2", 0));
     //Ks = sysId.getKS(0.1, Kv, SmartDashboard.getNumber("v1", 0));
     //System.out.println(Kv);

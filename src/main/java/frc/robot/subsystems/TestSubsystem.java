@@ -79,7 +79,7 @@ public class TestSubsystem extends SubsystemBase {
     this.num = num;
   }
   public double getNum(){
-    return num;
+    return getTrueVelocity()/1;
   }
 
   public double getVelocity(){
@@ -90,6 +90,6 @@ public class TestSubsystem extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
       builder.addDoubleProperty("true velocity", this::getTrueVelocity, null);
       builder.addDoubleProperty("wanted Velocity", this::getWantedSpeed, null);
-      builder.addDoubleProperty("Speed", this::getNum, this::setNum);
+      builder.addDoubleProperty("Error", this::getNum, null);
   }
 }
