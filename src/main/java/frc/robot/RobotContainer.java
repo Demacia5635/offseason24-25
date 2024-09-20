@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -90,6 +91,6 @@ public class RobotContainer implements Sendable {
    
   public Command getAutonomousCommand() {
 
-    return null;
+    return new InstantCommand(() -> chassis.setVelocities(new ChassisSpeeds(1, 0, 0)), chassis).withTimeout(2);
   }
 }

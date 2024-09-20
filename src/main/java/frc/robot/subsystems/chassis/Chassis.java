@@ -67,7 +67,7 @@ public class Chassis extends SubsystemBase {
 
     gyro = new Pigeon2(GYRO_ID);
     gyro.setYaw(0);
-    poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
+    poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS_CORRECTED, getRawAngle(), getModulePositions(), new Pose2d());
     
     setNeutralMode(NeutralMode.Brake);
     field = new Field2d();
@@ -225,7 +225,7 @@ public class Chassis extends SubsystemBase {
    * 
    * @param speeds In m/s and rad/s
    */
-  public void setVelocities(ChassisSpeeds speeds) {
+  /*public void setVelocities(ChassisSpeeds speeds) {
     double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
     ChassisSpeeds relativeSpeeds = 
     ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
@@ -235,6 +235,13 @@ public class Chassis extends SubsystemBase {
     newChassisSpeeds.omegaRadiansPerSecond = SwerveKinematics.fixOmega(newChassisSpeeds.omegaRadiansPerSecond);
     SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(newChassisSpeeds);
     targetVelocity = new Translation2d(newChassisSpeeds.vxMetersPerSecond, newChassisSpeeds.vyMetersPerSecond).getNorm();
+    setModuleStates(states);
+  }*/
+
+  public void setVelocities(ChassisSpeeds speeds){
+    ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
+    SwerveModuleState[] states = KINEMATICS_CORRECTED.toSwerveModuleStates(speeds);
+    targetVelocity = new Translation2d(relativeSpeeds.vxMetersPerSecond, relativeSpeeds.vxMetersPerSecond).getNorm();
     setModuleStates(states);
   }
 

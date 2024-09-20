@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 
 /**
  * Class to enhance WPILIB SwerveDriveKinematics
@@ -28,6 +29,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
    
 
     public SwerveModuleState[] states;
+    
     Translation2d[] moduleTranslationsMeters;
     /**
      * Constructor we use
@@ -41,7 +43,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
     }
 
     private double getCycleDistance(double vel){
-        return vel * 0.02;
+        return vel * Constants.CYCLE_DT;
     }
    
     /**
@@ -52,12 +54,19 @@ public class SwerveKinematics extends SwerveDriveKinematics {
             curPose.getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond * 0.02))); //the estimated pose2d of the chassis location and direction
         SwerveModuleState[] newModuleStates = new SwerveModuleState[4];
         for(int i = 0; i < 4; i++){
+            
             Translation2d moduleEstimatedPos = estimatedPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(estimatedPose.getRotation().minus(curPose.getRotation())));//the module estimated pos
             Translation2d moduleLocationDifference = moduleEstimatedPos.minus(curPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(curPose.getRotation()))); //the delta x of the module between previous and estimate
             Rotation2d alpha = moduleLocationDifference.getAngle().minus(prevStates[i].angle.rotateBy(curPose.getRotation())); //finding alpha
-            double moduleV = alpha.times(2).times(moduleLocationDifference.getNorm()*Math.sin(Math.PI/2-alpha.getRadians())/Math.sin(2*alpha.getRadians())).getRadians()*50;//(2alpha * d * sin(0.5pi - alpha)/sin(2alpha))/0.02 = Vn
-            double moduleD = prevStates[i].angle.rotateBy(curPose.getRotation()).getRadians()+2*alpha.getRadians()-(estimatedPose.getRotation().minus(curPose.getRotation())).getRadians();// d0 + 2alpha - delta(Beta) = Dn
-            newModuleStates[i] = new SwerveModuleState(moduleV,new Rotation2d(moduleD));  
+            double radius = moduleLocationDifference.getNorm() * Math.sin((Math.PI / 2 ) - alpha.getRadians()) / Math.sin(alpha.getRadians() * 2);
+
+            double moduleV = alpha.times(2 * radius).getRadians() / Constants.CYCLE_DT;    //(2alpha * d * sin(0.5pi - alpha)/sin(2alpha))/0.02 = Vn
+            
+            double startingModuleRadians = prevStates[i].angle.getRadians();
+            double chassisDiffRadians = estimatedPose.getRotation().minus(curPose.getRotation()).getRadians();
+            
+            double moduleAngle = startingModuleRadians+(2*alpha.getRadians())-chassisDiffRadians;// d0 + 2alpha - delta(Beta) = Dn
+            newModuleStates[i] = new SwerveModuleState(moduleV,new Rotation2d(moduleAngle));  
         }
         return newModuleStates;
     }
