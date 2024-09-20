@@ -12,7 +12,7 @@ public class IntakeCommand extends CommandBase {
   NotePosition currentPosition;
 
   public IntakeCommand(Intake intake) {
-    this.currentPosition = NotePosition.NO_NOTE;// i konw you dont havbe to put "this" but it helps me 
+    this.currentPosition = NotePosition.NO_NOTE;// i know you dont have to put "this" but it helps me 
     this.intake = intake;
     addRequirements(intake);
   }
