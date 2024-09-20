@@ -240,7 +240,7 @@ public class Chassis extends SubsystemBase {
 
   public void setVelocities(ChassisSpeeds speeds){
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-    SwerveModuleState[] states = KINEMATICS_CORRECTED.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = KINEMATICS_CORRECTED.toSwerveModuleStates(relativeSpeeds);
     targetVelocity = new Translation2d(relativeSpeeds.vxMetersPerSecond, relativeSpeeds.vxMetersPerSecond).getNorm();
     setModuleStates(states);
   }
