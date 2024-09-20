@@ -32,7 +32,10 @@ public class Intake extends SubsystemBase {
     return analogInput.getVoltage() > NOTE_VOLTEGE;
 
   }
-  public boolean isAmperHigh(){
+  public boolean isAmperHighMotorDown(){
+    return intakeMotorDown.getSupplyCurrent().getValue() >= NOTE_CURRENT;
+  }
+  public boolean isAmperHighMotorUp(){
     return intakeMotorUp.getSupplyCurrent().getValue() >= NOTE_CURRENT;
   }
 
