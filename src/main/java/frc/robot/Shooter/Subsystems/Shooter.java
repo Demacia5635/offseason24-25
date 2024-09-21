@@ -8,11 +8,15 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
+import frc.robot.Shooter.ShooterConstants.SHOOTER_VAR;
+import frc.robot.Shooter.ShooterConstants.STATE;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
@@ -26,24 +30,36 @@ public class Shooter extends SubsystemBase {
   private TalonSRX motorFeeding;
 
   private TalonFXConfiguration config;
-  private DutyCycleOut m_request = new DutyCycleOut(0.0);
+  private DutyCycleOut m_request;
   private VelocityVoltage velocityVoltage;
-
+  public STATE shooterState;
+  
+  
+/*setting all the configs */
   public Shooter() {
-    motorFeeding = new TalonSRX(MOTOR_FEEDING_ID);
-    motorDown = new TalonFX(MOTOR_DOWN_ID, CANBUS);
-    motorUp = new TalonFX(MOTOR_UP_ID, CANBUS);
+    shooterState = shooterState.IDLE;
+
+    motorFeeding = new TalonSRX(MOTOR_IDS.MOTOR_FEEDING_ID);
+    motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
+    motorUp = new TalonFX(MOTOR_IDS.MOTOR_UP_ID, MOTOR_IDS.CANBUS);
+
+    m_request = new DutyCycleOut(0.0);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0);
     config = new TalonFXConfiguration();
-    config.Slot0.kP = SHOOTER_KP;
-    config.Slot0.kI = SHOOTER_KI;
-    config.Slot0.kD = SHOOTER_KD;
-    config.Slot0.kS = SHOOTER_KS;
-    config.Slot0.kV = SHOOTER_KV;
-    config.Voltage.PeakForwardVoltage = 8;
-    config.Voltage.PeakReverseVoltage = -8;
+    
+
+    config.Slot0.kP = SHOOTER_VAR.KP;
+    config.Slot0.kI = SHOOTER_VAR.KI;
+    config.Slot0.kD = SHOOTER_VAR.KD;
+    config.Slot0.kS = SHOOTER_VAR.KS;
+    config.Slot0.kV = SHOOTER_VAR.KV;
+
+    
+
     motorUp.getConfigurator().apply(config);
     motorDown.getConfigurator().apply(config);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0);
+
+    
   }
 
   public void setMotorPower(double power){
@@ -51,45 +67,28 @@ public class Shooter extends SubsystemBase {
     motorDown.setControl(m_request.withOutput(power));
   }
   
-  public void setDownMotorPower(double power){
-    motorDown.setControl(m_request.withOutput(power));
-  }
 
-  public void setUpMotorVelocityPid(double desiredRotationsPerSec){
-    motorUp.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
-  }
-
-  public void setDownMotorVelocityPid(double desiredRotationsPerSec){
-    motorUp.setControl(velocityVoltage.withVelocity(desiredRotationsPerSec));
-  }
 
   public void setFeedingPower(double power){
     motorFeeding.set(ControlMode.PercentOutput, power);
   }
 
-  public double getDownMotorVelocity(){
+  public double getDownMotorVel(){
     return motorDown.getVelocity().getValue();
   }
 
-  public double getUpMotorVelocity(){
+  public double getUpMotorVel(){
     return motorUp.getVelocity().getValue();
   }
 
-  private enum ShooterState{
-    AMP,
-    SPEAKER
-  }
-
-  public Enum getState(boolean isAmp){
-    if(isAmp){
-      return ShooterState.AMP;
-    }
-    return ShooterState.SPEAKER;
-  }
 
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+
+  public void pidMotorVelocity(double vel){
+    motorUp.setControl(velocityVoltage.withVelocity(vel));
+    motorDown.setControl(velocityVoltage.withVelocity(vel));
+}
+
+
+
 }

@@ -5,7 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Shooter.Commands.GoToAngle;
+import frc.robot.Shooter.Commands.Shoot;
+import frc.robot.Shooter.ShooterConstants.STATE;
+import frc.robot.Shooter.Subsystems.AngleChanger;
+import frc.robot.Shooter.Subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -16,17 +22,39 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  
+  private Shooter shooter;
+  private AngleChanger angleChanging;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController controller =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    shooter = new Shooter();
+    angleChanging = new AngleChanger();
+    shooter.setDefaultCommand(new Shoot());
+    angleChanging.setDefaultCommand(new GoToAngle(angleChanging));
+
+    
     // Configure the trigger bindings
     configureBindings();
   }
 
+
+  // public Trigger isAmp(){
+  //   return m_driverController.a().onTrue(new GoToAngle_AndShoot(shooter, angleChanging));
+  // }
+
+  // public Trigger isDelivery(){
+  //   return m_driverController.b().onTrue(new GoToAngle_AndShoot(shooter, angleChanging));
+  // }
+
+  //   public Trigger isSpeaker(){
+  //   return m_driverController.x().onTrue(new GoToAngle_AndShoot(shooter, angleChanging));
+  // }
+ 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -37,6 +65,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    controller.a().onTrue(new InstantCommand(() -> {
+      shooter.shooterState = STATE.SPEAKER;
+      angleChanging.angleState = STATE.SPEAKER;
+    }, shooter, angleChanging));
 
   }
 

@@ -5,15 +5,15 @@
 package frc.robot.Shooter.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Shooter.Subsystems.AngleChanging;
+import frc.robot.Shooter.Subsystems.AngleChanger;
 import static frc.robot.Shooter.ShooterConstants.*;
 
-public class Calibrition extends Command {
+public class Calibration extends Command {
   /** Creates a new Calibrition. */
-  private AngleChanging angleChanging;
+  private AngleChanger angleChanging;
   private int isFinished = 0;
-  public Calibrition() {
-    angleChanging = new AngleChanging();
+  public Calibration() {
+    angleChanging = new AngleChanger();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(angleChanging);
   }
@@ -32,7 +32,7 @@ public class Calibrition extends Command {
       isFinished = 1;
     }
     if(!angleChanging.isMaxAngle() && isFinished == 1){
-      angleChanging.setAngle(TOP_ANGLE);
+      angleChanging.goToAngle(TOP_ANGLE);
       isFinished = 2;
     }
   }
