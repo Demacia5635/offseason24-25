@@ -34,8 +34,6 @@ public class TestSubsystem extends SubsystemBase {
     config.Slot0.kS = FORWORD_ANGLE_KS;
     config.Slot0.kV = FORWORD_ANGLE_KV;
     velocityVoltage = new VelocityVoltage(0);
-    config.Voltage.PeakForwardVoltage = 12;
-    config.Voltage.PeakReverseVoltage = -12;
     config.MotorOutput.NeutralMode =  NeutralModeValue.Brake;
 
     

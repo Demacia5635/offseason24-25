@@ -8,7 +8,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.SysId;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.SysId;
 import frc.robot.subsystems.TestSubsystem;
 
 import static frc.robot.Constants.*;
