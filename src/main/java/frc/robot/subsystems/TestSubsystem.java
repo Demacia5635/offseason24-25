@@ -31,8 +31,8 @@ public class TestSubsystem extends SubsystemBase {
   public TestSubsystem() {
     config = new TalonFXConfiguration();
     config.Slot0.kP = KP;
-    config.Slot0.kS = FORWORD_ANGLE_KS;
-    config.Slot0.kV = FORWORD_ANGLE_KV;
+    config.Slot0.kS = KS;
+    config.Slot0.kV = KV;
     velocityVoltage = new VelocityVoltage(0);
     config.MotorOutput.NeutralMode =  NeutralModeValue.Brake;
 
@@ -82,16 +82,18 @@ public class TestSubsystem extends SubsystemBase {
     motor1.set(power);
   }
   public double getTrueVelocity(){
-    return motor1.getVelocity().getValue()*GEAR_RATIO/SCOPE;
+    return motor1.getVelocity().getValue()/360;
+  }
+
+  public double getVel(){
+    return motor3.getVelocity().getValue()/360;
   }
 
   public double getWantedSpeed(){
     return 0.1;
   }
 
-  public void setNum(double num){
-    this.num = num;
-  }
+
   public double getError(){
     return (100 - getTrueVelocity())/100;
   }
@@ -101,20 +103,11 @@ public class TestSubsystem extends SubsystemBase {
     return motor1.getVelocity().getValue();
   }
 
-  public double KS(){
-    return KS;
-  }
-
-  public double KV(){
-    return KV;
-  }
 
   @Override
   public void initSendable(SendableBuilder builder) {
       builder.addDoubleProperty("true velocity", this::getTrueVelocity, null);
       builder.addDoubleProperty("wanted Velocity", this::getWantedSpeed, null);
       builder.addDoubleProperty("Error", this::getError, null);
-      builder.addDoubleProperty("KS", this::KS, null);
-      builder.addDoubleProperty("KV", this::KV, null);
   }
 }
