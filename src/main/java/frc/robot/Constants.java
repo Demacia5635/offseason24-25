@@ -23,16 +23,16 @@ public final class Constants {
   public static final String CANBUS = "canivore";
 
   
-  public static final double KS = 0.02;  //SmartDashboard.getNumber("KS", 0);
-  public static final double KV = 0.1; //SmartDashboard.getNumber("KV", 0);
+  public static final double KS = 0.22420247395833334; //0.02;  //SmartDashboard.getNumber("KS", 0);
+  public static final double KV = 0.28280165592829387; //SmartDashboard.getNumber("KV", 0);
   public static final double BACKWARD_MOVE_KS = 0.02;
   public static final double BACKWARD_MOVE_KV = 0.1; 
 
   public static final double KP = 0.05;
   public static final double KI = KP/10;
   public static final double KD = KI/10;
-
-  
+  //0.22420247395833334 The KS is: 0.28280165592829387
+  //0.2297634548611111 The KS is: 0.28188393940160306
   public static final double FORWORD_ANGLE_KS = 0.05;//0.52557/12.0; //0.05;
   public static final double FORWORD_ANGLE_KV = 0.0006;
   public static final double BACKWARD_ANGLE_KV = 0.00056;//0.003737/12.0; //0.0962;
