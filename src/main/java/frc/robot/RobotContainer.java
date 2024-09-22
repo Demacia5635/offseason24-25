@@ -71,6 +71,6 @@ public class RobotContainer {
     //return new SysIdCmd(motor, 0.2, "v2");
     //return new RunCommand(()->motor.set(TestSubsystem.num));
     //return new SysIdCmd(0.3, "v1").withTimeout(4).andThen(new SysIdCmd(-0.4, "v2")).withTimeout(2);
-    return new SysId().runs(0.3, 0.5);
+    return new TestCmd(200);
   }
 }
