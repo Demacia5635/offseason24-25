@@ -85,7 +85,7 @@ public class subpose extends SubsystemBase {
     // Calculate pose
     
     // Update field visualization
-    Pose2d robotPose = Pose.calcMyPose();
+    Pose2d robotPose = Pose.calculatePose();
         if (robotPose != null) {
             field.setRobotPose(robotPose);
         }

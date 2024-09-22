@@ -52,68 +52,49 @@ public class TagPoseCalc {
     }
     
 
-    // Calculate distance to the object
-    public double GetDist() {
+    // Calculate distance FROM CAMERA TO TAG
+    public double GetDistFromCamera() {
         sumdegry = ty + Constants.LimelightAngle;
         sumdegry = Math.toRadians(sumdegry);
-        System.out.println((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry)) + x_offset);
-        return ((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry))) + x_offset;
+        return ((Math.abs(height - Constants.LimelightHight)) / (Math.tan(sumdegry)));
+    }
+
+
+    // Calculate distance FROM ROBOT CENTER TO TAG
+    public double GetDistFromRobotCenter() {
+        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx));
+        Translation2d offsetVector = new Translation2d(x_offset, y_offset);
+        Translation2d robotToTag = offsetVector.plus(cameraToTag);
+        return robotToTag.getNorm();
     }
 
     // Get object identifier (note or AprilTag)
+    //TODO: change name
     public String GetObj() {
         return id == 0 ? "note" : ("tag_" + id);
         
     }
 
-    // Calculate angle to the object
-    public double GetAngle() {
-        double angle_rad = Math.toRadians(tx);
-        double mol = (this.GetDist() - x_offset) * Math.tan(angle_rad);
-        mol = Math.abs(y_offset - mol);
-        angle_rad = Math.atan2(mol, this.GetDist());
-        return Math.toDegrees(angle_rad);
+    // Calculate angle to the object from the ROBOT CENTER
+    public Rotation2d getYawFromRobotCenter() {
+        //TODO: add TAG angle, if blue add 180 AND tag angle
+        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx));
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset);
+        Translation2d robotToTag = cameraToTag.plus(robotToCamera);
+        return robotToTag.getAngle();
     }
 
-    public Pose2d calcMyPose() {
-        Translation2d obj = Constants.dic.get(this.GetObj());
-        if (obj != null) {
-            point = calculatePoint(obj, this.GetDist(), this.GetAngle());
+    //get position of robot on the field
+    public Pose2d calculatePose() {
+        //TODO: change dic to a more desctiptive name
+        Translation2d originToTag = Constants.dic.get(this.GetObj());
+        if(originToTag != null){
+            Translation2d robotToTag = new Translation2d(GetDistFromRobotCenter(),getYawFromRobotCenter());
+            Translation2d originToRobot = originToTag.minus(robotToTag);
+            point = new Pose2d(originToRobot,getYawFromRobotCenter());
+            return point;
         }
         return point;
     }
-    
-
-    // Calculate a point based on object position, distance, and angle
-    private Pose2d calculatePoint(Translation2d obj, double dist, double angle) {
-        Translation2d globalPosition;
-        double globalAngle = ((robotYaw+angle) % 360);
-        // System.out.println("globalAngle:"+globalAngle);
-        Translation2d relativePosition = new Translation2d(dist, Rotation2d.fromDegrees(globalAngle));
-        // System.out.println("obgAngle:"+obj.getAngle().getDegrees());
-        if(relativePosition.getAngle().getDegrees()<-90.0|| relativePosition.getAngle().getDegrees()>90.0){
-            globalPosition = relativePosition.plus(obj);
-
-        }
-        else{
-            globalPosition = obj.minus(relativePosition);
-
-        }
-
-
-        
-        // Translation2d globalPosition = relativePosition.minus(obj);
-        // if(){
-        //     resetAngle = angle -90;
-        //     angle = angle - resetAngle; 
-        // }
-        this.isIedMostly = checkIfRightRotation();
-        if(this.isIedMostly){
-            return new Pose2d(globalPosition, Rotation2d.fromDegrees(robotYaw+180));
-        }
-        return new Pose2d(globalPosition, Rotation2d.fromDegrees(robotYaw));
-        
-    }
-
 
 }
