@@ -14,41 +14,25 @@ public class TagPoseCalc {
     private double id;
     private double sumdegry;
     private Pose2d point;
-    private double robotYaw;
     public boolean isIedMostly;
 
 
-    public TagPoseCalc(double tx, double ty, double x_offset, double y_offset, double id, double robotYaw) {
+    public TagPoseCalc(double tx, double ty, double x_offset, double y_offset, double id) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
         this.tx = tx;
         this.ty = ty;
         this.height = Constants.HEIGHT_MAP.get(id);
-        this.robotYaw = robotYaw;
     }
-    public boolean checkIfRightRotation(){
+    public boolean checkIfAdd180(){
+        boolean isblueAndNot6 = false;
         switch ((int)this.id) {
-            case 7,8,9,10,11,14:
-                return false;
-            //case 7:
-                // return false;
-                
-            // case 8:
-            //     return false;
-                
-            // case 9:
-            //     return false;
-                
-            // case 10:
-            //     return false;
-                
-            // case 11:
-            //     return false;
-            // case 12:
-            //     return false;                             
+            case 7,8,9,10,14,15,16:
+                isblueAndNot6 = true;
+                break;                
         }
-        return true;
+        return isblueAndNot6;
     }
     
 
@@ -69,25 +53,29 @@ public class TagPoseCalc {
     }
 
     // Get object identifier (note or AprilTag)
-    //TODO: change name
-    public String GetObj() {
+    public String translateIdToHashmap() {
         return id == 0 ? "note" : ("tag_" + id);
         
     }
 
     // Calculate angle to the object from the ROBOT CENTER
     public Rotation2d getYawFromRobotCenter() {
-        //TODO: add TAG angle, if blue add 180 AND tag angle
-        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx));
+        Translation2d cameraToTag;
+        if (checkIfAdd180()){
+            cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+Constants.IDTOANGLE_MAP.get(translateIdToHashmap())+180));
+        }
+        else{
+            cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+Constants.IDTOANGLE_MAP.get(translateIdToHashmap())));
+        }
+        
         Translation2d robotToCamera = new Translation2d(x_offset, y_offset);
         Translation2d robotToTag = cameraToTag.plus(robotToCamera);
         return robotToTag.getAngle();
     }
 
-    //get position of robot on the field
+    //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
-        //TODO: change dic to a more desctiptive name
-        Translation2d originToTag = Constants.dic.get(this.GetObj());
+        Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
             Translation2d robotToTag = new Translation2d(GetDistFromRobotCenter(),getYawFromRobotCenter());
             Translation2d originToRobot = originToTag.minus(robotToTag);

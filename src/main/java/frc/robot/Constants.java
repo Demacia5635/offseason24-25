@@ -22,69 +22,69 @@ import edu.wpi.first.math.geometry.Translation2d;
  * constants are needed, to reduce verbosity.
  */
 public class Constants {
-    public static final Map<String,Translation2d> dic;
+    public static final Map<String,Translation2d> CARTESIANVECTORS_MAP;
     static{
-        Hashtable<String,Translation2d> tmp = new Hashtable<String,Translation2d>();
+        Hashtable<String,Translation2d> vector = new Hashtable<String,Translation2d>();
 
 
-        tmp.put("tag_1.0",new Translation2d(inchToMeter(593.68), inchToMeter(9.68)));
-        tmp.put("tag_2.0",new Translation2d(inchToMeter(637.21), inchToMeter(34.79)));
-        tmp.put("tag_3.0",new Translation2d(inchToMeter(652.73), inchToMeter(196.17)));
-        tmp.put("tag_4.0",new Translation2d(inchToMeter(652.73), inchToMeter(218.42)));
-        tmp.put("tag_5.0",new Translation2d(inchToMeter(578.77), inchToMeter(323.00)));
-        tmp.put("tag_6.0",new Translation2d(inchToMeter(72.5), inchToMeter(323.00)));
-        tmp.put("tag_7.0",new Translation2d(inchToMeter(-1.50), inchToMeter(218.42)));
-        tmp.put("tag_8.0",new Translation2d(inchToMeter(-1.50), inchToMeter(196.17)));
-        tmp.put("tag_9.0",new Translation2d(inchToMeter(14.02), inchToMeter(34.79)));
-        tmp.put("tag_10.0",new Translation2d(inchToMeter(57.54), inchToMeter(9.68)));
-        tmp.put("tag_11.0",new Translation2d(inchToMeter(468.69), inchToMeter(146.19)));
-        tmp.put("tag_12.0",new Translation2d(inchToMeter(468.69), inchToMeter(177.10)));
-        tmp.put("tag_13.0",new Translation2d(inchToMeter(441.74), inchToMeter(161.62)));
-        tmp.put("tag_14.0",new Translation2d(inchToMeter(209.48), inchToMeter(161.62)));
-        tmp.put("tag_15.0",new Translation2d(inchToMeter(182.73), inchToMeter(177.10)));
-        tmp.put("tag_16.0",new Translation2d(inchToMeter(182.73),inchToMeter(146.19)));
+        vector.put("tag_1.0",new Translation2d(inchToMeter(593.68), inchToMeter(9.68)));
+        vector.put("tag_2.0",new Translation2d(inchToMeter(637.21), inchToMeter(34.79)));
+        vector.put("tag_3.0",new Translation2d(inchToMeter(652.73), inchToMeter(196.17)));
+        vector.put("tag_4.0",new Translation2d(inchToMeter(652.73), inchToMeter(218.42)));
+        vector.put("tag_5.0",new Translation2d(inchToMeter(578.77), inchToMeter(323.00)));
+        vector.put("tag_6.0",new Translation2d(inchToMeter(72.5), inchToMeter(323.00)));
+        vector.put("tag_7.0",new Translation2d(inchToMeter(-1.50), inchToMeter(218.42)));
+        vector.put("tag_8.0",new Translation2d(inchToMeter(-1.50), inchToMeter(196.17)));
+        vector.put("tag_9.0",new Translation2d(inchToMeter(14.02), inchToMeter(34.79)));
+        vector.put("tag_10.0",new Translation2d(inchToMeter(57.54), inchToMeter(9.68)));
+        vector.put("tag_11.0",new Translation2d(inchToMeter(468.69), inchToMeter(146.19)));
+        vector.put("tag_12.0",new Translation2d(inchToMeter(468.69), inchToMeter(177.10)));
+        vector.put("tag_13.0",new Translation2d(inchToMeter(441.74), inchToMeter(161.62)));
+        vector.put("tag_14.0",new Translation2d(inchToMeter(209.48), inchToMeter(161.62)));
+        vector.put("tag_15.0",new Translation2d(inchToMeter(182.73), inchToMeter(177.10)));
+        vector.put("tag_16.0",new Translation2d(inchToMeter(182.73),inchToMeter(146.19)));
 
         //if bottom left is (0,0)
-        tmp.put("red_stage_leg_mid",new Translation2d(inchToMeter(121),inchToMeter(161.64)));
-        tmp.put("red_stage_leg_bottom",new Translation2d(inchToMeter(231.2),inchToMeter(97.64)));
-        tmp.put("red_stage_leg_top",new Translation2d(inchToMeter(231.2),inchToMeter(220.26)));
-        tmp.put("blue_stage_leg_mid",new Translation2d(inchToMeter(532.22),inchToMeter(161.64)));
-        tmp.put("blue_stage_leg_bottom",new Translation2d(inchToMeter(422.02),inchToMeter(97.64)));
-        tmp.put("blue_stage_leg_top",new Translation2d(inchToMeter(422.02),inchToMeter(220.26)));
-        tmp.put("red_speaker_middle",new Translation2d(inchToMeter(36.68),inchToMeter(104.64)));
-        tmp.put("blue_speaker_middle",new Translation2d(inchToMeter(616.52),inchToMeter(104.64)));
+        vector.put("red_stage_leg_mid",new Translation2d(inchToMeter(121),inchToMeter(161.64)));
+        vector.put("red_stage_leg_bottom",new Translation2d(inchToMeter(231.2),inchToMeter(97.64)));
+        vector.put("red_stage_leg_top",new Translation2d(inchToMeter(231.2),inchToMeter(220.26)));
+        vector.put("blue_stage_leg_mid",new Translation2d(inchToMeter(532.22),inchToMeter(161.64)));
+        vector.put("blue_stage_leg_bottom",new Translation2d(inchToMeter(422.02),inchToMeter(97.64)));
+        vector.put("blue_stage_leg_top",new Translation2d(inchToMeter(422.02),inchToMeter(220.26)));
+        vector.put("red_speaker_middle",new Translation2d(inchToMeter(36.68),inchToMeter(104.64)));
+        vector.put("blue_speaker_middle",new Translation2d(inchToMeter(616.52),inchToMeter(104.64)));
 
         //tmp.put("note", null);
-        dic = Collections.unmodifiableMap(tmp);
+        CARTESIANVECTORS_MAP = Collections.unmodifiableMap(vector);
     }
 
-    public static final Map<String,Double> ang;
+    public static final Map<String,Double> IDTOANGLE_MAP;
     static{
-        Hashtable<String,Double> tmp = new Hashtable<String,Double>();
+        Hashtable<String,Double> angles = new Hashtable<String,Double>();
 
 
-        tmp.put("tag_1.0",120.0);
-        tmp.put("tag_2.0",120.0);
-        tmp.put("tag_3.0",180.0);
-        tmp.put("tag_4.0",180.0);
-        tmp.put("tag_5.0",270.0);
-        tmp.put("tag_6.0",270.0);
-        tmp.put("tag_7.0",0.0);
-        tmp.put("tag_8.0",0.0);
-        tmp.put("tag_9.0",90.0);
-        tmp.put("tag_10.0",60.0);
-        tmp.put("tag_11.0",-100.0);
-        tmp.put("tag_12.0",300.0);
-        tmp.put("tag_13.0",180.0);
-        tmp.put("tag_14.0",0.0);
-        tmp.put("tag_15.0",120.0);
-        tmp.put("tag_16.0",240.0);
+        angles.put("tag_1.0",120.0);
+        angles.put("tag_2.0",120.0);
+        angles.put("tag_3.0",180.0);
+        angles.put("tag_4.0",180.0);
+        angles.put("tag_5.0",270.0);
+        angles.put("tag_6.0",270.0);
+        angles.put("tag_7.0",0.0);
+        angles.put("tag_8.0",0.0);
+        angles.put("tag_9.0",90.0);
+        angles.put("tag_10.0",60.0);
+        angles.put("tag_11.0",300.0);
+        angles.put("tag_12.0",60.0);
+        angles.put("tag_13.0",180.0);
+        angles.put("tag_14.0",0.0);
+        angles.put("tag_15.0",120.0);
+        angles.put("tag_16.0",240.0);
         
 
 
 
-        tmp.put("note", 0.0);
-        ang = Collections.unmodifiableMap(tmp);
+        angles.put("note", 0.0);
+        IDTOANGLE_MAP = Collections.unmodifiableMap(angles);
     }
     
 
@@ -137,4 +137,4 @@ public class Constants {
     public static final double LimelightXOfset = 0.08;
     public static final double LimelightYOfset = 0.36;
 
-}//1.095
+}

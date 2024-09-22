@@ -41,7 +41,7 @@ public class subpose extends SubsystemBase {
   public subpose() {
 
     // Initialize Field2d for visualization
-    TPC = new TagPoseCalc(tx, ty, x_offset, y_offset, id, ty);
+    TPC = new TagPoseCalc(tx, ty, x_offset, y_offset, id);
     field = new Field2d();
     this.x_offset = Constants.LimelightXOfset;
     this.y_offset = Constants.LimelightYOfset;
@@ -80,7 +80,7 @@ public class subpose extends SubsystemBase {
     
 
     // Calculate distance and angle
-    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id, giro.getYaw());
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id);
     
     // Calculate pose
     
