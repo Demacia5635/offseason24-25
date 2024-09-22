@@ -1,58 +1,69 @@
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleSupplier;
-import java.util.function.LongConsumer;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
-
-import edu.wpi.first.util.function.BooleanConsumer;
-import edu.wpi.first.util.function.FloatConsumer;
-import edu.wpi.first.util.function.FloatSupplier;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.TestSubsystem;
 
-public class SysId implements SendableBuilder {
+public class SysId implements Sendable {
 
   
-    public double velocity1;
-    public double velocity2;
-    public double KV;
-    public double KS;
+    public static double velocity1;
+    public static double velocity2;
+    public static double KV = 0.0;
+    public static double KS = 0.0;
 
-    private TestSubsystem subsystem = new TestSubsystem();
+    private static TestSubsystem subsystem = new TestSubsystem();
 
-    public SysId(){}
+    public SysId(){
+        SmartDashboard.putData(this);
+    }
 
-    public Command runs(double power1, double power2){
-        return new ParallelCommandGroup(new InstantCommand(() -> {
+    public static Command runs(double power1, double power2){
+        return new SequentialCommandGroup(new RunCommand(() -> {
+            System.out.println("PLSSSSSS LET ME SEE THISSSS");
             subsystem.setPowers(power1);
-            velocity1 = subsystem.getTrueVelocity();
+            velocity1 = subsystem.getVel();
+            //SmartDashboard.putNumber("V1", velocity1);
             System.out.println(subsystem.getTrueVelocity());
+            System.out.println("this is power!!! one: " + power1);
         },subsystem)
-        .withTimeout(2.5), new InstantCommand(() -> {
+        .withTimeout(2.5), new RunCommand(() -> {
             subsystem.setPowers(power2);
-            velocity2 = subsystem.getTrueVelocity();
+            velocity2 = subsystem.getVel();
             KV = getKV(power1, power2, velocity1,velocity2);
             KS = getKS(power1, KV, velocity1);
             System.out.println("The KV is: " + KV + " The KS is: " + KS);
-            SmartDashboard.putNumber("KS", KS);
-            SmartDashboard.putNumber("KV", KV);
-        },subsystem));
+            System.out.println("This is the power!!!: " + power2);
+            //SmartDashboard.putNumber("V2", velocity2);
+        },subsystem).withTimeout(2));
 
     }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleProperty("KS", ()->KS, null);
+        builder.addDoubleProperty("KV", ()->KV, null);
+    }
+
+   
+
+    public static double getterKV(){
+        return getKV(KV, KS, velocity1, velocity2);
+    }
+
+    public static double getterKS(){
+        return getKS(KS, KV, velocity1);
+    }
     
-    public double getVel(){
+    public static double getVel(){
         return subsystem.getTrueVelocity();
     }
 
-    public double getWantedSpeed(){
+    public static double getWantedSpeed(){
         return 4;
     }
 
@@ -61,17 +72,15 @@ public class SysId implements SendableBuilder {
     }
 
 
-    /*    
+        
     public void calculate(double pow1, double pow2){
-        runs(pow1);
         double vel = subsystem.getTrueVelocity();
-        runs(pow2);
         double vel2 = subsystem.getTrueVelocity();
         double KV = getKV(pow1, pow2, vel, vel2);
         double KS = getKS(pow2, KV, vel2);
         System.out.println("The KS is: " + KS + " The KV is: " + KV);
     }
-    */
+    
 
 
     public  double[] simpleFeedForward(double power1, double power2, double Scope){
@@ -88,11 +97,11 @@ public class SysId implements SendableBuilder {
         return feedForwardData;
     }
 
-    public  double getKV(double power1, double power2, double velocity1, double velocity2){
+    public static double getKV(double power1, double power2, double velocity1, double velocity2){
         return (velocity2 - velocity1)/(power2 - power1);
     }
 
-    public  double getKS(double power, double KV, double velocity){
+    public static double getKS(double power, double KV, double velocity){
         return power - KV * velocity;
     }
 
@@ -111,191 +120,7 @@ public class SysId implements SendableBuilder {
         SmartDashboard.putNumber("KS", KS);
     }
 
-    @Override
-    public void close() throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'close'");
-    }
-
-    @Override
-    public void setSmartDashboardType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSmartDashboardType'");
-    }
-
-    @Override
-    public void setActuator(boolean value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setActuator'");
-    }
-
-    @Override
-    public void setSafeState(Runnable func) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSafeState'");
-    }
-
-    @Override
-    public void addBooleanProperty(String key, BooleanSupplier getter, BooleanConsumer setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addBooleanProperty'");
-    }
-
-    @Override
-    public void publishConstBoolean(String key, boolean value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstBoolean'");
-    }
-
-    @Override
-    public void addIntegerProperty(String key, LongSupplier getter, LongConsumer setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addIntegerProperty'");
-    }
-
-    @Override
-    public void publishConstInteger(String key, long value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstInteger'");
-    }
-
-    @Override
-    public void addFloatProperty(String key, FloatSupplier getter, FloatConsumer setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addFloatProperty'");
-    }
-
-    @Override
-    public void publishConstFloat(String key, float value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstFloat'");
-    }
-
-    @Override
-    public void addDoubleProperty(String key, DoubleSupplier getter, DoubleConsumer setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addDoubleProperty'");
-    }
-
-    @Override
-    public void publishConstDouble(String key, double value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstDouble'");
-    }
-
-    @Override
-    public void addStringProperty(String key, Supplier<String> getter, Consumer<String> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addStringProperty'");
-    }
-
-    @Override
-    public void publishConstString(String key, String value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstString'");
-    }
-
-    @Override
-    public void addBooleanArrayProperty(String key, Supplier<boolean[]> getter, Consumer<boolean[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addBooleanArrayProperty'");
-    }
-
-    @Override
-    public void publishConstBooleanArray(String key, boolean[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstBooleanArray'");
-    }
-
-    @Override
-    public void addIntegerArrayProperty(String key, Supplier<long[]> getter, Consumer<long[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addIntegerArrayProperty'");
-    }
-
-    @Override
-    public void publishConstIntegerArray(String key, long[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstIntegerArray'");
-    }
-
-    @Override
-    public void addFloatArrayProperty(String key, Supplier<float[]> getter, Consumer<float[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addFloatArrayProperty'");
-    }
-
-    @Override
-    public void publishConstFloatArray(String key, float[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstFloatArray'");
-    }
-
-    @Override
-    public void addDoubleArrayProperty(String key, Supplier<double[]> getter, Consumer<double[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addDoubleArrayProperty'");
-    }
-
-    @Override
-    public void publishConstDoubleArray(String key, double[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstDoubleArray'");
-    }
-
-    @Override
-    public void addStringArrayProperty(String key, Supplier<String[]> getter, Consumer<String[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addStringArrayProperty'");
-    }
-
-    @Override
-    public void publishConstStringArray(String key, String[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstStringArray'");
-    }
-
-    @Override
-    public void addRawProperty(String key, String typeString, Supplier<byte[]> getter, Consumer<byte[]> setter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addRawProperty'");
-    }
-
-    @Override
-    public void publishConstRaw(String key, String typeString, byte[] value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'publishConstRaw'");
-    }
-
-    @Override
-    public BackendKind getBackendKind() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBackendKind'");
-    }
-
-    @Override
-    public boolean isPublished() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isPublished'");
-    }
-
-    @Override
-    public void update() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-
-    @Override
-    public void clearProperties() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clearProperties'");
-    }
-
-    @Override
-    public void addCloseable(AutoCloseable closeable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addCloseable'");
-    }
+    
     
         //p1 = ks * Math.signum(velocity1) + kv * velocity1 + ka * acceleration1;
         //p2 = ks * Math.signum(velocity2) + kv * velocity2 + ka * acceleration2
