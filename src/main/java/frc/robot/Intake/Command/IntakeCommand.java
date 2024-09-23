@@ -1,9 +1,9 @@
 package frc.robot.Intake.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Intake.Intake;
 import frc.robot.Intake.IntakeConstants;
 import frc.robot.Intake.IntakeConstants.NotePosition;
+import frc.robot.Intake.Subsystem.Intake;
 
 import static frc.robot.Intake.IntakeConstants.*;
 public class IntakeCommand extends CommandBase {
