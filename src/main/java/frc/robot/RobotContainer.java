@@ -31,7 +31,7 @@ public class RobotContainer {
   public double power;
   private TalonFX motor = new TalonFX(1);
   private TestSubsystem subsystem = new TestSubsystem();
-  private SysId sysId = new SysId();
+  private SysIdDefault sysId = new SysIdDefault();
 
   //private SysIdCmd sysId = new SysIdCmd(motor, 0.1, "v1");
   //private SequentialCommandGroup cmd = sysId.andThen(new SysIdCmd(motor, 0.2, "v2")) ;

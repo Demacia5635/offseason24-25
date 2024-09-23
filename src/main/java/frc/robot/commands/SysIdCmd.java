@@ -9,7 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.SysId;
+import frc.robot.SysIdDefault;
 import frc.robot.subsystems.TestSubsystem;
 
 import static frc.robot.Constants.*;
@@ -20,7 +20,7 @@ public class SysIdCmd extends Command {
   private double power;
   private String nameForShuffleBoard;
   private TestSubsystem subsystem = new TestSubsystem();
-  private SysId sysId = new SysId();
+  private SysIdDefault sysId = new SysIdDefault();
 
   public SysIdCmd(double power, String nameForShuffleBoard) {
     //this.motor = motor;

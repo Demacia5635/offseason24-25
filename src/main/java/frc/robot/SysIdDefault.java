@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.TestSubsystem;
 
-public class SysId implements Sendable {
+public class SysIdDefault implements Sendable {
 
   
     public static double velocity1;
@@ -19,7 +19,7 @@ public class SysId implements Sendable {
 
     private static TestSubsystem subsystem = new TestSubsystem();
 
-    public SysId(){
+    public SysIdDefault(){
         SmartDashboard.putData(this);
     }
 
