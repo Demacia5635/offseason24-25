@@ -13,6 +13,7 @@ public class SysId implements Sendable {
   
     public static double velocity1;
     public static double velocity2;
+    private static double velocity3;
     public static double KV = 0.0;
     public static double KS = 0.0;
 
@@ -22,24 +23,22 @@ public class SysId implements Sendable {
         SmartDashboard.putData(this);
     }
 
-    public static Command runs(double power1, double power2){
+    public static Command feedForwardRun(double power1, double power2, double power3){
         return new SequentialCommandGroup(new RunCommand(() -> {
             System.out.println("PLSSSSSS LET ME SEE THISSSS");
             subsystem.setPowers(power1);
             velocity1 = subsystem.getVel();
-            //SmartDashboard.putNumber("V1", velocity1);
-            System.out.println(subsystem.getTrueVelocity());
-            System.out.println("this is power!!! one: " + power1);
         },subsystem)
         .withTimeout(2.5), new RunCommand(() -> {
             subsystem.setPowers(power2);
             velocity2 = subsystem.getVel();
             KV = getKV(power1, power2, velocity1,velocity2);
             KS = getKS(power1, KV, velocity1);
-            System.out.println("The KV is: " + KV + " The KS is: " + KS);
-            System.out.println("This is the power!!!: " + power2);
-            //SmartDashboard.putNumber("V2", velocity2);
-        },subsystem).withTimeout(2));
+        },subsystem).withTimeout(2.5), new RunCommand(()->{
+            subsystem.setPowers(power3);
+            velocity3 = subsystem.getVel();
+
+        }, subsystem));
 
     }
 
@@ -92,8 +91,7 @@ public class SysId implements Sendable {
 
         double KV = getKV(power1, power2, velocity1, velocity2);
         double KS = getKS(power1, KV, velocity1);
-        double KA = getKA(power1, power2, power1, power2, Scope, KS, KV);
-        double[] feedForwardData = {KV,KS,KA};
+        double[] feedForwardData = {KV,KS};
         return feedForwardData;
     }
 
@@ -105,8 +103,14 @@ public class SysId implements Sendable {
         return power - KV * velocity;
     }
 
-    public  double getKA(double power1, double power2, double velocity1, double velocity2, double acceleration1, double acceleration2, double KV) {
-        return ((power2 - power1) - KV * (velocity2 - velocity1)) / (acceleration2 - acceleration1);
+    public  double getKA(double power1, double power2, double power3, double velocity1, double velocity2, double velocity3, double acceleration1, double acceleration2, double acceleration3, double KV) {
+        double firstEquation =  ((power2 - power1) - KV * (velocity2 - velocity1)) / (acceleration2 - acceleration1);
+        double deltaP = power2-power1;
+        double deltaV = velocity2 - velocity1;
+        double deltaA = acceleration2 - acceleration1;
+        
+        
+        return -1;
     }
 
     public void showFeedForward(double power1, double power2, double Scope){
