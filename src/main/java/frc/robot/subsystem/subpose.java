@@ -36,12 +36,11 @@ public class subpose extends SubsystemBase {
   
   // Field visualization
   private Field2d field;
-  TagPoseCalc TPC;
 
   public subpose() {
 
     // Initialize Field2d for visualization
-    TPC = new TagPoseCalc(tx, ty, x_offset, y_offset, id);
+    
     field = new Field2d();
     this.x_offset = Constants.LimelightXOfset;
     this.y_offset = Constants.LimelightYOfset;
@@ -50,27 +49,26 @@ public class subpose extends SubsystemBase {
 
     giro = new Pigeon2(19);
 
+        // Get the Limelight NetworkTable
+    
+    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+
   }
   public static void resetGiro(){
     giro.setYaw(0);
-    System.out.println("  ");
   }
     public static void add180Giro(){
-    giro.setYaw(giro.getYaw()+90);
-    System.out.println("  ");
+    giro.setYaw(giro.getYaw()+180);
   }
       public static void addmines180Giro(){
-    giro.setYaw(giro.getYaw()-90);
-    System.out.println("  ");
+    giro.setYaw(giro.getYaw()-180);
   }
 
   
 
   @Override
   public void periodic() {
-    // Get the Limelight NetworkTable
-    
-    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+
     
     // Fetch Limelight data
     tx = table.getEntry("tx").getDouble(0);
@@ -80,11 +78,12 @@ public class subpose extends SubsystemBase {
     
 
     // Calculate distance and angle
-    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id);
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getYaw()));
     
     // Calculate pose
     
     // Update field visualization
+    //TODO: have to fix robot rotation when he is red because he is upsidedown when he is red 
     Pose2d robotPose = Pose.calculatePose();
         if (robotPose != null) {
             field.setRobotPose(robotPose);

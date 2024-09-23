@@ -14,15 +14,17 @@ public class TagPoseCalc {
     private double id;
     private double sumdegry;
     private Pose2d point;
+    private Rotation2d giroYaw;
     public boolean isIedMostly;
 
 
-    public TagPoseCalc(double tx, double ty, double x_offset, double y_offset, double id) {
+    public TagPoseCalc(double tx, double ty, double x_offset, double y_offset, double id,Rotation2d giroYaw) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
         this.tx = tx;
         this.ty = ty;
+        this.giroYaw = giroYaw;
         this.height = Constants.HEIGHT_MAP.get(id);
     }
     public boolean checkIfAdd180(){
@@ -46,7 +48,9 @@ public class TagPoseCalc {
 
     // Calculate distance FROM ROBOT CENTER TO TAG
     public double GetDistFromRobotCenter() {
+        
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx));
+
         Translation2d offsetVector = new Translation2d(x_offset, y_offset);
         Translation2d robotToTag = offsetVector.plus(cameraToTag);
         return robotToTag.getNorm();
@@ -75,12 +79,20 @@ public class TagPoseCalc {
 
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
+        System.out.println("get dist in m: "+GetDistFromRobotCenter());
+        System.out.println("get angle yaw from robot: "+giroYaw);
+        Translation2d originToRobot;
         Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
-            Translation2d robotToTag = new Translation2d(GetDistFromRobotCenter(),getYawFromRobotCenter());
-            Translation2d originToRobot = originToTag.minus(robotToTag);
-            point = new Pose2d(originToRobot,getYawFromRobotCenter());
-            return point;
+            Translation2d robotToTag = new Translation2d(GetDistFromRobotCenter(),giroYaw);
+            if (checkIfAdd180()){
+                originToRobot = originToTag.plus(robotToTag);
+            }
+            else{
+                originToRobot = originToTag.minus(robotToTag);
+            }
+            point = new Pose2d(originToRobot,giroYaw);
+
         }
         return point;
     }
