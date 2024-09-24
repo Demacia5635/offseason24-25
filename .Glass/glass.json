@@ -1,0 +1,59 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
+      "Shuffleboard": {
+        "open": true
+      },
+      "log": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Chassis/Change gyro angle ": "Command",
+      "/Shuffleboard/Chassis/Chassis Move Sysid": "Command",
+      "/Shuffleboard/Chassis/Chassis Move Sysid2": "Command",
+      "/Shuffleboard/Chassis/Set Modules Angle": "Command",
+      "/Shuffleboard/Chassis/SetAngle45": "Command",
+      "/Shuffleboard/Chassis/calibrate": "Command",
+      "/Shuffleboard/Chassis/reset wheels": "Command",
+      "/Shuffleboard/Chassis/run command": "Command",
+      "/Shuffleboard/Chassis/set brake": "Command",
+      "/Shuffleboard/Chassis/set coast": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/reset pose": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "bottom": 544,
+        "builtin": "2024 Crescendo",
+        "height": 8.013679504394531,
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Server": {
+      "open": true
+    },
+    "glass@1": {
+      "Subscribers": {
+        "open": true
+      }
+    },
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "5635"
+  }
+}
