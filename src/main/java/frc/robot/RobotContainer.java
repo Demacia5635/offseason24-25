@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -13,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.subsystem.Subpose;
 import frc.robot.utils.LogManager;
 
 public class RobotContainer implements Sendable {
@@ -27,16 +27,12 @@ public class RobotContainer implements Sendable {
 
   private LogManager LM = new LogManager();
 
-  public Command shoot; // shoot to amp or to speaker
-  public Command driveToNote;
-  public Command manualIntake;
-  public Command activateAmp;
-  public Command disableCommand;
+
   public Command resetOdometry;
-  public Command activatePodium;
-  public Command activateShooter;
-  public Command activateSubwoofer;
+
   public double num = 0;
+
+  public Subpose subsystemPosition = new Subpose();
   
 
   

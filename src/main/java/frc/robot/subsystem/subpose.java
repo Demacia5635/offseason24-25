@@ -4,7 +4,8 @@ package frc.robot.subsystem;
 
 
 
-import com.ctre.phoenix.sensors.Pigeon2;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,9 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.TagPoseCalc;
+import frc.robot.utils.ImageProsesing.TagPoseCalc;
 
-public class subpose extends SubsystemBase {
+public class Subpose extends SubsystemBase {
   // NetworkTable for Limelight communication
   private NetworkTable table;
   
@@ -37,7 +38,7 @@ public class subpose extends SubsystemBase {
   // Field visualization
   private Field2d field;
 
-  public subpose() {
+  public Subpose() {
 
     // Initialize Field2d for visualization
     
@@ -47,21 +48,21 @@ public class subpose extends SubsystemBase {
     // Add this subsystem to SmartDashboard
     SmartDashboard.putData(this);
 
-    giro = new Pigeon2(19);
+    giro = new Pigeon2(14);
 
         // Get the Limelight NetworkTable
     
-    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+    table = NetworkTableInstance.getDefault().getTable("limelight");
 
   }
   public static void resetGiro(){
     giro.setYaw(0);
   }
     public static void add180Giro(){
-    giro.setYaw(giro.getYaw()+180);
+    giro.setYaw(giro.getAngle()+180);
   }
       public static void addmines180Giro(){
-    giro.setYaw(giro.getYaw()-180);
+    giro.setYaw(giro.getAngle()-180);
   }
 
   
@@ -78,7 +79,7 @@ public class subpose extends SubsystemBase {
     
 
     // Calculate distance and angle
-    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getYaw()));
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()));
     
     // Calculate pose
     
@@ -100,10 +101,10 @@ public class subpose extends SubsystemBase {
     // builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
     // builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
     // builder.addDoubleProperty("dist", () -> this.dists, null);
-    SmartDashboard.putData("field", field);
-    SmartDashboard.putData("reset", new InstantCommand(()->resetGiro()).ignoringDisable(true));
-    SmartDashboard.putData("add_180", new InstantCommand(()->add180Giro()).ignoringDisable(true));
-    SmartDashboard.putData("add_-180", new InstantCommand(()->addmines180Giro()).ignoringDisable(true));
+    SmartDashboard.putData("fieldIMGPROS", field);
+    SmartDashboard.putData("resetIMG", new InstantCommand(()->resetGiro()).ignoringDisable(true));
+    SmartDashboard.putData("add_180IMG", new InstantCommand(()->add180Giro()).ignoringDisable(true));
+    SmartDashboard.putData("add_-180IMG", new InstantCommand(()->addmines180Giro()).ignoringDisable(true));
 
   }
 }

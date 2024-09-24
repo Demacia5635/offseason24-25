@@ -127,10 +127,11 @@ public class Constants {
   
       HEIGHT_MAP = Collections.unmodifiableMap(idToHeights);
     }
-    public static final double LimelightHight = 0.355;
-    public static final double LimelightAngle = 33;
+    public static final double LimelightHight = 0.215;
+    public static final double LimelightAngle = 46;
 
-    public static final double LimelightXOfset = 0.08;
-    public static final double LimelightYOfset = 0.36;
+    public static final double LimelightYaw = 180;
+    public static final double LimelightXOfset = -0.352;
+    public static final double LimelightYOfset = 0.035;
 
 }

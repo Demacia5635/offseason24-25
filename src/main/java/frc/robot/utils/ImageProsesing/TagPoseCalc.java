@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.ImageProsesing;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,15 +46,7 @@ public class TagPoseCalc {
     }
 
 
-    // Calculate distance FROM ROBOT CENTER TO TAG
-    public double GetDistFromRobotCenter() {
-        
-        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx));
 
-        Translation2d offsetVector = new Translation2d(x_offset, y_offset);
-        Translation2d robotToTag = offsetVector.plus(cameraToTag);
-        return robotToTag.getNorm();
-    }
 
     // Get object identifier (note or AprilTag)
     public String translateIdToHashmap() {
@@ -62,35 +54,26 @@ public class TagPoseCalc {
         
     }
 
-    // Calculate angle to the object from the ROBOT CENTER
-    public Rotation2d getYawFromRobotCenter() {
-        Translation2d cameraToTag;
-        if (checkIfAdd180()){
-            cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+Constants.IDTOANGLE_MAP.get(translateIdToHashmap())+180));
-        }
-        else{
-            cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+Constants.IDTOANGLE_MAP.get(translateIdToHashmap())));
-        }
+    // Calculate vector Camera to tag
+    public Translation2d getCameraToTag() {
+        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+180));
+
         
         Translation2d robotToCamera = new Translation2d(x_offset, y_offset);
         Translation2d robotToTag = cameraToTag.plus(robotToCamera);
-        return robotToTag.getAngle();
+        robotToTag = robotToTag.rotateBy(Rotation2d.fromDegrees(Constants.LimelightYaw));
+        return robotToTag;
     }
 
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
-        System.out.println("get dist in m: "+GetDistFromRobotCenter());
-        System.out.println("get angle yaw from robot: "+giroYaw);
         Translation2d originToRobot;
         Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
-            Translation2d robotToTag = new Translation2d(GetDistFromRobotCenter(),giroYaw);
-            if (checkIfAdd180()){
-                originToRobot = originToTag.plus(robotToTag);
-            }
-            else{
-                originToRobot = originToTag.minus(robotToTag);
-            }
+            Translation2d robotToTag = getCameraToTag();
+            originToRobot = originToTag.plus(robotToTag);
+            
+
             point = new Pose2d(originToRobot,giroYaw);
 
         }

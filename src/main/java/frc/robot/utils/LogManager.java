@@ -216,7 +216,6 @@ public class LogManager extends SubsystemBase {
 
     @Override
     public void periodic() {
-        super.periodic();
         for (LogEntry e : logEntries) {
             e.log();
         }
