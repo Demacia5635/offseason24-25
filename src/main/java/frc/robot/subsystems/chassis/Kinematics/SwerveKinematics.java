@@ -29,7 +29,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
    
 
     public SwerveModuleState[] states;
-    
+    public double MINalpha=5;
     Translation2d[] moduleTranslationsMeters;
     /**
      * Constructor we use
@@ -45,7 +45,12 @@ public class SwerveKinematics extends SwerveDriveKinematics {
     private double getCycleDistance(double vel){
         return vel * Constants.CYCLE_DT;
     }
-   
+    public SwerveModuleState straightPath(Translation2d moduleLocationDifference,SwerveModuleState state)   {
+        SwerveModuleState newState = new SwerveModuleState(moduleLocationDifference.getNorm()/0.02,state.angle);
+        return newState;
+    }
+     public SwerveModuleState curvedPath(Rotation2d alpha,Translation2d moduleLocationDifference,Translation2d moduleEstimatedPos)
+
     /**
      * Rotate the speeds counter to omega - to drive stright
      */
@@ -58,15 +63,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
             Translation2d moduleEstimatedPos = estimatedPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(estimatedPose.getRotation().minus(curPose.getRotation())));//the module estimated pos
             Translation2d moduleLocationDifference = moduleEstimatedPos.minus(curPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(curPose.getRotation()))); //the delta x of the module between previous and estimate
             Rotation2d alpha = moduleLocationDifference.getAngle().minus(prevStates[i].angle.rotateBy(curPose.getRotation())); //finding alpha
-            double radius = moduleLocationDifference.getNorm() * Math.sin((Math.PI / 2 ) - alpha.getRadians()) / Math.sin(alpha.getRadians() * 2);
-
-            double moduleV = alpha.times(2 * radius).getRadians() / Constants.CYCLE_DT;    //(2alpha * d * sin(0.5pi - alpha)/sin(2alpha))/0.02 = Vn
-            
-            double startingModuleRadians = prevStates[i].angle.getRadians();
-            double chassisDiffRadians = estimatedPose.getRotation().minus(curPose.getRotation()).getRadians();
-            
-            double moduleAngle = startingModuleRadians+(2*alpha.getRadians())-chassisDiffRadians;// d0 + 2alpha - delta(Beta) = Dn
-            newModuleStates[i] = new SwerveModuleState(moduleV,new Rotation2d(moduleAngle));  
+            newModuleStates[i] = alpha.getDegrees()>=MINalpha ? curvedPath() : straightPath(moduleLocationDifference,prevStates[i]);
         }
         return newModuleStates;
     }
