@@ -27,15 +27,7 @@ public class TagPoseCalc {
         this.giroYaw = giroYaw;
         this.height = Constants.HEIGHT_MAP.get(id);
     }
-    public boolean checkIfAdd180(){
-        boolean isblueAndNot6 = false;
-        switch ((int)this.id) {
-            case 7,8,9,10,14,15,16:
-                isblueAndNot6 = true;
-                break;                
-        }
-        return isblueAndNot6;
-    }
+
     
 
     // Calculate distance FROM CAMERA TO TAG
@@ -55,13 +47,12 @@ public class TagPoseCalc {
     }
 
     // Calculate vector Camera to tag
-    public Translation2d getCameraToTag() {
-        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx+180));
+    public Translation2d getRobotToTag() {
+        Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx)).rotateBy(giroYaw);
 
         
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset);
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(Rotation2d.fromDegrees(Constants.LimelightYaw).plus(giroYaw));
         Translation2d robotToTag = cameraToTag.plus(robotToCamera);
-        robotToTag = robotToTag.rotateBy(Rotation2d.fromDegrees(Constants.LimelightYaw));
         return robotToTag;
     }
 
@@ -70,7 +61,7 @@ public class TagPoseCalc {
         Translation2d originToRobot;
         Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
-            Translation2d robotToTag = getCameraToTag();
+            Translation2d robotToTag = getRobotToTag();
             originToRobot = originToTag.plus(robotToTag);
             
 
