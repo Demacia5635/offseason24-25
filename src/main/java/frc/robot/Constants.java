@@ -16,4 +16,10 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final int CANCODERID = 0;
+  public static final int PIGEONID = 0;
+  public static final String CANCODERCANBUS = "canivore";
+  public static final String PIGEONCANBUS = "canivore";
+  public static final double OFFSET = 0;
+  public static final Boolean BOOLDIRECTION = false;
 }
