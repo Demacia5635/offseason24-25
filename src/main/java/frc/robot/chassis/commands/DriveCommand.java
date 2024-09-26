@@ -1,5 +1,6 @@
 package frc.robot.chassis.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -7,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 import static frc.robot.chassis.ChassisConstants.MAX_OMEGA_VELOCITY;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.utils.Utils;
+
 import static frc.robot.utils.Utils.deadband;
 
 public class DriveCommand extends Command {
@@ -49,12 +52,16 @@ public class DriveCommand extends Command {
     double velRot = Math.pow(rot, 2) * MAX_OMEGA_VELOCITY * Math.signum(rot);
 
     if (precisionDrive) {
-      // velX /= 4;
-      // velY /= 4;
-      // velRot /= 4;
+      velX /= 4;
+      velY /= 4;
+      velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
-    chassis.setVelocities(speeds);
+    
+    if(Utils.joystickOutOfDeadband(commandXboxController, true)) chassis.setVelocitiesRotateToAngle(
+      speeds, Utils.getStickVector(commandXboxController).getAngle());
+
+    else chassis.setVelocities(speeds);
     }
   }
 

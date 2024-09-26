@@ -25,12 +25,18 @@ public class Utils {
     public static double angleDif(Rotation2d r1, Rotation2d r2) {
       return degrees(r1.minus(r2));
     }
-    public static boolean joystickOutOfDeadband(CommandXboxController controller){
-        return deadband(controller.getLeftX(), 0.1) != 0 ||
-        deadband(controller.getLeftX(), 0.1) != 0
+    public static boolean joystickOutOfDeadband(CommandXboxController controller, boolean isLeft){
+      return deadband(isLeft ? controller.getLeftX() : controller.getRightX(), 0.1) != 0 ||
+        deadband(isLeft ? controller.getLeftY() : controller.getRightY(), 0.1) != 0
         || deadband(controller.getLeftTriggerAxis(), 0.1) != 0||
         deadband(controller.getRightTriggerAxis(), 0.1) != 0;
     }
+
+    public static Translation2d getStickVector(CommandXboxController controller){
+      return new Translation2d(controller.getRightX(), controller.getRightY());
+    }
+
+  
     
   public static double deadband(double x, double threshold) {
     return Math.abs(x) < threshold ? 0 :x;

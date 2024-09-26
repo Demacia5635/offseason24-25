@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,6 +44,8 @@ public class Chassis extends SubsystemBase {
   private final Pigeon2 gyro;
   private SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field;
+
+  private PIDController rotationPID = new PIDController(0.05,0.0, 0.002);
 
   public Chassis() {
     modules = new SwerveModule[] {
@@ -218,6 +221,15 @@ public class Chassis extends SubsystemBase {
     // System.out.println("vX" + speeds.vxMetersPerSecond);
     // System.out.println("vY" + speeds.vyMetersPerSecond);
     setModuleStates(states);
+  }
+
+  public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
+    speeds.omegaRadiansPerSecond = getRadPerSecToAngle(angle);
+    setVelocities(speeds);
+  }
+
+  public double getRadPerSecToAngle(Rotation2d fieldRelativeAngle){
+    return rotationPID.calculate(-fieldRelativeAngle.getRadians(), 0);
   }
 
   public Translation2d getVelocity() {

@@ -5,12 +5,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
+import com.ctre.phoenix6.Timestamp;
+import com.ctre.phoenix6.Timestamp.TimestampSource;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -36,6 +40,8 @@ public class SwerveModule extends SubsystemBase {
     public boolean debug = false;
 
     Chassis chassis;
+
+    Timer timer;
 
     /**
      * Constructor
@@ -77,11 +83,13 @@ public class SwerveModule extends SubsystemBase {
 
         LogManager.addEntry(name + "/angle", this::getSteerTalonAngle);
 
+        timer = new Timer();
+        timer.start();
     }
 
     @Override
     public void periodic() {
-        steerMotor.setPosition(getAbsDegrees().getDegrees());
+        if(timer.get() <= 15) {steerMotor.setPosition(getAbsDegrees().getDegrees()); timer.reset();}
         
     }
 
@@ -215,7 +223,7 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAbsDegrees());
-        if(optimized.speedMetersPerSecond != 0) setSteerPosition(optimized.angle);
+        setSteerPosition(optimized.angle);
         setVelocity(optimized.speedMetersPerSecond);
     }
 
