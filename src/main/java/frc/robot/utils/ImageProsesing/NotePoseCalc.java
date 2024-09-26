@@ -35,7 +35,6 @@ public class NotePoseCalc {
     public double GetDistFromCamera() {
         sumdegry = Math.abs(ty - Constants.NoteLimelightAngle);
         sumdegry = Math.toRadians(sumdegry);
-        System.out.println((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
         return ((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
 
     }
