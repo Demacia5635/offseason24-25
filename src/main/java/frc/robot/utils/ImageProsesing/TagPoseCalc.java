@@ -66,9 +66,9 @@ public class TagPoseCalc {
             
 
             point = new Pose2d(originToRobot,giroYaw);
-
+            return point;
         }
-        return point;
+        return new Pose2d();
     }
 
 }

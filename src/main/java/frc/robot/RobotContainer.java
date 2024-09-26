@@ -23,12 +23,12 @@ public class RobotContainer implements Sendable {
   public Joystick gitar;
 
 
-  public Chassis chassis;
+  // public Chassis chassis;
 
   private LogManager LM = new LogManager();
 
 
-  public Command resetOdometry;
+  //public Command resetOdometry;
 
   public double num = 0;
 
@@ -42,11 +42,11 @@ public class RobotContainer implements Sendable {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    chassis = new Chassis();
+    // chassis = new Chassis();
     
     commandController2 = new CommandXboxController(1);
     commandController = new CommandXboxController(0);
-    chassis.setDefaultCommand(new DriveCommand(chassis, commandController));
+    // chassis.setDefaultCommand(new DriveCommand(chassis, commandController));
 
       createCommands();
     
@@ -67,7 +67,7 @@ public class RobotContainer implements Sendable {
 
 
 
-    resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward()).ignoringDisable(true);
+    // resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward()).ignoringDisable(true);
 
 }
 
@@ -93,14 +93,15 @@ public class RobotContainer implements Sendable {
 
   private void configureBindings() {
   
-    commandController.b().onTrue(new RunCommand(()->chassis.setGyroAngle(0)));
+    // commandController.b().onTrue(new RunCommand(()->chassis.setGyroAngle(0)));
   
 }
 
    
   public Command getAutonomousCommand() {
     // return new RunCommand(() -> chassis.setModuleSteerVelocity(2, 360), chassis);
-    return new RunCommand(()->chassis.setModulesSteerPosition(num, 2));
+    return null;
+    // return new RunCommand(()->chassis.setModulesSteerPosition(num, 2));
     // return new RunCommand(() -> {
     //   chassis.setModulesSteerPosition(0.0,0);
     //   chassis.setModulesSteerPosition(0.0,1);

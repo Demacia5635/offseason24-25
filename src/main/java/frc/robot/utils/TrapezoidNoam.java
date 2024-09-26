@@ -70,7 +70,7 @@ public class TrapezoidNoam {
           //  if(debug) System.out.println(" reduce v - " + a + " maxV=" + maxVelocity + " maxA=" + maxAcceleration);
         }
         if(debug) {
-            System.out.println(" Trap: curV = " + baseCurV + " / " + curentVelocity + " next=" + lastV + " remain=" + remainingDistance);
+            // System.out.println(" Trap: curV = " + baseCurV + " / " + curentVelocity + " next=" + lastV + " remain=" + remainingDistance);
         }
         lastA = lastV - curentVelocity;
         lastTime = time;

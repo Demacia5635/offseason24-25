@@ -22,7 +22,7 @@ public class NotePoseCalc {
     public NotePoseCalc(double tx, double ty, double x_offset, double y_offset,Pose2d pose) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
-        this.tx = tx;
+        this.tx = -tx;
         this.ty = ty;
         this.pose = pose;
         this.giroYaw = pose.getRotation();
@@ -33,9 +33,11 @@ public class NotePoseCalc {
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = ty + Constants.NoteLimelightAngle;
+        sumdegry = Math.abs(ty - Constants.NoteLimelightAngle);
         sumdegry = Math.toRadians(sumdegry);
+        System.out.println((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
         return ((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
+
     }
 
 
@@ -54,16 +56,17 @@ public class NotePoseCalc {
     //get position of robot on the field origin is the pose (0,0)!!!!
     public Pose2d calculatePose() {
         Translation2d originToNote;
-        Translation2d originToRobot = pose.getTranslation();
-        if(tx != 0 && ty != 0 ){
+        
+        if(tx != 0 && ty != 0 && pose != null){
+            Translation2d originToRobot = pose.getTranslation();
             Translation2d robotToNote = getRobotToNote();
             originToNote = originToRobot.plus(robotToNote);
             
 
             pose = new Pose2d(originToNote,new Rotation2d());
-
+            return pose;
         }
-        return pose;
+        return new Pose2d();
     }
 
 }

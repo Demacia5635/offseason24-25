@@ -67,8 +67,8 @@ public class Subpose extends SubsystemBase {
 
         // Get the Limelight NetworkTable
     
-    table = NetworkTableInstance.getDefault().getTable("limelight");
-    tableNote = NetworkTableInstance.getDefault().getTable("limelight-note");
+    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+    tableNote = NetworkTableInstance.getDefault().getTable("limelight");
 
   }
   public static void resetGiro(){
@@ -114,7 +114,7 @@ public class Subpose extends SubsystemBase {
 
         // Display field on SmartDashboard
         // System.out.println("giro:"+giro.getYaw());
-    NotePose = new NotePoseCalc(txNote, tyNote, x_offset_note, y_offset_note, robotPose);
+    NotePose = new NotePoseCalc(txNote, tyNote, x_offset_note, y_offset_note, robotPose == null? new Pose2d(): robotPose);
     Pose2d notepose = NotePose.calculatePose();
         if (notepose != null) {
             fieldNote.setRobotPose(notepose);
