@@ -32,6 +32,7 @@ public class Subpose extends SubsystemBase {
   private double tyNote;
   private double id;
   private static Pigeon2 giro;
+  // להגדיר את המשתנים שתתשתשמ בהם
 
   
   // Pose and distance calculation utilities
@@ -102,9 +103,11 @@ public class Subpose extends SubsystemBase {
     // Update field visualization
     //TODO: have to fix robot rotation when he is red because he is upsidedown when he is red 
     Pose2d robotPose = Pose.calculatePose();
-        if (robotPose != null) {
-            field.setRobotPose(robotPose);
-        }
+    if (robotPose != null) {
+        field.setRobotPose(robotPose);
+    }
+    // ליצור אובייקט חדש של הממוצע מיקום(תן לו מהירות 0)
+      
 
 
         // Display field on SmartDashboard
