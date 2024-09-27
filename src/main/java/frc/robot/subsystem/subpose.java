@@ -1,10 +1,5 @@
 package frc.robot.subsystem;
 
-
-
-
-
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
