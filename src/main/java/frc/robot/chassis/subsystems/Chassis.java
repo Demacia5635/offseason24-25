@@ -202,6 +202,10 @@ public class Chassis extends SubsystemBase {
     poseEstimator.resetPosition(getRawAngle(), getModulePositions(), pose);
   }
 
+  public void speen(double speed){
+    setVelocities(new ChassisSpeeds(0,0,speed));
+  }
+
   /**
    * Sets the velocity of the chassis
    * 
@@ -324,8 +328,8 @@ public class Chassis extends SubsystemBase {
     }
   }
 
-  public void setModulesSteerPosition(Double angle, int i) {
-    modules[i].setSteerPosition(Rotation2d.fromDegrees(angle));
+  public void setModulesSteerPosition(Rotation2d angle, int i) {
+    modules[i].setSteerPosition(angle);
   }
 
   public SwerveDrivePoseEstimator getSwerveDrivePoseEstimator(){
@@ -352,6 +356,7 @@ public class Chassis extends SubsystemBase {
       module.setSteerPosition(a);
     }
   }
+
 
   public double getGyroRate() {
     return gyro.getRate();

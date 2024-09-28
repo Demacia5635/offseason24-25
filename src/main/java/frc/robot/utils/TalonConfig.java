@@ -149,7 +149,7 @@ public class TalonConfig {
      * @return TalonConfig
      */
     public TalonConfig withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        pid = new closeLoopParam(kp, ki, kd, 0, kv, ka, kg);
+        pid = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
         return this;
     }
 

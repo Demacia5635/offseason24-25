@@ -13,6 +13,8 @@ import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
+import static frc.robot.chassis.ChassisConstants.SICLE_CAUNT;
+
 import com.ctre.phoenix6.Timestamp;
 import com.ctre.phoenix6.Timestamp.TimestampSource;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -41,7 +43,7 @@ public class SwerveModule extends SubsystemBase {
 
     Chassis chassis;
 
-    Timer timer;
+    double caunt = 0;
 
     /**
      * Constructor
@@ -83,13 +85,17 @@ public class SwerveModule extends SubsystemBase {
 
         LogManager.addEntry(name + "/angle", this::getSteerTalonAngle);
 
-        timer = new Timer();
-        timer.start();
+
     }
 
     @Override
     public void periodic() {
-        if(timer.get() <= 15) {steerMotor.setPosition(getAbsDegrees().getDegrees()); timer.reset();}
+        if(caunt >= SICLE_CAUNT){
+            steerMotor.setPosition(getAbsDegrees().getDegrees());
+            caunt =0;
+        }
+        caunt ++;
+        
         
     }
 
@@ -196,6 +202,7 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setSteerPower(double p) {
         steerMotor.setDuty(p);
+        System.out.println(name + ": " + steerMotor.getCurrentVelocityDegrees());
     }
 
     public void setSteerVelocity(double v) {
@@ -224,6 +231,7 @@ public class SwerveModule extends SubsystemBase {
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAbsDegrees());
         setSteerPosition(optimized.angle);
+        System.out.println(name + optimized.angle);
         setVelocity(optimized.speedMetersPerSecond);
     }
 

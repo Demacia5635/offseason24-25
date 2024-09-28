@@ -171,6 +171,9 @@ public class TalonMotor extends TalonFX {
   public double getCurrentVelocity() {
     return getVelocity().getValueAsDouble();
   }
+  public double getCurrentVelocityDegrees(){
+    return Rotation2d.fromRotations(getCurrentVelocity()).getDegrees();
+  }
 
   // public double getTimePosition(double time) {
   //   if(time == 0) {
