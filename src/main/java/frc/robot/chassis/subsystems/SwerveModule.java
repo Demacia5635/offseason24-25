@@ -231,7 +231,6 @@ public class SwerveModule extends SubsystemBase {
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAbsDegrees());
         setSteerPosition(optimized.angle);
-        System.out.println(name + optimized.angle);
         setVelocity(optimized.speedMetersPerSecond);
     }
 
