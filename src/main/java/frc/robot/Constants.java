@@ -128,8 +128,8 @@ public class Constants {
       HEIGHT_MAP = Collections.unmodifiableMap(idToHeights);
     }
     // APRIL TAG CODE ROBOT
-    public static final double TagLimelightHight = 0.355;//0.215;
-    public static final double TagLimelightAngle = 38;//46;
+    public static final double TagLimelightHight = 0.313;//0.215;
+    public static final double TagLimelightAngle = 36.28832;//46;
 
     public static final double TagLimelightYaw = 180;
     public static final double TagLimelightXOfset = -0.36;//-0.352;

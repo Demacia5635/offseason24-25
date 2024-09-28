@@ -4,8 +4,10 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,7 +59,7 @@ public class Subpose extends SubsystemBase {
     this.x_offset_note = Constants.TagLimelightXOfset;
     this.y_offset_note = Constants.TagLimelightYOfset;
     // Add this subsystem to SmartDashboard
-    SmartDashboard.putData(this);
+    
 
     giro = new Pigeon2(14);
 
@@ -65,53 +67,56 @@ public class Subpose extends SubsystemBase {
     
     table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
     tableNote = NetworkTableInstance.getDefault().getTable("limelight");
+    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
+    Pose.updatePosValues(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
+
+    SmartDashboard.putData(this);
 
   }
   public static void resetGiro(){
     giro.setYaw(0);
   }
-    public static void add180Giro(){
+  public static void add180Giro(){
     giro.setYaw(giro.getAngle()+180);
   }
-      public static void addmines180Giro(){
+  public static void addmines180Giro(){
     giro.setYaw(giro.getAngle()-180);
   }
+
+
 
   
 
   @Override
   public void periodic() {
 
-    
     // Fetch Limelight data
     tx = table.getEntry("tx").getDouble(0);
     ty = table.getEntry("ty").getDouble(0);
     id = table.getEntry("tid").getDouble(0);
-
     txNote = tableNote.getEntry("tx").getDouble(0);
     tyNote = tableNote.getEntry("ty").getDouble(0);
-
+    tx *=-1;
     
 
     // Calculate distance and angle
-    Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()));
-
+    // Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()));
+    
     
     
     // Calculate pose
-    
     // Update field visualization
     //TODO: have to fix robot rotation when he is red because he is upsidedown when he is red 
+    
     Pose2d robotPose = Pose.calculatePose();
     if (robotPose != null) {
+      Pose.updatePosValues(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
         field.setRobotPose(robotPose);
     }
     // ליצור אובייקט חדש של הממוצע מיקום(תן לו מהירות 0)
-      
-
 
         // Display field on SmartDashboard
-        // System.out.println("giro:"+giro.getYaw());
+    //System.out.println("giro:"+giro.getYaw());
     NotePose = new NotePoseCalc(txNote, tyNote, x_offset_note, y_offset_note, robotPose == null? new Pose2d(): robotPose);
     Pose2d notepose = NotePose.calculatePose();
         if (notepose != null) {
@@ -122,7 +127,6 @@ public class Subpose extends SubsystemBase {
 
   public void initSendable(SendableBuilder builder) {
     // Add properties to be displayed on SmartDashboard
-    
     // builder.addStringProperty("name", this.objects != null?()->this.objects: ()->"r", null);
     // builder.addDoubleProperty("height", () -> Constants.HEIGHT_MAP.get(id) , null);
     // builder.addDoubleProperty("dist", () -> this.dists, null);
@@ -131,6 +135,6 @@ public class Subpose extends SubsystemBase {
     SmartDashboard.putData("resetIMG", new InstantCommand(()->resetGiro()).ignoringDisable(true));
     SmartDashboard.putData("add_180IMG", new InstantCommand(()->add180Giro()).ignoringDisable(true));
     SmartDashboard.putData("add_-180IMG", new InstantCommand(()->addmines180Giro()).ignoringDisable(true));
-
+    builder.addDoubleProperty("getX", ()->Pose.getTagToRobot().getX(),null);
   }
 }
