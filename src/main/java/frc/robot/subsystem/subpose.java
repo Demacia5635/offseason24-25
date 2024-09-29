@@ -34,8 +34,6 @@ public class Subpose extends SubsystemBase {
   private double tyNote;
   private double id;
   private static Pigeon2 giro;
-  // להגדיר את המשתנים שתתשתשמ בהם
-
   
   // Pose and distance calculation utilities
   private TagPoseCalc Pose;
@@ -47,6 +45,12 @@ public class Subpose extends SubsystemBase {
 
   private Field2d fieldNote;
 
+  // Calculate expected Robot position
+  private Pose2d[] poseArray = new Pose2d[5]; 
+  private double[] timestampArray = new double[5];
+  private int arrCount = 0;
+
+  private CalcExpPose ExpPose;
   public Subpose() {
 
     // Initialize Field2d for visualization
@@ -112,8 +116,8 @@ public class Subpose extends SubsystemBase {
     if (robotPose != null) {
       Pose.updatePosValues(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
         field.setRobotPose(robotPose);
+        updatePoseArr(robotPose);
     }
-    // ליצור אובייקט חדש של הממוצע מיקום(תן לו מהירות 0)
 
         // Display field on SmartDashboard
     //System.out.println("giro:"+giro.getYaw());
@@ -123,7 +127,40 @@ public class Subpose extends SubsystemBase {
             fieldNote.setRobotPose(notepose);
         }
 
+  double timestamp = Timer.getFPGATimestamp(); 
+  updateTimestampArr(timestamp);
+
+  // Velocity is 0 for now
+  double velocity = 0;
+  if (arrCount == 5){
+    ExpPose = new CalcExpPose(poseArray, timestampArray, velocity){}
   }
+  Pose2d expectedPosition = ExpPose.GetExpectedPos();
+}
+
+public void updatePoseArr(Pose2d newPose) {
+  if (arrCount == 5) {
+      for (int i = 1; i < poseArray.length; i++) {
+          poseArray[i - 1] = poseArray[i];
+      }
+      poseArray[4] = newPose;
+  } else {
+      poseArray[count] = newPose;
+      arrCount++;
+  }
+} 
+
+public void updateTimestampArr(double newTimestamp) {
+  if (arrCount == 5) {
+      for (int i = 1; i < poseArray.length; i++) {
+          timestampArray[i - 1] = timestampArray[i];
+      }
+      timestampArray[4] = newTimestamp;
+  } else {
+      timestampArray[count] = newTimestamp;
+      arrCount++;
+  }
+} 
 
   public void initSendable(SendableBuilder builder) {
     // Add properties to be displayed on SmartDashboard

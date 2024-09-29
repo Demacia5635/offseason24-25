@@ -9,23 +9,29 @@ public class CalcExpPose{
     private double[] timeArr;
     private double velocity;
     private double angle;
-    private double sumXLocation = 0;
-    private double sumYLocation = 0;
+    private double sumXLocation;
+    private double sumYLocation;
 
-    public CalcExpPose(Pose2d[] pointsArr, double[] timeArr, double velocity, double angle)
+    public CalcExpPose(Pose2d[] pointsArr, double[] timeArr, double velocity)
     {
         this.pointsArr = pointsArr;
         this.timeArr = timeArr;
         this.velocity = velocity;
-        this.angle = angle;
+        this.angle = pointsArr[0].getRotation().getDegrees();
     }
     public Pose2d GetExpectedPos()
     {
+        sumXLocation = 0;
+        sumYLocation = 0;
+
+        //Postion in set amount of seconds
+        double setTime = timeArr[0] + 2;
 
         for (int i = 0; i < pointsArr.length; i++)
         {
-            double xLocation = pointsArr[i].getTranslation().getX() + Math.cos(angle) * velocity * timeArr[i];
-            double yLocation = pointsArr[i].getTranslation().getY() + Math.sin(angle) * velocity * timeArr[i];
+            double time = setTime - timeArr[i];
+            double xLocation = pointsArr[i].getTranslation().getX() + Math.cos(angle) * velocity * time;
+            double yLocation = pointsArr[i].getTranslation().getY() + Math.sin(angle) * velocity * time;
             sumXLocation += xLocation;
             sumYLocation += yLocation;
         }
