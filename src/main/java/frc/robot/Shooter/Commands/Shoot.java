@@ -11,17 +11,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
+import frc.robot.Shooter.utils.LookupTable;
 
 public class Shoot extends Command {
   
   private Shooter shooter;
+  private AngleChanger angleChanger;
+
   private double upMotorVelocity;
   private double downMotorVelocity;
   public STATE state;
-  private AngleChanger angleChanger;
+  private double distance;
+
+  private LookupTable lookupTable;
+  private double[][] testingData;
 
   /** Creates a new Shoot. */
-  public Shoot() {
+  public Shoot(Shooter shooter) {
+    lookupTable = new LookupTable(testingData);
+    angleChanger = new AngleChanger();
+    this.shooter = shooter;
+    addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -39,15 +49,15 @@ public class Shoot extends Command {
           break;
 
       case SPEAKER:
-          //distance = ?;
-          //angle = ?;
-          //upMotorVelocity = ?;
-          //downMotorVelocity = ?;
+           distance = -1;
+           double[] lookUpTableData = lookupTable.get(distance);
+           upMotorVelocity = lookUpTableData[1];
+           downMotorVelocity = lookUpTableData[2];
           break;
 
      case DELIVERY:
-          upMotorVelocity = MOTOR_UP_DELIVERY_VELOCITY;
-          downMotorVelocity = MOTOR_DOWN_DELIVERY_VELOCITY;
+          upMotorVelocity = -1;
+          downMotorVelocity = -1;
           break;
 
       case IDLE:

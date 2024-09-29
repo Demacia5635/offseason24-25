@@ -8,23 +8,16 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import edu.wpi.first.wpilibj.AnalogEncoder;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
 import frc.robot.Shooter.ShooterConstants.SHOOTER_VAR;
 import frc.robot.Shooter.ShooterConstants.STATE;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import static frc.robot.Shooter.ShooterConstants.*;
 
 public class Shooter extends SubsystemBase {
-  /** Creates a new Shooter. */
+  
   private TalonFX motorUp;
   private TalonFX motorDown;
   private TalonSRX motorFeeding;
@@ -34,8 +27,7 @@ public class Shooter extends SubsystemBase {
   private VelocityVoltage velocityVoltage;
   public STATE shooterState;
   
-  
-/*setting all the configs */
+  /** Creates a new Shooter. */
   public Shooter() {
     shooterState = shooterState.IDLE;
 
@@ -87,7 +79,7 @@ public class Shooter extends SubsystemBase {
   public void pidMotorVelocity(double vel){
     motorUp.setControl(velocityVoltage.withVelocity(vel));
     motorDown.setControl(velocityVoltage.withVelocity(vel));
-}
+  }
 
 
 

@@ -4,15 +4,12 @@
 
 package frc.robot.Shooter.Subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_CONFIGS;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_VAR;
 import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
 import frc.robot.Shooter.ShooterConstants.STATE;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -60,9 +57,9 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_JERK;
 
     config.Feedback.SensorToMechanismRatio = OOM_METER_PER_SPIN;
-    
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
     angleChangingMotor.getConfigurator().apply(config);
-    angleChangingMotor.setNeutralMode(NeutralModeValue.Brake);
     /*TODO add brake invert  */
   }
    
@@ -89,7 +86,8 @@ public class AngleChanger extends SubsystemBase {
   }
 
   public double getShooterAngle(){
-    return Math.acos(-(A*A-B*B-Math.pow(getC(), 2))/(2*B*getC()));
+    double Basis = getC();
+    return Math.acos(-(A*A-B*B-Math.pow(Basis, 2))/(2*B*Basis));
   }
 
   /**

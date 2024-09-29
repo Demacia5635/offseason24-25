@@ -7,12 +7,14 @@ package frc.robot.Shooter.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
-import frc.robot.Shooter.Subsystems.Shooter;
+import frc.robot.Shooter.utils.LookupTable;
+
 import static frc.robot.Shooter.ShooterConstants.*;
 
 public class GoToAngle extends Command {
   /** Creates a new setShooting. */
-
+  private LookupTable lookupTable;
+  private double[][] arr;
   private AngleChanger angleChanging;
   public static double angle;
   private double distance;
@@ -27,6 +29,7 @@ public class GoToAngle extends Command {
   public GoToAngle(AngleChanger angleChanging) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angleChanging = angleChanging;
+    lookupTable = new LookupTable(arr);
     addRequirements(angleChanging);
   }
 
@@ -37,6 +40,12 @@ public class GoToAngle extends Command {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
+  
+      /**index: 0 - distance, 1 - angle, 2 - up vel, 3 - down vel 
+       * 
+       * @param lookUpTableData index of angle - 0, up vel - 1, down vel - 2
+       * 
+      */
   @Override
   public void execute() {
     switch(state){
@@ -47,19 +56,20 @@ public class GoToAngle extends Command {
           break;
 
       case SPEAKER:
-          //distance = ?;
-          //angle = ?;
-          //upMotorVelocity = ?;
-          //downMotorVelocity = ?;
+           distance = -1;
+           double[] lookUpTableData = lookupTable.get(distance);
+           angle = lookUpTableData[0];
           break;
 
+    /*TODO getting data from Look Up Table */
      case DELIVERY:
-          angle = DELIVERY_ANGLE;
-          upMotorVelocity = MOTOR_UP_DELIVERY_VELOCITY;
-          downMotorVelocity = MOTOR_DOWN_DELIVERY_VELOCITY;
+          angle = -1;
           break;
 
       case IDLE:
+          angle = -1;
+          upMotorVelocity = 0;
+          downMotorVelocity = 0;
           break;
     }
 

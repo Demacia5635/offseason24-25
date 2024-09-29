@@ -25,6 +25,7 @@ public class RobotContainer {
   
   private Shooter shooter;
   private AngleChanger angleChanging;
+  int x;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController controller =
@@ -34,7 +35,7 @@ public class RobotContainer {
   public RobotContainer() {
     shooter = new Shooter();
     angleChanging = new AngleChanger();
-    shooter.setDefaultCommand(new Shoot());
+    shooter.setDefaultCommand(new Shoot(shooter));
     angleChanging.setDefaultCommand(new GoToAngle(angleChanging));
 
     
@@ -66,6 +67,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     controller.a().onTrue(new InstantCommand(() -> {
+      x++;
       shooter.shooterState = STATE.SPEAKER;
       angleChanging.angleState = STATE.SPEAKER;
     }, shooter, angleChanging));
