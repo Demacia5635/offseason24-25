@@ -162,6 +162,11 @@ public class Chassis extends SubsystemBase {
       m.setSteerPower(power);
     }
   }
+  public void setModulesSteerPower(double power, int i) {
+
+    modules[i].setSteerPower(power);
+    
+  }
 
   public void setModuleSteerVelocity(int moduleIndex, double velocity) {
     modules[moduleIndex].setSteerVelocity(velocity);
@@ -330,6 +335,8 @@ public class Chassis extends SubsystemBase {
 
   public void setModulesSteerPosition(Rotation2d angle, int i) {
     modules[i].setSteerPosition(angle);
+    System.out.println("rotatios" + angle.getRotations());
+    System.out.println("d" + angle.getDegrees());
   }
 
   public SwerveDrivePoseEstimator getSwerveDrivePoseEstimator(){

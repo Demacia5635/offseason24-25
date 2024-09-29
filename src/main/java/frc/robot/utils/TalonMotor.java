@@ -4,6 +4,7 @@ package frc.robot.utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -18,6 +19,8 @@ public class TalonMotor extends TalonFX {
   String name;
   TalonFXConfiguration cfg;
   VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
+  PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
+
   DutyCycleOut dutyCycle = new DutyCycleOut(0);
   MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
   LogManager.LogEntry dutyCycleEntry;
@@ -151,12 +154,14 @@ public class TalonMotor extends TalonFX {
     // System.out.println(name + " target pos: " + position);
     // System.out.println(name + " current vel: " + getCurrentVelocity());
     // System.out.println("==================");
+    //setControl(positionEntry)
     setControl(motionMagicVoltage.withPosition(position));
     positionEntry.log(position);
   }
   public void setMotorPosition(double position/*in rotation */) {
     setMotorPosition(position, 0);
   }
+
   public void setMotorPositionWithFeedForward(double position) {
     setMotorPosition(position, positionFeedForward(position));
   }

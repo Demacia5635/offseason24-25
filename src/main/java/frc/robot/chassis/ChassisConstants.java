@@ -35,7 +35,7 @@ public final class ChassisConstants {
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
   public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.1, 0.04, 0.0007);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.009, 0.005, 0.00009);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.01, 0.003, 0.0008);//0.0008);
   /*TODO kill who forgot to finish the merge */
   // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
   // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
@@ -44,7 +44,7 @@ public final class ChassisConstants {
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
   public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.03, 0.002, 0.001); //0.0262, 0.0008, 0.0004);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.02, 0.0, 0.0);
+  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.02, 0.001, 0.0);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
@@ -68,7 +68,7 @@ public static final double SICLE_CAUNT = 50.0;
       new TalonConfig(5,"rio", "FrontLeft/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
         .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO)
-        .withMotionMagic(500, 1440, 3000),
+        .withMotionMagic(720, 1440, 3000),
       6,
       new Translation2d(0.332, 0.277),
       -0.39599609375);
@@ -82,7 +82,7 @@ public static final double SICLE_CAUNT = 50.0;
       new TalonConfig(2,"rio", "FrontRight/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
         .withInvert(false).withMotorRatio(1/FRONT_STEER_RATIO)
-        .withMotionMagic(500, 1440, 3000),
+        .withMotionMagic(720, 1440, 3000),
       3,
       new Translation2d(0.332, -0.277),
       -0.448974609375);
@@ -96,7 +96,7 @@ public static final double SICLE_CAUNT = 50.0;
       new TalonConfig(11,"rio", "BackLeft/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
         .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO)
-        .withMotionMagic(500, 1440, 3000),
+        .withMotionMagic(720, 1440, 3000),
       12,
       new Translation2d(-0.332, 0.288),
       -0.1357421875);
@@ -110,7 +110,7 @@ public static final double SICLE_CAUNT = 50.0;
       new TalonConfig(8,"rio", "BackRight/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
         .withInvert(true).withMotorRatio(1/BACK_STEER_RATIO)
-        .withMotionMagic(500, 1440, 3000),
+        .withMotionMagic(720, 1440, 3000),
       9,
       new Translation2d(-0.332, -0.288),
       -0.48095703125);
