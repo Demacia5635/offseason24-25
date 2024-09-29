@@ -91,7 +91,7 @@ public class SwerveModule extends SubsystemBase {
     @Override
     public void periodic() {
         if(caunt >= SICLE_CAUNT){
-            steerMotor.setPosition(getAbsDegrees().getDegrees());
+            //steerMotor.setPosition(getAbsDegrees().getDegrees());
             caunt =0;
         }
         caunt ++;
@@ -127,7 +127,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle.getDegrees());
+        steerMotor.setMotorPosition(angle.getRadians());
     }
 
     /**
