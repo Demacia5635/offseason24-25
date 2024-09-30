@@ -7,13 +7,13 @@ package frc.robot.Shooter.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
-import frc.robot.Shooter.utils.LookupTable;
+import frc.robot.Shooter.utils.LookUpTable;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
 public class GoToAngle extends Command {
   /** Creates a new setShooting. */
-  private LookupTable lookupTable;
+  private LookUpTable lookupTable;
   private double[][] arr;
   private AngleChanger angleChanging;
   public static double angle;
@@ -29,7 +29,7 @@ public class GoToAngle extends Command {
   public GoToAngle(AngleChanger angleChanging) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angleChanging = angleChanging;
-    lookupTable = new LookupTable(arr);
+    lookupTable = new LookUpTable(arr);
     addRequirements(angleChanging);
   }
 

@@ -11,7 +11,7 @@ import java.util.List;
  * @author (Please add your name here)
  * @version (Please add the version number here)
  */
-public class LookupTable {
+public class LookUpTable {
 
     /**The internal table data as a list of double arrays. */
     private final List<double[]> table;
@@ -25,7 +25,7 @@ public class LookupTable {
      * @param size the number of interpolated values
      * @throws IllegalArgumentException if size is less than 2
      */
-    public LookupTable(int size) {
+    public LookUpTable(int size) {
         if (size < 2) {
             throw new IllegalArgumentException("Size must be at least 2.");
         }
@@ -39,7 +39,7 @@ public class LookupTable {
      * @param table the 2D array containing the look-up table data
      * @throws IllegalArgumentException if any row in the table has a different length than the others
      */
-    public LookupTable(double[][] table) {
+    public LookUpTable(double[][] table) {
         this.table = new ArrayList<>();
         sort(table);
         for (double[] row : table) {

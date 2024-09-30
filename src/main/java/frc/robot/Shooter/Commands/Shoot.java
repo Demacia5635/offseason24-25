@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
-import frc.robot.Shooter.utils.LookupTable;
+import frc.robot.Shooter.utils.LookUpTable;
 
 public class Shoot extends Command {
   
@@ -22,26 +22,46 @@ public class Shoot extends Command {
 
   private double upMotorVelocity;
   private double downMotorVelocity;
+  private double testingUpMotorVelocity;
+  private double testingDownMotorVelocity;
   public STATE state;
   private double distance;
 
-  private LookupTable lookupTable;
+  private LookUpTable lookupTable;
   private double[][] testingData;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {
-    lookupTable = new LookupTable(testingData);
+    lookupTable = new LookUpTable(testingData);
     this.angleChanger = new AngleChanger();
     this.shooter = shooter;
     SmartDashboard.putData(this);
     addRequirements(shooter);
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem dependencies.ll
   }
 
   @Override
     public void initSendable(SendableBuilder builder){
-        
+      builder.addDoubleProperty("upMotorVelocity", this::getUpMotorVelocity, this::setUpMotorVelocity);
+      builder.addDoubleProperty("downMotorVelocity", this::getDownMotorVelocity, this::setDownMotorVelocity);
     }
+
+    public double getUpMotorVelocity(){
+      return this.testingUpMotorVelocity;
+    }
+  
+    public void setUpMotorVelocity(double testingUpMotorVelocity){
+      this.testingUpMotorVelocity = testingUpMotorVelocity;
+    }
+
+    public double getDownMotorVelocity(){
+      return this.testingDownMotorVelocity;
+    }
+  
+    public void setDownMotorVelocity(double testingDownMotorVelocity){
+      this.testingDownMotorVelocity = testingDownMotorVelocity;
+    }
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -74,8 +94,8 @@ public class Shoot extends Command {
           break;
 
      case TESTING:
-          upMotorVelocity = -1;
-          downMotorVelocity = -1;
+          upMotorVelocity = testingUpMotorVelocity;
+          downMotorVelocity = testingDownMotorVelocity;
           break;
 
       case DELIVERY:
@@ -91,7 +111,7 @@ public class Shoot extends Command {
 
     if (Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLEZONE
         && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UPMOTORVELZONE
-        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE) /*|| (הנהג לחץ על קפתור)*/{
+        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE) /*|| (הנהג לחץ על כפתור)*/{
 
       GoToAngle.isReady = true;
     }
