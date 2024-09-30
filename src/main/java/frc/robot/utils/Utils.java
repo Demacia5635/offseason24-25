@@ -126,4 +126,12 @@ public class Utils {
     }
   }
 
+  public static double mpsToRps(double speedMps, double radius) {
+    double circumference = 2 * Math.PI * radius;
+    return speedMps / circumference;
+  }
+  public static double rpsToMps(double rotationsPerSecond, double radius) {
+    return rotationsPerSecond * 2 * Math.PI * radius;
+  }
+
 }

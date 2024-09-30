@@ -121,7 +121,7 @@ public class SwerveModule extends SubsystemBase {
    * set position to drive to in rotations in radians
    */
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle.getRadians());
+        steerMotor.setMotorPosition(angle.getRotations());
     }
 
     /**
@@ -153,7 +153,7 @@ public class SwerveModule extends SubsystemBase {
         if(Math.abs(targetVelocity) < 0.03) {
             targetVelocity = 0;
         }
-        moveMotor.setVelocity(targetVelocity);
+        moveMotor.setVelocityMPS(targetVelocity, WHEEL_DIAMETER/2);
 
     }
 
@@ -200,7 +200,7 @@ public class SwerveModule extends SubsystemBase {
      * Sets velosity to the module  in meters per secons
      */
     public void setSteerVelocity(double v) {
-        steerMotor.setVelocity(v);
+        steerMotor.setVelocityMPS(v,WHEEL_DIAMETER/2);
     }
 
     /**

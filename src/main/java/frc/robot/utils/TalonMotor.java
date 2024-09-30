@@ -108,10 +108,10 @@ public class TalonMotor extends TalonFX {
   }
 
   private void addLog() {
-    LogManager.addEntry(name + "/position", this::getPosition);// rotation in radians 
+    LogManager.addEntry(name + "/position", this::getPosition);// rotation
     LogManager.addEntry(name + "/position in degres", this::getCurrentPositionAsDegrees);// degrees
-    LogManager.addEntry(name + "/Velocity", this::getVelocity);// rotation per seconds in radians 
-    LogManager.addEntry(name + "/Acceleration", this::getAcceleration);// rotation per seconds^2 in radians 
+    LogManager.addEntry(name + "/Velocity", this::getVelocity);// rotation per seconds
+    LogManager.addEntry(name + "/Acceleration", this::getAcceleration);// rotation per seconds^2
     LogManager.addEntry(name + "/Voltage", this::getMotorVoltage);
     LogManager.addEntry(name + "/Current", this::getStatorCurrent);
     LogManager.addEntry(name + "/CloseLoopError", this::getClosedLoopError);
@@ -133,21 +133,30 @@ public class TalonMotor extends TalonFX {
     dutyCycleEntry.log(power);
   }
   /**
-   * set volocity to motor with PID and FF - rotations per second in radians
+   * gets rotations per secon
+   * set volocity to motor with PID and FF
    */
   public void setVelocity(double velocity, double feedForward) {
     setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
     velocityEntry.log(velocity);
   }
   /**
-   * set volocity to motor with PID and FF - meter per second
+   * gets R/s
+   * set volocity to motor with PID and FF
    */
-  public void setVelocity(double velocity) {
-    setVelocity(velocity/2*Math.PI,0);
+  public void setVelocityRPS(double velocity) {
+    setVelocity(velocity,0);
+  }
+  /**
+   * gets m/s
+   * set volocity to motor with PID and FF
+   */
+  public void setVelocityMPS(double velocity, double radius) {
+    setVelocity(Utils.mpsToRps(velocity, radius ), 0);
   }
 
   /**
-   * set position to drive to in rotations in radians
+   * set position to drive to in rotations
    */
   public void setMotorPosition(double position/*in rotation */, double feedForward) {
     // System.out.println("==================");
@@ -160,7 +169,7 @@ public class TalonMotor extends TalonFX {
     positionEntry.log(position);
   }
   /**
-   * set position to drive to in rotations in radians
+   * set position to drive to in rotations
    */
   public void setMotorPosition(double position/*in rotation */) {
     setMotorPosition(position, 0);
@@ -168,7 +177,7 @@ public class TalonMotor extends TalonFX {
 
 
   /**
-   * get position in rotations in radians
+   * get position in rotations
    */
   public double getCurrentPosition() {
     return getPosition().getValueAsDouble();
@@ -186,7 +195,7 @@ public class TalonMotor extends TalonFX {
     return getCurrentPositionAsRotation2d().getDegrees();
   }
   /**
-   * get Velosity in rotations per seconds in radians
+   * get Velosity in rotations per seconds
    */
   public double getCurrentVelocity() {
     return getVelocity().getValueAsDouble();
@@ -195,8 +204,7 @@ public class TalonMotor extends TalonFX {
    * get Velosity in meters per second
    */
   public double getCurrentVelocityInMPS(double RadiusInM) {
-    double angularVelocityRadPerSec = getCurrentVelocity() * (2 * Math.PI);
-    return angularVelocityRadPerSec * RadiusInM;
+    return Utils.rpsToMps(getCurrentVelocity(), RadiusInM);
   }
   /**
    * get Velosity in degrees per seconds
