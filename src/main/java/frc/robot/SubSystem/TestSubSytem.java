@@ -24,7 +24,7 @@ public class TestSubSytem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("getNonAbsPosition", cancoder.getNonAbsPosition());
     SmartDashboard.putNumber("getAbsDegree", cancoder.getAbsDegree());
-    SmartDashboard.putNumber("getVelocityDegree", cancoder.getVelocityDegree());
+    SmartDashboard.putNumber("getVelocityRotation", cancoder.getVelocityRotation());
     SmartDashboard.putNumber("getPigeonAngleDegree", pigeon.getPigeonAngleDegree());
     SmartDashboard.putNumber("getPigeonPitchDegree", pigeon.getPigeonPitchDegree());
     SmartDashboard.putNumber("getPigeonRollDegree", pigeon.getPigeonRollDegree());
