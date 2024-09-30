@@ -5,18 +5,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
 import static frc.robot.chassis.ChassisConstants.SICLE_CAUNT;
+import static frc.robot.chassis.ChassisConstants.WHEEL_DIAMETER;
 
-import com.ctre.phoenix6.Timestamp;
-import com.ctre.phoenix6.Timestamp.TimestampSource;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -100,11 +97,6 @@ public class SwerveModule extends SubsystemBase {
     }
 
 
-    /**
-     * calculates and sets close loop params
-     * @param constants
-     */
-
 
 
 
@@ -114,7 +106,7 @@ public class SwerveModule extends SubsystemBase {
      * @return angle based on talon encoder
      */
     public double getSteerTalonAngle() {
-        return steerMotor.getCurrentPositionAsAngle().getDegrees();
+        return steerMotor.getCurrentPositionAsDegrees();
     }
 
 
@@ -123,9 +115,11 @@ public class SwerveModule extends SubsystemBase {
      * @return Velocity in m/s
      */
     public double getVelocity() {
-        return moveMotor.getCurrentVelocity();
+        return moveMotor.getCurrentVelocityInMPS(WHEEL_DIAMETER/2);
     }
-
+    /**
+   * set position to drive to in rotations in radians
+   */
     public void setSteerPosition(Rotation2d angle){
         steerMotor.setMotorPosition(angle.getRadians());
     }
@@ -202,22 +196,25 @@ public class SwerveModule extends SubsystemBase {
         steerMotor.setDuty(p);
         System.out.println(name + ": " + steerMotor.getCurrentVelocityDegrees());
     }
-
+    /**
+     * Sets velosity to the module  in meters per secons
+     */
     public void setSteerVelocity(double v) {
         steerMotor.setVelocity(v);
     }
 
     /**
      * Returns the rotational velocity of the module
-     * @return Velocity in deg/s
+     * @return Velocity in rotations per second in radiands
      */
     public double getSteerVelocity() {  
-        return steerMotor.getVelocity().getValueAsDouble();
+        return steerMotor.getCurrentVelocity();
     }
 
     /**
      * Returns the state of the module
      * @return Velocity in m/s
+     * @return pose in degrees in m/s
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(getVelocity(), getAbsDegrees());

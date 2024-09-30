@@ -57,15 +57,15 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
 
 public static final double SICLE_CAUNT = 50.0;
 
-
+  //מגדירים שכל סיבוב של המערת הוא יחס גיר - ממיר ל ביחידות של רדיאנים
   public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants(
       "FrontLeft",
       new TalonConfig(4,"rio", "FrontLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO/Math.PI*2),
+        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(5,"rio", "FrontLeft/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO/Math.PI*2)
+        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       6,
       new Translation2d(0.332, 0.277),
@@ -76,10 +76,10 @@ public static final double SICLE_CAUNT = 50.0;
       "FrontRight",
       new TalonConfig(1,"rio", "FrontRight/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO/Math.PI*2),
+        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(2,"rio", "FrontRight/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO/Math.PI*2)
+        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       3,
       new Translation2d(0.332, -0.277),
@@ -90,10 +90,10 @@ public static final double SICLE_CAUNT = 50.0;
     "BackLeft",
       new TalonConfig(10,"rio", "BackLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO/Math.PI*2),
+        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(11,"rio", "BackLeft/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(BACK_STEER_RATIO/Math.PI*2)
+        .withInvert(true).withMotorRatio(BACK_STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       12,
       new Translation2d(-0.332, 0.288),
@@ -104,10 +104,10 @@ public static final double SICLE_CAUNT = 50.0;
       "BackRight",
       new TalonConfig(7,"rio", "BackRight/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
-        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO/Math.PI*2),
+        .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(8,"rio", "BackRight/Steer")
         .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(BACK_STEER_RATIO/Math.PI*2)
+        .withInvert(true).withMotorRatio(BACK_STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       9,
       new Translation2d(-0.332, -0.288),

@@ -123,7 +123,7 @@ public class TalonConfig {
      * @return TalonConfig
      */
     public TalonConfig withMotorRatio(double ratio) {
-        this.motorRatio = ratio;
+        this.motorRatio = ratio/Math.PI*2;
         return this;
     }
 

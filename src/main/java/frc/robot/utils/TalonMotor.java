@@ -4,10 +4,8 @@ package frc.robot.utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -19,7 +17,6 @@ public class TalonMotor extends TalonFX {
   String name;
   TalonFXConfiguration cfg;
   VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-  PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
   DutyCycleOut dutyCycle = new DutyCycleOut(0);
   MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
@@ -101,7 +98,9 @@ public class TalonMotor extends TalonFX {
     getMotorVoltage().setUpdateFrequency(200);
 
   }
-
+  /*
+   * set motor to brake or coast
+   */
   public void setBrake(boolean brake) {
     this.getConfigurator().refresh(cfg.MotorOutput);
     cfg.MotorOutput.NeutralMode = config.brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
@@ -109,9 +108,10 @@ public class TalonMotor extends TalonFX {
   }
 
   private void addLog() {
-    LogManager.addEntry(name + "/position", this::getPosition);
-    LogManager.addEntry(name + "/Velocity", this::getVelocity);
-    LogManager.addEntry(name + "/Acceleration", this::getAcceleration);
+    LogManager.addEntry(name + "/position", this::getPosition);// rotation in radians 
+    LogManager.addEntry(name + "/position in degres", this::getCurrentPositionAsDegrees);// degrees
+    LogManager.addEntry(name + "/Velocity", this::getVelocity);// rotation per seconds in radians 
+    LogManager.addEntry(name + "/Acceleration", this::getAcceleration);// rotation per seconds^2 in radians 
     LogManager.addEntry(name + "/Voltage", this::getMotorVoltage);
     LogManager.addEntry(name + "/Current", this::getStatorCurrent);
     LogManager.addEntry(name + "/CloseLoopError", this::getClosedLoopError);
@@ -125,29 +125,30 @@ public class TalonMotor extends TalonFX {
     velocityEntry = LogManager.getEntry(name + "/setVelocity");
     positionEntry = LogManager.getEntry(name + "/setPosition");
   }
-
+  /**
+   * set power from 1 to -1 (v/12) no PID/FF
+   */
   public void setDuty(double power) {
     setControl(dutyCycle.withOutput(power));
     dutyCycleEntry.log(power);
   }
+  /**
+   * set volocity to motor with PID and FF - rotations per second in radians
+   */
   public void setVelocity(double velocity, double feedForward) {
     setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
     velocityEntry.log(velocity);
   }
+  /**
+   * set volocity to motor with PID and FF - meter per second
+   */
   public void setVelocity(double velocity) {
-    setVelocity(velocity,0);
-  }
-  public void setVelocityWithFeedForward(double velocity) {
-    setVelocity(velocity,velocityFeedForward(velocity));
+    setVelocity(velocity/2*Math.PI,0);
   }
 
-  private double velocityFeedForward(double velocity) {
-    return velocity * velocity * Math.signum(velocity) * config.kv2;
-  }
-  private double positionFeedForward(double positin) {
-    return Math.sin(positin*config.posToRad)*config.ksin;
-  }
-
+  /**
+   * set position to drive to in rotations in radians
+   */
   public void setMotorPosition(double position/*in rotation */, double feedForward) {
     // System.out.println("==================");
     // System.out.println(name + " current pos: " + getCurrentPosition());
@@ -158,53 +159,52 @@ public class TalonMotor extends TalonFX {
     setControl(motionMagicVoltage.withPosition(position));
     positionEntry.log(position);
   }
+  /**
+   * set position to drive to in rotations in radians
+   */
   public void setMotorPosition(double position/*in rotation */) {
     setMotorPosition(position, 0);
   }
 
-  public void setMotorPositionWithFeedForward(double position) {
-    setMotorPosition(position, positionFeedForward(position));
-  }
 
+  /**
+   * get position in rotations in radians
+   */
   public double getCurrentPosition() {
     return getPosition().getValueAsDouble();
   }
-
-  public Rotation2d getCurrentPositionAsAngle() {
-    return Rotation2d.fromDegrees(getPosition().getValueAsDouble());
+  /**
+   * get position in Rotation2D
+   */
+  public Rotation2d getCurrentPositionAsRotation2d() {
+    return Rotation2d.fromRotations(getCurrentPosition());
   }
+  /**
+   * get position in degrees
+   */
+  public double getCurrentPositionAsDegrees() {
+    return getCurrentPositionAsRotation2d().getDegrees();
+  }
+  /**
+   * get Velosity in rotations per seconds in radians
+   */
   public double getCurrentVelocity() {
     return getVelocity().getValueAsDouble();
   }
+  /**
+   * get Velosity in meters per second
+   */
+  public double getCurrentVelocityInMPS(double RadiusInM) {
+    double angularVelocityRadPerSec = getCurrentVelocity() * (2 * Math.PI);
+    return angularVelocityRadPerSec * RadiusInM;
+  }
+  /**
+   * get Velosity in degrees per seconds
+   */
   public double getCurrentVelocityDegrees(){
     return Rotation2d.fromRotations(getCurrentVelocity()).getDegrees();
   }
 
-  // public double getTimePosition(double time) {
-  //   if(time == 0) {
-  //       time = Utils.getCurrentTimeSeconds();
-  //   }
-  //   var p = getPosition();
-  //   double pTime = p.getTimestamp().getTime();
-  //   if(time < pTime) {
-  //       return p.getValue();
-  //   }
-  //   var v = getVelocity();
-  //   return p.getValue() + v.getValue()*(time-pTime);
-  // }
-
-  // public double getTimeVelocity(double time) {
-  //   if(time == 0) {
-  //       time = Utils.getCurrentTimeSeconds();
-  //   }
-  //   var v = getVelocity();
-  //   double vTime = v.getTimestamp().getTime();
-  //   if(time < vTime) {
-  //       return v.getValue();
-  //   }
-  //   var a = getAcceleration();
-  //   return v.getValue() + a.getValue()*(time-vTime);
-  // }
 
   public String name() {
     return name;
