@@ -9,11 +9,12 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 /** Add your docs here. */
 public class TalonMotor {
   TalonFX talon;
-  TalonFXConfiguration talConfig;
+  TalonFXConfiguration talonConfig;
   VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
   DutyCycleOut dutyCycle = new DutyCycleOut(0);
   MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
@@ -22,9 +23,16 @@ public class TalonMotor {
     configMotor();
   }
   private void configMotor(){
-    talConfig = new TalonFXConfiguration();
+    talonConfig = new TalonFXConfiguration();
   }
-public void setBrake(boolean isBrake){
-    
+  public void setBrake(boolean isBrake){
+    talonConfig.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    talon.getConfigurator().apply(talonConfig.MotorOutput);
+  }
+  public void setDuty(double power) {
+    talon.setControl(dutyCycle.withOutput(power));
+  }
+  public void setVelocity(double velocity, double feedForward) {
+    talon.setControl(velocityVoltage.withVelocity(velocity));
   }
 }
