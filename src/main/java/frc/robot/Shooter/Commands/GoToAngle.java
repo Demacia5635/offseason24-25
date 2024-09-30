@@ -18,9 +18,6 @@ public class GoToAngle extends Command {
   private AngleChanger angleChanging;
   public static double angle;
   private double distance;
-  private double upMotorVelocity;
-  private double downMotorVelocity;
-  public static boolean isReady;
   public boolean isfinished;
   public STATE state;
 

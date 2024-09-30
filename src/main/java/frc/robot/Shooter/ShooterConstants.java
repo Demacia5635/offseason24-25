@@ -81,9 +81,9 @@ public class ShooterConstants {
   public static final double C_AT_TOP = 0;
   public static final double FreqHz = 200;
 
-  public static final double ANGLEZONE = 0;
-  public static final double UPMOTORVELZONE = 0;
-  public static final double DOWNMOTORVELZONE = 0;
+  public static final double ANGLEZONE = -1;
+  public static final double UPMOTORVELZONE = -1;
+  public static final double DOWNMOTORVELZONE = -1;
 
   public static final double SHOOOTER_VOLTAGE = 0;
   

@@ -73,9 +73,9 @@ public class Shooter extends SubsystemBase {
     return motorUp.getVelocity().getValue();
   }
 
-  public void pidMotorVelocity(double vel){
-    motorUp.setControl(velocityVoltage.withVelocity(vel));
-    motorDown.setControl(velocityVoltage.withVelocity(vel));
+  public void pidMotorVelocity(double upVel, double downVel){
+    motorUp.setControl(velocityVoltage.withVelocity(upVel));
+    motorDown.setControl(velocityVoltage.withVelocity(downVel));
   }
 
   public void setShooterState(STATE state){

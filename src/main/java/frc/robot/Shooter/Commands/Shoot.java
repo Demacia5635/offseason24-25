@@ -6,6 +6,7 @@ package frc.robot.Shooter.Commands;
 
 
 import static frc.robot.Shooter.ShooterConstants.*;
+import static frc.robot.RobotContainer.*;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +27,8 @@ public class Shoot extends Command {
   private double testingDownMotorVelocity;
   public STATE state;
   private double distance;
+  public boolean isReady = false;
+  public boolean isfinished = false;
 
   private LookUpTable lookupTable;
   private double[][] testingData;
@@ -99,24 +102,28 @@ public class Shoot extends Command {
           break;
 
       case DELIVERY:
-          upMotorVelocity = -1;
-          downMotorVelocity = -1;
+          distance = -1;
+          double[] deliveryLookUpTableData = lookupTable.get(distance);
+          upMotorVelocity = deliveryLookUpTableData[1];
+          downMotorVelocity = deliveryLookUpTableData[2];
           break;
 
       case IDLE:
           break;
     }
 
-    shooter.pidMotorVelocity(upMotorVelocity);
+    shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    if (Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLEZONE
+    if ((Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLEZONE
         && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UPMOTORVELZONE
-        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE) /*|| (הנהג לחץ על כפתור)*/{
+        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE) 
+        || isShooterReady){
 
-      GoToAngle.isReady = true;
+      isReady = true;
     }
-    if (GoToAngle.isReady){
+    if (isReady){
       shooter.setFeedingPower(FEEDING_MOTOR_POWER);
+      isReady = false;
     }
   }
 
@@ -124,11 +131,12 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.setMotorPower(0);
+    shooter.setFeedingPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isfinished;
   }
 }

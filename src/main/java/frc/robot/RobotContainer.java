@@ -25,6 +25,7 @@ public class RobotContainer {
   
   private Shooter shooter;
   private AngleChanger angleChanging;
+  public static boolean isShooterReady = false;
   int x;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -67,10 +68,18 @@ public class RobotContainer {
    */
   private void configureBindings() {
     controller.a().onTrue(new InstantCommand(() -> {
-      x++;
-      shooter.shooterState = STATE.SPEAKER;
-      angleChanging.angleState = STATE.SPEAKER;
+      if (shooter.shooterState == STATE.SPEAKER){
+        shooter.shooterState = STATE.AMP;
+        angleChanging.angleState = STATE.AMP;
+      }
+      if (shooter.shooterState == STATE.AMP){
+        shooter.shooterState = STATE.SPEAKER;
+        angleChanging.angleState = STATE.SPEAKER;
+      }
     }, shooter, angleChanging));
+    controller.b().onTrue(new InstantCommand(() -> {
+        isShooterReady = true;
+    }, shooter));
 
   }
 
