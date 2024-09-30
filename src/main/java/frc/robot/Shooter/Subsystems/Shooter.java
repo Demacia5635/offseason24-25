@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
   
   /** Creates a new Shooter. */
   public Shooter() {
-    shooterState = shooterState.IDLE;
+    shooterState = STATE.IDLE;
 
     motorFeeding = new TalonSRX(MOTOR_IDS.MOTOR_FEEDING_ID);
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
@@ -73,14 +73,12 @@ public class Shooter extends SubsystemBase {
     return motorUp.getVelocity().getValue();
   }
 
-
-
-
   public void pidMotorVelocity(double vel){
     motorUp.setControl(velocityVoltage.withVelocity(vel));
     motorDown.setControl(velocityVoltage.withVelocity(vel));
   }
 
-
-
+  public void setShooterState(STATE state){
+    shooterState = state;
+  }
 }

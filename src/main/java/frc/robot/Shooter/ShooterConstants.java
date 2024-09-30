@@ -27,6 +27,8 @@ public class ShooterConstants {
     public static final double KV = 0.0;
     public static final double KA = 0.0;
 
+    
+
   }
 
   /*TODO change to 2 diff classes one for kp and for angle changing max vel */
@@ -65,9 +67,12 @@ public class ShooterConstants {
   public static final double AMP_ANGLE = 0;
   public static final double MOTOR_UP_AMP_VELOCITY = 0;
   public static final double MOTOR_DOWN_AMP_VELOCITY = 0;
-  public static final double DELIVERY_ANGLE = 0;
-  public static final double MOTOR_UP_DELIVERY_VELOCITY = 0;
-  public static final double MOTOR_DOWN_DELIVERY_VELOCITY = 0;
+  public static final double STAGE_ANGLE = 0;
+  public static final double MOTOR_UP_STAGE_VELOCITY = 0;
+  public static final double MOTOR_DOWN_STAGE_VELOCITY = 0;
+  public static final double WING_ANGLE = 0;
+  public static final double MOTOR_UP_WING_VELOCITY = 0;
+  public static final double MOTOR_DOWN_WING_VELOCITY = 0;
   public static final double DEFULT_ANGLE = 0;
   public static final double TOP_ANGLE = 0;
   public static final double MOT_IN_METER = 0;
@@ -76,12 +81,15 @@ public class ShooterConstants {
   public static final double C_AT_TOP = 0;
   public static final double FreqHz = 200;
 
-
+  public static final double ANGLEZONE = 0;
+  public static final double UPMOTORVELZONE = 0;
+  public static final double DOWNMOTORVELZONE = 0;
 
   public static final double SHOOOTER_VOLTAGE = 0;
+  
 
 
   public enum STATE{
-    AMP, DELIVERY, SPEAKER, IDLE;
+    AMP, STAGE, WING, DELIVERY, SPEAKER, IDLE, TESTING;
   }
 }

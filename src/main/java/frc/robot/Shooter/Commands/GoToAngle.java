@@ -51,8 +51,6 @@ public class GoToAngle extends Command {
     switch(state){
       case AMP:
           angle = AMP_ANGLE;
-          upMotorVelocity = MOTOR_UP_AMP_VELOCITY;
-          downMotorVelocity = MOTOR_DOWN_AMP_VELOCITY;
           break;
 
       case SPEAKER:
@@ -68,8 +66,6 @@ public class GoToAngle extends Command {
 
       case IDLE:
           angle = -1;
-          upMotorVelocity = 0;
-          downMotorVelocity = 0;
           break;
     }
 
