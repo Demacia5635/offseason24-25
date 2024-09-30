@@ -4,11 +4,14 @@
 
 package frc.robot.utils;
 
+import java.text.BreakIterator;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 /** Add your docs here. */
 public class TalonMotor {
@@ -24,7 +27,8 @@ public class TalonMotor {
   private void configMotor(){
     talConfig = new TalonFXConfiguration();
   }
-public void setBrake(boolean isBrake){
-    
+  public void setBrake(boolean isBrake){
+    talConfig.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    talon.getConfigurator().apply(talConfig.MotorOutput);
   }
 }

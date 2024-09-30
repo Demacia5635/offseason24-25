@@ -22,11 +22,11 @@ public class Cancoder {
     public double getAbsDegree() {
         return getAbsRotation2d().getDegrees();
     }
-    public double getVelocityRotation(){
-        return cancoder.getVelocity().getValue();
+    public Rotation2d getVelocityRotation2d(){
+        return Rotation2d.fromRotations(cancoder.getVelocity().getValue());
     }
-    public double getVelocityDegree(){
-        return getVelocityRotation()*360;
+    public double getVelocityRotation(){
+        return getVelocityRotation2d().getRotations();
     }
     public void setOfset(double offset){
         canConfig.MagnetSensor.MagnetOffset = -offset;
