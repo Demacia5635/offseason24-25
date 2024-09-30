@@ -35,11 +35,20 @@ public class Pigeon {
     public double getXVelocityDPS(){
         return pigeon.getAngularVelocityXDevice().getValue();
     }
+    public Rotation2d getXVelocityRotation2d(){
+        return Rotation2d.fromDegrees(getXVelocityDPS());
+    }
     public double getYVelocityDPS(){
         return pigeon.getAngularVelocityYDevice().getValue();
     }
+    public Rotation2d getYVelocityRotation2d(){
+        return Rotation2d.fromDegrees(getYVelocityDPS());
+    }
     public double getZVelocityDPS(){
         return pigeon.getAngularVelocityZDevice().getValue();
+    }
+    public Rotation2d getZVelocityRotation2d(){
+        return Rotation2d.fromDegrees(getZVelocityDPS());
     }
     public void resetPigeon(){
         pigeon.reset();
