@@ -76,7 +76,7 @@ public class SwerveModule extends SubsystemBase {
         moveMotor.setBrake(true);
         steerMotor.setBrake(true);
         moveMotor.setPosition(0);
-        steerMotor.setPosition(getAbsDegrees().getDegrees());
+        steerMotor.setPosition(getAngleDegreesRaw());
 
         SmartDashboard.putData(name, this);
 
@@ -115,13 +115,13 @@ public class SwerveModule extends SubsystemBase {
      * @return Velocity in m/s
      */
     public double getVelocity() {
-        return moveMotor.getCurrentVelocityInMPS(WHEEL_DIAMETER/2);
+        return moveMotor.getCurrentVelocityInMS(WHEEL_DIAMETER/2);
     }
     /**
    * set position to drive to in rotations in radians
    */
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle.getRotations());
+        steerMotor.setMotorPosition(angle);
     }
 
     /**
@@ -205,10 +205,10 @@ public class SwerveModule extends SubsystemBase {
 
     /**
      * Returns the rotational velocity of the module
-     * @return Velocity in rotations per second in radiands
+     * @return Velocity in degrees per second
      */
     public double getSteerVelocity() {  
-        return steerMotor.getCurrentVelocity();
+        return steerMotor.getCurrentVelocity().getDegrees();
     }
 
     /**
@@ -234,12 +234,10 @@ public class SwerveModule extends SubsystemBase {
      * @return Position relative to the field
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moveMotor.getCurrentPosition(), getAbsDegrees());
+        return new SwerveModulePosition(moveMotor.getCurrentPosition().getDegrees(), getAbsDegrees());
     }
 
-    public double getDistance() {
-        return moveMotor.getCurrentPosition();
-    }
+   
 
     @Override
     public void initSendable(SendableBuilder builder) {
@@ -249,7 +247,6 @@ public class SwerveModule extends SubsystemBase {
 //        builder.addDoubleProperty("distance", this::getDistance, null);
         builder.addDoubleProperty("abs encoder", () -> absoluteEncoder.getAbsolutePosition().getValue(), null);
         builder.addDoubleProperty("abs encoder in angle", ()-> Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValue()).getDegrees(), null);
-        builder.addDoubleProperty("encoder", steerMotor::getCurrentPosition, null);
     }
 
 

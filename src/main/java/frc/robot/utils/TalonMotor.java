@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Add your docs here. */
@@ -158,20 +159,15 @@ public class TalonMotor extends TalonFX {
   /**
    * set position to drive to in rotations
    */
-  public void setMotorPosition(double position/*in rotation */, double feedForward) {
-    // System.out.println("==================");
-    // System.out.println(name + " current pos: " + getCurrentPosition());
-    // System.out.println(name + " target pos: " + position);
-    // System.out.println(name + " current vel: " + getCurrentVelocity());
-    // System.out.println("==================");
-    //setControl(positionEntry)
-    setControl(motionMagicVoltage.withPosition(position));
-    positionEntry.log(position);
+  public void setMotorPosition(Rotation2d position, double feedForward) {
+    Rotation2d wantedPosition = getCurrentPosition().minus(position);
+    setControl(motionMagicVoltage.withPosition((Math.abs(wantedPosition.getDegrees())<=1)?0: wantedPosition.getRotations()));
+    positionEntry.log(position.getRotations());
   }
   /**
    * set position to drive to in rotations
    */
-  public void setMotorPosition(double position/*in rotation */) {
+  public void setMotorPosition(Rotation2d position) {
     setMotorPosition(position, 0);
   }
 
@@ -179,38 +175,35 @@ public class TalonMotor extends TalonFX {
   /**
    * get position in rotations
    */
-  public double getCurrentPosition() {
-    return getPosition().getValueAsDouble();
+  public Rotation2d getCurrentPosition() {
+    return Rotation2d.fromRotations(MathUtil.inputModulus(getPosition().getValueAsDouble(),-0.5,0.5));
   }
-  /**
-   * get position in Rotation2D
-   */
-  public Rotation2d getCurrentPositionAsRotation2d() {
-    return Rotation2d.fromRotations(getCurrentPosition());
-  }
+
+
+
   /**
    * get position in degrees
    */
   public double getCurrentPositionAsDegrees() {
-    return getCurrentPositionAsRotation2d().getDegrees();
+    return getCurrentPosition().getDegrees();
   }
   /**
    * get Velosity in rotations per seconds
    */
-  public double getCurrentVelocity() {
-    return getVelocity().getValueAsDouble();
+  public Rotation2d getCurrentVelocity() {
+    return Rotation2d.fromRotations(getVelocity().getValueAsDouble());
   }
   /**
    * get Velosity in meters per second
    */
-  public double getCurrentVelocityInMPS(double RadiusInM) {
-    return Utils.rpsToMps(getCurrentVelocity(), RadiusInM);
+  public double getCurrentVelocityInMS(double RadiusInM) {
+    return Utils.rpsToMps(getCurrentVelocity().getRotations(), RadiusInM);
   }
   /**
    * get Velosity in degrees per seconds
    */
   public double getCurrentVelocityDegrees(){
-    return Rotation2d.fromRotations(getCurrentVelocity()).getDegrees();
+    return getCurrentVelocity().getDegrees();
   }
 
 
