@@ -16,7 +16,9 @@ public class Trapezoid {
     private double lastTime  = 0;
     private double deacceleratingOffset;
     private double lastV;
-    
+    private double lastA;
+
+
     // Constructor to initialize with maximum velocity and acceleration
     public Trapezoid(double maxVelocity, double maxAcceleration) {
         this.maxAcceleration = maxAcceleration;
@@ -85,6 +87,7 @@ public class Trapezoid {
             
             }
         }
+        lastA = lastV - curentVelocity;
         lastTime = time;
         return lastV;
     }

@@ -8,7 +8,6 @@ import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -16,13 +15,9 @@ import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.Odometry;
-import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.WheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import frc.robot.subsystems.chassis.ChassisConstants;
-import frc.robot.subsystems.chassis.utils.SwerveKinematics;
-
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -44,7 +39,7 @@ import java.util.Objects;
  */
 public class PoseEstimator<T extends WheelPositions<T>> {
   private final Kinematics<?, T> m_kinematics;
-  private final Odometry<SwerveDriveWheelPositions> m_odometry;
+  private final Odometry<T> m_odometry;
   private final Matrix<N3, N1> m_q = new Matrix<>(Nat.N3(), Nat.N1());
   private final Matrix<N3, N3> m_visionK = new Matrix<>(Nat.N3(), Nat.N3());
 
@@ -66,7 +61,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
    */
   public PoseEstimator(
       Kinematics<?, T> kinematics,
-      Odometry<SwerveDriveWheelPositions> odometry,
+      Odometry<T> odometry,
       Matrix<N3, N1> stateStdDevs,
       Matrix<N3, N1> visionMeasurementStdDevs) {
     m_kinematics = kinematics;
@@ -115,7 +110,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
    * @param wheelPositions The current encoder readings.
    * @param poseMeters The position on the field that your robot is at.
    */
-  public void resetPosition(Rotation2d gyroAngle, SwerveDriveWheelPositions wheelPositions, Pose2d poseMeters) {
+  public void resetPosition(Rotation2d gyroAngle, T wheelPositions, Pose2d poseMeters) {
     // Reset state estimate and error covariance
     m_odometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
     m_poseBuffer.clear();
@@ -240,7 +235,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
    * @param wheelPositions The current encoder readings.
    * @return The estimated pose of the robot in meters.
    */
-  public Pose2d update(Rotation2d gyroAngle, SwerveDriveWheelPositions wheelPositions) {
+  public Pose2d update(Rotation2d gyroAngle, T wheelPositions) {
     return updateWithTime(MathSharedStore.getTimestamp(), gyroAngle, wheelPositions);
   }
 
@@ -253,7 +248,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
    * @param wheelPositions The current encoder readings.
    * @return The estimated pose of the robot in meters.
    */
-  public Pose2d updateWithTime(double currentTimeSeconds, Rotation2d gyroAngle, SwerveDriveWheelPositions wheelPositions) {
+  public Pose2d updateWithTime(double currentTimeSeconds, Rotation2d gyroAngle, T wheelPositions) {
     m_odometry.update(gyroAngle, wheelPositions);
     m_poseBuffer.addSample(
         currentTimeSeconds,
@@ -274,7 +269,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
     private final Rotation2d gyroAngle;
 
     // The current encoder readings.
-    private final SwerveDriveWheelPositions wheelPositions;
+    private final T wheelPositions;
 
     /**
      * Constructs an Interpolation Record with the specified parameters.
@@ -283,7 +278,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
      * @param gyro The current gyro angle.
      * @param wheelPositions The current encoder readings.
      */
-    private InterpolationRecord(Pose2d poseMeters, Rotation2d gyro, SwerveDriveWheelPositions wheelPositions) {
+    private InterpolationRecord(Pose2d poseMeters, Rotation2d gyro, T wheelPositions) {
       this.poseMeters = poseMeters;
       this.gyroAngle = gyro;
       this.wheelPositions = wheelPositions;
@@ -311,8 +306,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
         var gyroLerp = gyroAngle.interpolate(endValue.gyroAngle, t);
 
         // Create a twist to represent the change based on the interpolated sensor inputs.
-      
-        Twist2d twist = ChassisConstants.KINEMATICS_CORRECTED.toTwist2d(wheelPositions, wheelLerp);
+        Twist2d twist = m_kinematics.toTwist2d(wheelPositions, wheelLerp);
         twist.dtheta = gyroLerp.minus(gyroAngle).getRadians();
 
         return new InterpolationRecord(poseMeters.exp(twist), gyroLerp, wheelLerp);

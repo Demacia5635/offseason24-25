@@ -101,10 +101,16 @@ public class LedControll extends SubsystemBase{
 
         boolean isSeeNote = Utils.seeNote();
         boolean isStart = DriveToNote.isStart;
+        boolean isNotePresent = RobotContainer.robotContainer.intake.isNotePresent();
+        boolean isShooterReady = RobotContainer.robotContainer.shooter.getIsShootingReady();
 
-        if(isStart){
+        if(isShooterReady){
+            setColor(Color.kWhite);
+        } else if(isStart){
             setColor(Color.kOrange);
-        }else if (isSeeNote){
+        } else if (isNotePresent){
+            setColor(Color.kPurple);
+        } else if (isSeeNote){
             setColor(Color.kGreen);
         } else {
             setColor(Color.kRed);
