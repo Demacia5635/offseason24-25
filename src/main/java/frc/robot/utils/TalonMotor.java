@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -18,6 +19,7 @@ public class TalonMotor extends TalonFX {
   String name;
   TalonFXConfiguration cfg;
   VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
+  VoltageOut voltageOut = new VoltageOut(0);
 
   DutyCycleOut dutyCycle = new DutyCycleOut(0);
   MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
@@ -132,6 +134,12 @@ public class TalonMotor extends TalonFX {
   public void setDuty(double power) {
     setControl(dutyCycle.withOutput(power));
     dutyCycleEntry.log(power);
+  }
+  /**
+   * set power from -12-12 no PID/FF
+   */
+  public void setVoltage(double voltage) {
+    setControl(voltageOut.withOutput(voltage));
   }
   /**
    * gets rotations per secon

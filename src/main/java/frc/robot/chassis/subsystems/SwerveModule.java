@@ -194,13 +194,15 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setSteerPower(double p) {
         steerMotor.setDuty(p);
-        System.out.println(name + ": " + steerMotor.getCurrentVelocityDegrees());
+    }
+    public void setSteerVoltage(double v) {
+        steerMotor.setVoltage(v);
     }
     /**
-     * Sets velosity to the module  in meters per secons
+     * Sets velosity to the module  in rps
      */
     public void setSteerVelocity(double v) {
-        steerMotor.setVelocityMPS(v,WHEEL_DIAMETER/2);
+        steerMotor.setVelocity(v,0);
     }
 
     /**

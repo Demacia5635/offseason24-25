@@ -168,6 +168,17 @@ public class Chassis extends SubsystemBase {
     
   }
 
+  public void setModulesSteerVoltage(double Voltage) {
+    for (var m : modules) {
+      m.setSteerPower(Voltage);
+    }
+  }
+  public void setModulesSteerVoltage(double Voltage, int i) {
+
+    modules[i].setSteerVoltage(Voltage);
+    
+  }
+
   public void setModuleSteerVelocity(double velocity, int moduleIndex) {
     modules[moduleIndex].setSteerVelocity(velocity);
   }

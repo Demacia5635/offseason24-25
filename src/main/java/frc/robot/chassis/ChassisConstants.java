@@ -33,7 +33,7 @@ public final class ChassisConstants {
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
   public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0, 0.000);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.0001, 0.0, 0.00);//0.0008);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.000, 0.0, 0.0);//0.0008);
   /*TODO kill who forgot to finish the merge */
   // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
   // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
@@ -42,7 +42,7 @@ public final class ChassisConstants {
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
   public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.03, 0.002, 0.001); //0.0262, 0.0008, 0.0004);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.9861259338, 0.1084311633, 0.0);
+  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.2742838015,1.51359078,  0.001411548535);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
