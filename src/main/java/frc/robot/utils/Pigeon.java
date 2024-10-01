@@ -20,11 +20,17 @@ public class Pigeon {
     public Rotation2d getPigeonAngleRotation2d(){
         return Rotation2d.fromDegrees(getPigeonAngleDegree());
     }
+    public double getPigeonAngleRotation(){
+        return getPigeonAngleRotation2d().getRotations();
+    }
     public double getPigeonPitchDegree(){
         return pigeon.getPitch().getValue();
     }
     public Rotation2d getPigeonPitchRotation2d(){
         return Rotation2d.fromDegrees(getPigeonPitchDegree());
+    }
+    public double getPigeonPitchRotation(){
+        return getPigeonPitchRotation2d().getRotations();
     }
     public double getPigeonRollDegree(){
         return pigeon.getRoll().getValue();
@@ -32,23 +38,35 @@ public class Pigeon {
     public Rotation2d getPigeonRollRotation2d(){
         return Rotation2d.fromDegrees(getPigeonRollDegree());
     }
-    public double getXVelocityDPS(){
+    public double getPigeonRollRotation(){
+        return getPigeonRollRotation2d().getRotations();
+    }
+    public double getXVelocityDegreePerSecond(){
         return pigeon.getAngularVelocityXDevice().getValue();
     }
     public Rotation2d getXVelocityRotation2d(){
-        return Rotation2d.fromDegrees(getXVelocityDPS());
+        return Rotation2d.fromDegrees(getXVelocityDegreePerSecond());
     }
-    public double getYVelocityDPS(){
+    public double getXVelocityRotation(){
+        return getXVelocityRotation2d().getRotations();
+    }
+    public double getYVelocityDegreePerSecond(){
         return pigeon.getAngularVelocityYDevice().getValue();
     }
     public Rotation2d getYVelocityRotation2d(){
-        return Rotation2d.fromDegrees(getYVelocityDPS());
+        return Rotation2d.fromDegrees(getYVelocityDegreePerSecond());
     }
-    public double getZVelocityDPS(){
+    public double getYVelocityRotation(){
+        return getYVelocityRotation2d().getRotations();
+    }
+    public double getZVelocityDegreePerSecond(){
         return pigeon.getAngularVelocityZDevice().getValue();
     }
     public Rotation2d getZVelocityRotation2d(){
-        return Rotation2d.fromDegrees(getZVelocityDPS());
+        return Rotation2d.fromDegrees(getZVelocityDegreePerSecond());
+    }
+    public double getZVelocityRotation(){
+        return getZVelocityRotation2d().getRotations();
     }
     public void resetPigeon(){
         pigeon.reset();

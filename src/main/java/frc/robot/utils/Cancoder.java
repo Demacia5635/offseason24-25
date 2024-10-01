@@ -16,20 +16,23 @@ public class Cancoder {
     public double getNonAbsPosition() {
         return cancoder.getPosition().getValue();
     }
+    public Rotation2d getNonAbsRotation2d() {
+        return Rotation2d.fromRotations(getNonAbsPosition());
+    }
+    public double getAbsRotation() {
+        return cancoder.getAbsolutePosition().getValue();
+    }
     public Rotation2d getAbsRotation2d() {
-        return Rotation2d.fromRotations(cancoder.getAbsolutePosition().getValue());
-    }
-    public double getAbsDegree() {
-        return getAbsRotation2d().getDegrees();
-    }
-    public Rotation2d getVelocityRotation2d(){
-        return Rotation2d.fromRotations(cancoder.getVelocity().getValue());
+        return Rotation2d.fromRotations(getAbsRotation());
     }
     public double getVelocityRotation(){
-        return getVelocityRotation2d().getRotations();
+        return cancoder.getVelocity().getValue();
     }
-    public void setOfset(double offset){
-        canConfig.MagnetSensor.MagnetOffset = -offset;
+    public Rotation2d getVelocityRotation2d(){
+        return Rotation2d.fromRotations(getVelocityRotation());
+    }
+    public void setOffset(double offset){
+        canConfig.MagnetSensor.MagnetOffset = offset;
         cancoder.getConfigurator().apply(canConfig); 
     }
     public void setCanCoderClockwise(Boolean boolDirection){

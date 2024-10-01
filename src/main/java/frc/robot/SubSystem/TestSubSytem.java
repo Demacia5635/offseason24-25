@@ -23,20 +23,20 @@ public class TestSubSytem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("getNonAbsPosition", cancoder.getNonAbsPosition());
-    SmartDashboard.putNumber("getAbsDegree", cancoder.getAbsDegree());
+    SmartDashboard.putNumber("getAbsRotation", cancoder.getAbsRotation());
     SmartDashboard.putNumber("getVelocityRotation", cancoder.getVelocityRotation());
     SmartDashboard.putNumber("getPigeonAngleDegree", pigeon.getPigeonAngleDegree());
     SmartDashboard.putNumber("getPigeonPitchDegree", pigeon.getPigeonPitchDegree());
     SmartDashboard.putNumber("getPigeonRollDegree", pigeon.getPigeonRollDegree());
-    SmartDashboard.putNumber("getXVelocityDPS", pigeon.getXVelocityDPS());
-    SmartDashboard.putNumber("getYVelocityDPS", pigeon.getYVelocityDPS());
-    SmartDashboard.putNumber("getZVelocityDPS", pigeon.getZVelocityDPS());
+    SmartDashboard.putNumber("getXVelocityDegreePerSecond", pigeon.getXVelocityDegreePerSecond());
+    SmartDashboard.putNumber("getYVelocityDegreePerSecond", pigeon.getYVelocityDegreePerSecond());
+    SmartDashboard.putNumber("getZVelocityDegreePerSecond", pigeon.getZVelocityDegreePerSecond());
   }
   public void resetPigeon(){
     pigeon.resetPigeon();
   }
   public void setOffset(double offset){
-    cancoder.setOfset(offset);
+    cancoder.setOffset(offset);
   }
   public void setCanCoderClockwise(Boolean boolDirection){
     cancoder.setCanCoderClockwise(boolDirection);;
