@@ -18,9 +18,14 @@ public class TalonConfig {
     public double motorRatio = 1;   // motor to mechanism ratio
     public boolean inverted = false; // if to invert motor
     public closeLoopParam pid; // close loop argument - PID + FF
+    public closeLoopParam pid1 = null; // pid for slot 1
+    public closeLoopParam pid2 = null; // pid for slot 2
     public double motionMagicAccel = 10; // maximum motion magic (position) acceleration
     public double motionMagicVelocity = 1; // maximum motition magic velocity
     public double motionMagicJerk = 10;    // maximum motion magic jerk
+    public double kv2 = 0;
+    public double ksin = 0;
+    public double posToRad = 0;
     
 
     class closeLoopParam { // calculate volts - not -1 to 1 !!!
@@ -78,6 +83,35 @@ public class TalonConfig {
 
     public TalonConfig withMotorRatio(double ratio) {
         this.motorRatio = ratio;
+        return this;
+    }
+
+    public TalonConfig withFeedForward(double kv2, double ksin, double posToRad) {
+        this.kv2 = kv2;
+        this.ksin = ksin;
+        this.posToRad = posToRad;
+        return this;
+    }
+
+    public TalonConfig withPID(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
+        pid = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
+        return this;
+    }
+
+    public TalonConfig withPID1(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
+        pid1 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
+        return this;
+    }
+
+    public TalonConfig withPID2(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
+        pid2 = new closeLoopParam(kp, ki, kd, ks, kv, ka, kg);
+        return this;
+    }
+
+    public TalonConfig withMotionMagic(double velocity, double acceleration, double jerk) {
+        motionMagicVelocity = velocity;
+        motionMagicAccel = acceleration;
+        motionMagicJerk = jerk;
         return this;
     }
 }
