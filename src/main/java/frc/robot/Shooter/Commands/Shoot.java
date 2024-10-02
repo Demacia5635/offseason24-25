@@ -116,7 +116,8 @@ public class Shoot extends Command {
 
     if ((Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLEZONE
         && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UPMOTORVELZONE
-        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE) 
+        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE
+        /* and if the camrra sees an april tag*/) 
         || isShooterReady){
 
       isReady = true;
@@ -124,13 +125,14 @@ public class Shoot extends Command {
     if (isReady){
       shooter.setFeedingPower(FEEDING_MOTOR_POWER);
       isReady = false;
+      isShooterReady = false;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setMotorPower(0);
+    shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
   }
 

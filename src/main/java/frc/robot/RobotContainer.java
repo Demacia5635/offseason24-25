@@ -25,6 +25,7 @@ public class RobotContainer {
   
   private Shooter shooter;
   private AngleChanger angleChanging;
+  private Shoot shootCommand;
   public static boolean isShooterReady = false;
   int x;
 
@@ -36,8 +37,8 @@ public class RobotContainer {
   public RobotContainer() {
     shooter = new Shooter();
     angleChanging = new AngleChanger();
-    shooter.setDefaultCommand(new Shoot(shooter));
     angleChanging.setDefaultCommand(new GoToAngle(angleChanging));
+    shootCommand = new Shoot(shooter);
 
     
     // Configure the trigger bindings
@@ -67,6 +68,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    controller.leftTrigger().onTrue(shootCommand);
+
     controller.a().onTrue(new InstantCommand(() -> {
       if (shooter.shooterState == STATE.SPEAKER){
         shooter.shooterState = STATE.AMP;
@@ -77,10 +80,22 @@ public class RobotContainer {
         angleChanging.angleState = STATE.SPEAKER;
       }
     }, shooter, angleChanging));
+
     controller.b().onTrue(new InstantCommand(() -> {
         isShooterReady = true;
     }, shooter));
 
+    controller.x().onTrue(new InstantCommand(() -> {
+        shooter.shooterState = STATE.TESTING;
+    }, shooter));
+
+    controller.y().onTrue(new InstantCommand(() -> {
+        shooter.shooterState = STATE.STAGE;
+    }, shooter));
+
+    controller.rightTrigger().onTrue(new InstantCommand(() -> {
+        shooter.shooterState = STATE.WING;
+    }, shooter));
   }
 
   /**

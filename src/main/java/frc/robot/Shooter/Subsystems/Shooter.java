@@ -54,9 +54,9 @@ public class Shooter extends SubsystemBase {
     
   }
 
-  public void setMotorPower(double power){
-    motorUp.setControl(m_request.withOutput(power));
-    motorDown.setControl(m_request.withOutput(power));
+  public void setMotorPower(double upPower, double downPower){
+    motorUp.setControl(m_request.withOutput(upPower));
+    motorDown.setControl(m_request.withOutput(downPower));
   }
   
 

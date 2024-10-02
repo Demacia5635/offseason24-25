@@ -4,6 +4,9 @@
 
 package frc.robot.Shooter.Commands;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
@@ -14,9 +17,10 @@ import static frc.robot.Shooter.ShooterConstants.*;
 public class GoToAngle extends Command {
   /** Creates a new setShooting. */
   private LookUpTable lookupTable;
-  private double[][] arr;
+  private double[][] testingData;
   private AngleChanger angleChanging;
   public static double angle;
+  private double testingAngle; 
   private double distance;
   public boolean isfinished;
   public STATE state;
@@ -26,8 +30,23 @@ public class GoToAngle extends Command {
   public GoToAngle(AngleChanger angleChanging) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angleChanging = angleChanging;
-    lookupTable = new LookUpTable(arr);
+    lookupTable = new LookUpTable(testingData);
+    SmartDashboard.putData(this);
     addRequirements(angleChanging);
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder){
+      builder.addDoubleProperty("Angle", this::getAngle, this::setAngle);
+      
+  }
+
+  public double getAngle(){
+      return this.testingAngle;
+  }
+  
+  public void setAngle(double testingAngle){
+      this.testingAngle = testingAngle;
   }
 
   // Called when the command is initially scheduled.
@@ -49,23 +68,37 @@ public class GoToAngle extends Command {
       case AMP:
           angle = AMP_ANGLE;
           break;
+      
+      case STAGE:
+          angle = STAGE_ANGLE;
+  
+          break;
+
+      case WING:
+          angle = WING_ANGLE;
+          break;
 
       case SPEAKER:
            distance = -1;
-           double[] lookUpTableData = lookupTable.get(distance);
-           angle = lookUpTableData[0];
+           double[] speakerLookUpTableData = lookupTable.get(distance);
+           angle = speakerLookUpTableData[0];
           break;
 
-    /*TODO getting data from Look Up Table */
      case DELIVERY:
-          angle = -1;
+          distance = -1;
+           double[] deliveryLookUpTableData = lookupTable.get(distance);
+           angle = deliveryLookUpTableData[0];
+          break;
+
+      case TESTING:
+          angle = testingAngle;
           break;
 
       case IDLE:
           angle = -1;
           break;
     }
-
+    
     angleChanging.MotionMagic(angle);
 
 
