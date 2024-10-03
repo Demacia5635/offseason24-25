@@ -16,11 +16,4 @@ public class ShooterUtils {
         return Math.acos(((Math.pow(A, 2)-Math.pow(B, 2))/(C+distance)-C-distance)/(-2*B));
         //return  Math.acos((distance + C)/(2*B)); if A = B
     }
-    public static double rotationsToDistance(double rotation){
-        return rotation * ANGLE_CHANGING_GEAR_RATIO * OOM_MILLIMETER_PER_SPIN;
-    }
-    public static double distanceToRotations(double distance){
-        return distance * OOM_SPIN_PER_MILLIMETER / ANGLE_CHANGING_GEAR_RATIO;
-
-    }
 }

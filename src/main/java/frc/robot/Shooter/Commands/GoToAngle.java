@@ -23,6 +23,7 @@ public class GoToAngle extends Command {
   public double wantedAngle;
   private double testingAngle; 
   private double distance;
+  private boolean isInWing = true;//to do
   public STATE state;
   public static boolean isAngleReady;
 
@@ -66,6 +67,8 @@ public class GoToAngle extends Command {
       */
   @Override
   public void execute() {
+    if (!isInWing)
+      state = STATE.DELIVERY;
     switch(state){
       case AMP:
           wantedAngle = AMP_ANGLE;
@@ -99,8 +102,7 @@ public class GoToAngle extends Command {
       case IDLE:
           break;
     }
-    if (distance > WING_DISTANCE)
-      state = STATE.DELIVERY;
+    
     angleChanger.goToAngle(wantedAngle);
 
 

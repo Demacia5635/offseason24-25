@@ -4,7 +4,9 @@
 
 package frc.robot.Shooter.Subsystems;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_CONFIGS;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_VAR;
@@ -59,11 +61,13 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_Acceleration;
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_JERK;
 
-    config.Feedback.SensorToMechanismRatio = OOM_MILLIMETER_PER_SPIN;
+    config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_GEAR_RATIO;
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     angleChangingMotor.getConfigurator().apply(config);
     /*TODO add brake invert  */
+
+    SmartDashboard.putData(this);
   }
    
 
@@ -94,6 +98,10 @@ public class AngleChanger extends SubsystemBase {
     return angle;
   }
 
+  public void setBaseAngle() {
+    angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_ANGLE);
+  }
+
   /**
    * 
    * @return returns if reverse hard limit is closed
@@ -105,8 +113,12 @@ public class AngleChanger extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("ShooterAngle", getAngle());
-    SmartDashboard.putNumber("angleMotorVel", getAngleMotorVel());
   }
 
+  @Override
+  public void initSendable(SendableBuilder builder) {
+      SmartDashboard.putData("reset angle", new InstantCommand(()-> setBaseAngle(), this).ignoringDisable(true));
+      builder.addDoubleProperty("ShooterAngle", this::getAngle, null);
+      builder.addDoubleProperty("angleMotorVer", this::getAngleMotorVel, null);
+  }
 }

@@ -7,6 +7,7 @@ package frc.robot.Shooter.utils;
 import static frc.robot.Shooter.ShooterConstants.*;
 
 import frc.robot.RobotContainer;
+import frc.robot.Shooter.ShooterConstants.STATE;
 
 /** Add your docs here. */
 public class Ready {
@@ -18,5 +19,14 @@ public class Ready {
     }
     public static boolean isDownMotorReady(double wantedDownMotorVel){
         return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE;
+    }
+    public static boolean isGoodState(STATE state){
+        return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING);
+    }
+    public static boolean isSeeAprilTag(){
+        return true;
+    }
+    public static boolean isNearAmp(){
+        return true;
     }
 }

@@ -9,18 +9,18 @@ public class ShooterConstants {
 
   public static class MOTOR_IDS{
     
-    public static final int MOTOR_UP_ID = 1;
-    public static final int MOTOR_DOWN_ID = 2;
-    public static final int MOTOR_FEEDING_ID = 3;
+    public static final int MOTOR_UP_ID = 2;
+    public static final int MOTOR_DOWN_ID = 35;
+    public static final int MOTOR_FEEDING_ID = 4;
     public static final int ANGLE_CHANGING_ID = 5;
 
-    public static final String CANBUS = "canivore";
+    public static final String CANBUS = "RIO";
   }
 
 
   public static class SHOOTER_VAR{
     
-    public static final double KP = 0.0;
+    public static final double KP = 0.5;
     public static final double KI = 0.0;
     public static final double KD = 0.0;
     public static final double KS = 0.0;
@@ -34,7 +34,7 @@ public class ShooterConstants {
   /*TODO change to 2 diff classes one for kp and for angle changing max vel */
   public static class ANGLE_CHANGING_CONFIGS{
     
-    public static final double KP = 0.0;
+    public static final double KP = 0.01;
     public static final double KI = 0.0;
     public static final double KD = 0.0;
     public static final double KS = 0.0;
@@ -45,20 +45,16 @@ public class ShooterConstants {
 
   public static class ANGLE_CHANGING_VAR{
 
-    public static final double ANGLE_CHANGING_MAX_VELOCITY = 0;
-    public static final double ANGLE_CHANGING_MAX_Acceleration  = 0;
-    public static final double ANGLE_CHANGING_MAX_JERK = 0;
-    public static final double BASE_ANGLE = -1;
+    public static final double ANGLE_CHANGING_MAX_VELOCITY = 10;
+    public static final double ANGLE_CHANGING_MAX_Acceleration  = 15;
+    public static final double ANGLE_CHANGING_MAX_JERK = 20;
+    public static final double BASE_ANGLE = 0;
   }
 
   public static final double RADIOS_AS_MILLIMETER = 0.035;
 
   /*the gear ratio is 1 in motor up and motordown */
-  public static final double MILLIMETER_PER_SPIN = (RADIOS_AS_MILLIMETER*2)*Math.PI;
-  public static final double SPIN_PER_MILLIMETER = 1/MILLIMETER_PER_SPIN;
-  public static final double ANGLE_CHANGING_GEAR_RATIO = 0;
-  public static final double OOM_SPIN_PER_MILLIMETER = 0;
-  public static final double OOM_MILLIMETER_PER_SPIN = 1 / OOM_SPIN_PER_MILLIMETER;
+  public static final double ANGLE_CHANGING_GEAR_RATIO = 1/4;  
 
   public static final double FEEDING_MOTOR_POWER = 0;
   public static final double CALIBRITION_ANGLE_CHAGING_VELOCITY = 0;
@@ -76,8 +72,8 @@ public class ShooterConstants {
   public static final double DEFULT_ANGLE = 0;
   public static final double TOP_ANGLE = 0;
   public static final double MOT_IN_METER = 0;
-  public static final double A = 0;
-  public static final double B = 0;
+  public static final double A = 128;
+  public static final double B = 128;
   public static final double C = 0;
   public static final double FreqHz = 200;
 
@@ -85,7 +81,7 @@ public class ShooterConstants {
   public static final double UP_MOTOR_VEL_ZONE = 0;
   public static final double DOWN_MOTOR_VEL_ZONE = -0;
 
-  public static final double MIL_SEC_TO_SHOOT = 0;
+  public static final double MIL_SEC_TO_SHOOT = 1000;
 
   public static final double WING_DISTANCE = 0;
 

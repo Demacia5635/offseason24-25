@@ -26,6 +26,7 @@ public class Shoot extends Command {
   private double testingDownMotorVelocity;
   public STATE state;
   private double distance;
+  private boolean isInWing = true;//to do
   public boolean isReady = false;
   public boolean isfinished = false;
 
@@ -71,6 +72,8 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (!isInWing)
+      state = STATE.DELIVERY;
     switch(state){
       case AMP:
           upMotorVelocity = MOTOR_UP_AMP_VELOCITY;
@@ -109,14 +112,15 @@ public class Shoot extends Command {
       case IDLE:
           break;
     }
-
+    
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
     isReady = GoToAngle.isAngleReady
         && Ready.isUpMotorReady(upMotorVelocity)
         && Ready.isUpMotorReady(downMotorVelocity)
-        && (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING)
-        /* and if the camrra sees an april tag*/
+        && Ready.isGoodState(state)
+        && Ready.isSeeAprilTag()
+        && ((state == STATE.AMP && Ready.isNearAmp()) || state != STATE.AMP)
         || isShooterReady;
     if (isReady){
       shooter.setFeedingPower(FEEDING_MOTOR_POWER);
