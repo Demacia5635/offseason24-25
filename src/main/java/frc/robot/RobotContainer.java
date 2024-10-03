@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   
-  private Shooter shooter;
-  private AngleChanger angleChanging;
+  public static Shooter shooter;
+  public static AngleChanger angleChanging;
   private Shoot shootCommand;
   public static boolean isShooterReady = false;
   int x;

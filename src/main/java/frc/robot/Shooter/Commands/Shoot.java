@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.Shooter;
 import frc.robot.Shooter.utils.LookUpTable;
+import frc.robot.Shooter.utils.Ready;
 
 public class Shoot extends Command {
   
@@ -112,8 +113,8 @@ public class Shoot extends Command {
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
     isReady = GoToAngle.isAngleReady
-        && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UP_MOTOR_VEL_ZONE
-        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE
+        && Ready.isUpMotorReady(upMotorVelocity)
+        && Ready.isUpMotorReady(downMotorVelocity)
         && (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING)
         /* and if the camrra sees an april tag*/
         || isShooterReady;
