@@ -58,5 +58,19 @@ public class LedManager{
     currentH = 0;
   }
 
-}
+  
+  /**
+   * updated the certain port of leds
+   * @param port the port that the leds update
+   * @apiNote updated only one port at the time so the code will be faster at most cases
+   */
+  public void update(int port) {
+    if (ledColors[port] != null) {
+      for (int j = 0; j < ledColors[port].length; j++) {
+        buffers[port].setLED(j, ledColors[port][j]);
+      }
 
+      leds[port].setData(buffers[port]);
+    }
+  }
+}
