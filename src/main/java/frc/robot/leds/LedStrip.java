@@ -98,4 +98,12 @@ public class LedStrip extends SubsystemBase{
     return manager.setBlink(this, colors);
   }
 
+  /**
+   * turn the strip off
+   * @return command that turn off the leds
+   */
+  public Command turnoff() {
+    return setColor(Color.kBlack);
+  }
+  
 }
