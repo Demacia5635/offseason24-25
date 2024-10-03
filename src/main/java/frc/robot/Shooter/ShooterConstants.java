@@ -90,6 +90,10 @@ public class ShooterConstants {
   public static final double WING_DISTANCE = 0;
 
   public static final double SHOOOTER_VOLTAGE = 0;
+
+  public static final boolean IS_UP_MOTOR_INVERT = false;
+  public static final boolean IS_DOWN_MOTOR_INVERT = true;
+  public static final boolean IS_FEEDING_MOTOR_INVERT = false;
   
 
 

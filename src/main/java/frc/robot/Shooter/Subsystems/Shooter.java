@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,7 +16,12 @@ import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
 import frc.robot.Shooter.ShooterConstants.SHOOTER_VAR;
 import frc.robot.Shooter.ShooterConstants.STATE;
 
+import static frc.robot.Shooter.ShooterConstants.IS_DOWN_MOTOR_INVERT;
+import static frc.robot.Shooter.ShooterConstants.IS_FEEDING_MOTOR_INVERT;
+import static frc.robot.Shooter.ShooterConstants.IS_UP_MOTOR_INVERT;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Shooter extends SubsystemBase {
@@ -40,7 +46,11 @@ public class Shooter extends SubsystemBase {
     m_request = new DutyCycleOut(0.0);
     velocityVoltage = new VelocityVoltage(0).withSlot(0);
     config = new TalonFXConfiguration();
-    
+
+    config.MotorOutput.Inverted = IS_UP_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
+    motorDown.getConfigurator().apply(config);
+    config.MotorOutput.Inverted = IS_DOWN_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
+    motorUp.getConfigurator().apply(config);
 
     config.Slot0.kP = SHOOTER_VAR.KP;
     config.Slot0.kI = SHOOTER_VAR.KI;
@@ -53,7 +63,9 @@ public class Shooter extends SubsystemBase {
     motorUp.getConfigurator().apply(config);
     motorDown.getConfigurator().apply(config);
 
-    
+    motorFeeding.configFactoryDefault();
+    motorFeeding.setInverted(IS_FEEDING_MOTOR_INVERT);
+    motorFeeding.setNeutralMode(NeutralMode.Brake);
   }
 
   public void setMotorPower(double upPower, double downPower){
