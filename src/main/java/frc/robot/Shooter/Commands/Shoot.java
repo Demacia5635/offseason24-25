@@ -45,8 +45,8 @@ public class Shoot extends Command {
 
   @Override
     public void initSendable(SendableBuilder builder){
-      builder.addDoubleProperty("upMotorVelocity", this::getUpMotorVelocity, this::setUpMotorVelocity);
-      builder.addDoubleProperty("downMotorVelocity", this::getDownMotorVelocity, this::setDownMotorVelocity);
+      builder.addDoubleProperty("testingUpMotorVelocity", this::getUpMotorVelocity, this::setUpMotorVelocity);
+      builder.addDoubleProperty("testingDownMotorVelocity", this::getDownMotorVelocity, this::setDownMotorVelocity);
     }
 
     public double getUpMotorVelocity(){
@@ -114,19 +114,17 @@ public class Shoot extends Command {
 
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    if ((Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLE_ZONE
+    isReady = Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLE_ZONE
         && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UP_MOTOR_VEL_ZONE
         && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE
         && (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING)
-        /* and if the camrra sees an april tag*/) 
-        || isShooterReady){
-
-      isReady = true;
-    }
+        /* and if the camrra sees an april tag*/
+        || isShooterReady;
     if (isReady){
       shooter.setFeedingPower(FEEDING_MOTOR_POWER);
       isReady = false;
       isShooterReady = false;
+
     }
   }
 

@@ -4,6 +4,7 @@
 
 package frc.robot.Shooter.Subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_CONFIGS;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_VAR;
@@ -77,6 +78,10 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.setControl(velocityVoltage.withVelocity(vel));
   }
 
+  public double getAngleMotorVel(){
+    return angleChangingMotor.getVelocity().getValue();
+  }
+
   public void goToAngle(double angle){
     angleChangingMotor.setPosition(2*A*Math.cos(angle)*OOM_METER_PER_SPIN*ANGLE_CHANGING_GEAR_RATIO);
   }
@@ -97,6 +102,12 @@ public class AngleChanger extends SubsystemBase {
     */
   public boolean isMaxAngle(){
     return angleChangingMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("ShooterAngle", getShooterAngle());
+    SmartDashboard.putNumber("ShooterAngle", getShooterAngle());
   }
 
 }

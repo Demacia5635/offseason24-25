@@ -8,6 +8,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
 import frc.robot.Shooter.ShooterConstants.SHOOTER_VAR;
@@ -80,5 +82,11 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterState(STATE state){
     shooterState = state;
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("upMotorVel", getUpMotorVel());
+    SmartDashboard.putNumber("downMotorVel", getDownMotorVel());
   }
 }
