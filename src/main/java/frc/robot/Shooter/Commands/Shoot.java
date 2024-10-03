@@ -114,9 +114,10 @@ public class Shoot extends Command {
 
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    if ((Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLEZONE
-        && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UPMOTORVELZONE
-        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWNMOTORVELZONE
+    if ((Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLE_ZONE
+        && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UP_MOTOR_VEL_ZONE
+        && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE
+        && (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING)
         /* and if the camrra sees an april tag*/) 
         || isShooterReady){
 

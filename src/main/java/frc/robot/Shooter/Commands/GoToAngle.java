@@ -22,7 +22,6 @@ public class GoToAngle extends Command {
   public static double angle;
   private double testingAngle; 
   private double distance;
-  public boolean isfinished;
   public STATE state;
 
   
@@ -95,14 +94,15 @@ public class GoToAngle extends Command {
           break;
 
       case IDLE:
-          angle = -1;
           break;
     }
-    
+    if (distance > WING_DISTANCE)
+      state = STATE.DELIVERY;
+    else
+      state = STATE.SPEAKER;
     angleChanging.MotionMagic(angle);
 
 
-    //פונקציה שמגדירה את isFinished כtrue אחרי שהרובוט ירה
   }
 
   // Called once the command ends or is interrupted.
@@ -114,7 +114,7 @@ public class GoToAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isfinished;
+    return false;
   }
 
 

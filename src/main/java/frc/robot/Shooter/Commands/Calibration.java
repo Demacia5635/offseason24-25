@@ -11,7 +11,7 @@ import static frc.robot.Shooter.ShooterConstants.*;
 public class Calibration extends Command {
   /** Creates a new Calibrition. */
   private AngleChanger angleChanging;
-  private int isFinished = 0;
+  private int finishedState = 0;
   public Calibration() {
     angleChanging = new AngleChanger();
     // Use addRequirements() here to declare subsystem dependencies.
@@ -29,11 +29,11 @@ public class Calibration extends Command {
   public void execute() {
     if(angleChanging.isMaxAngle()){
       angleChanging.angleChangingPID(-DOWN_SPEED_CALIBRATION);
-      isFinished = 1;
+      finishedState = 1;
     }
-    if(!angleChanging.isMaxAngle() && isFinished == 1){
+    if(!angleChanging.isMaxAngle() && finishedState == 1){
       angleChanging.goToAngle(TOP_ANGLE);
-      isFinished = 2;
+      finishedState = 2;
     }
   }
 
@@ -46,6 +46,6 @@ public class Calibration extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (isFinished == 2);
+    return (finishedState == 2);
   }
 }
