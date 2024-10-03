@@ -170,6 +170,25 @@ public class LedManager{
     .ignoringDisable(true);
   }
 
+  /**
+   * get the colors of a strip
+   * @param port the port of the strip
+   * @param offset the offset of the strip
+   * @param size the size of the strip
+   * @return the currnet colors of the strip
+   */
+  public Color[] getColors(int port, int offset, int size) {
+    return Arrays.copyOfRange(ledColors[port], offset, offset + size);
+  }
+  
+  /**
+   * get the colors of a strip
+   * @param ledStrip the wanted strip
+   * @return the current colors of the strip
+   */
+  public Color[] getColors(LedStrip ledStrip) {
+    return getColors(ledStrip.port, ledStrip.offset, ledStrip.size);
+  }
   
   /**
    * updated the certain port of leds

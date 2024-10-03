@@ -122,4 +122,12 @@ public class LedStrip extends SubsystemBase{
     return manager.setBlinkGay(this);
   }
 
+  /**
+   * get the colors of the strip
+   * @return arr of colors that are the colors of the leds in the leds manager
+   */
+  public Color[] getColors() {
+    return manager.getColors(this);
+  }
+
 }
