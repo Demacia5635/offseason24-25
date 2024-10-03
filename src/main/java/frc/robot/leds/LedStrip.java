@@ -62,4 +62,22 @@ public class LedStrip extends SubsystemBase{
     SmartDashboard.putData(name, this);
   }
 
+  /**
+   * set the strip to one color
+   * @param color the wanted color
+   * @return command that makes the strip one solid color
+   */
+  public Command setColor(Color color) {
+    return manager.setColor(this, color);
+  }
+  
+  /**
+   * set the strip to solid colors
+   * @param colors the wanted colors
+   * @return command that makes the strip solid colors
+   */
+  public Command setColor(Color[] colors) {
+    return manager.setColor(this, colors);
+  }
+
 }

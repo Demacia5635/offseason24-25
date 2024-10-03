@@ -58,6 +58,40 @@ public class LedManager{
     currentH = 0;
   }
 
+  /**
+   * set a strip to be a solid color
+   * @param strip the wanted strip
+   * @param color the wanted color to blink
+   * @return command that set the strip a certain color
+   */
+  public Command setColor(LedStrip strip, Color color) {
+    return new RunCommand(()-> {
+      for(int i = strip.offset; i < strip.size + strip.offset; i++) {
+        this.ledColors[strip.port][i] = color;
+      }
+
+      update(strip.port);
+    }, strip)
+    .ignoringDisable(true);
+  }
+  
+  /**
+   * set a strip to be solid colors
+   * @param strip the wanted strip
+   * @param colors the wanted colors (notice that the size of the arr must by the size of the strip)
+   * @return command that set the strip a certain color
+   */
+  public Command setColor(LedStrip strip, Color[] colors) {
+    return new RunCommand(()-> {
+      for(int i = strip.offset; i < colors.length + strip.offset; i++) {
+        this.ledColors[strip.port][i] = colors[i - strip.offset];
+      }
+
+      update(strip.port);
+    }, strip)
+    .ignoringDisable(true);
+  }
+    
   
   /**
    * updated the certain port of leds
