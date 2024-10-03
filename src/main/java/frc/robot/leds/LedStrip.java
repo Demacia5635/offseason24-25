@@ -106,4 +106,20 @@ public class LedStrip extends SubsystemBase{
     return setColor(Color.kBlack);
   }
   
+  /**
+   * set the strip solid gay
+   * @return command that make the strip gay
+   */
+  public Command setSolidGay() {
+    return manager.setSolidGay(this);
+  }
+
+  /**
+   * set the strip blink gay
+   * @return command that make the strip gay blink
+   */
+  public Command setBlinkGay() {
+    return manager.setBlinkGay(this);
+  }
+
 }

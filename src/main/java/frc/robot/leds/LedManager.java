@@ -130,6 +130,46 @@ public class LedManager{
     .ignoringDisable(true);
   }
   
+  /**
+   * set the leds to being gay always
+   * @param strip the wanted strip
+   * @return command that makes the strip gay
+   */
+  public Command setSolidGay(LedStrip strip) {
+    return new RunCommand(()-> {
+      for (int i = strip.offset; i < strip.size + strip.offset; i++) {
+        ledColors[strip.port][i] = Color.fromHSV((int) (currentH + i * 3), 255, 255);
+      }
+
+      update(strip.port);
+      currentH += 3;
+      currentH %= 180;
+
+    }, strip)
+    .ignoringDisable(true);
+  }
+  
+  /**
+   * set the leds to being gay blinky
+   * @param strip the wanted strip
+   * @return command that makes the strip gay
+   */
+  public Command setBlinkGay(LedStrip strip) {
+    return new RunCommand(()-> {
+      for (int i = strip.offset; i < strip.size + strip.offset; i++) {
+        ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0
+        ? Color.fromHSV((int) (currentH + i * 3), 255, 255)
+        : Color.kBlack;
+      }
+
+      update(strip.port);
+      currentH += 3;
+      currentH %= 180;
+
+    }, strip)
+    .ignoringDisable(true);
+  }
+
   
   /**
    * updated the certain port of leds
