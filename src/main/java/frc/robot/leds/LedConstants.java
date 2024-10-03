@@ -3,18 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.leds;
-import frc.robot.leds.utils.IntPair;
 
-/** Add your docs here. */
+/**constants for leds */
 public class LedConstants {
-    public static final IntPair[] LED_STRIPS = {
-        new IntPair(0, 10),
-        new IntPair(0, 10)
-    };
-    public static final double MAX_ANGLE = 50;
-    public static final double EPSILON = 3;
-    /** time to wait between switch from blank to color in blink. 
-     * in miliseconds 
-     */
-public static final double BLINK_WAIT_TIME = 300;
+  /**the size of every strip for every port */
+  public static final int[] STRIPS = {};
+
+  /**
+   * the blink time between what is color and what is off
+   * {@code timer.get() % BLINK_TIME != 0 ? color : Color.kBlack}
+   */
+  public static final double BLINK_TIME = 300 / 1000;
 }
