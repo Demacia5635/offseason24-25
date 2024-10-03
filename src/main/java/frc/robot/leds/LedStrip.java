@@ -130,4 +130,28 @@ public class LedStrip extends SubsystemBase{
     return manager.getColors(this);
   }
 
+  /**
+   * get the colors as a hex code
+   * {@code String.format("#%02X%02X%02X", (int) (red * 255), (int) (green * 255), (int) (blue * 255))}
+   * @return arr of string as hex code 
+   */
+  public String[] getColorsAsHex() {
+    Color[] colors = getColors();
+    String[] ans = new String[colors.length];
+    for(int i = 0; i < colors.length; i++) {
+      ans[i] = colors[i].toHexString();
+    }
+    
+    return ans;
+  }
+
+  /**
+   * put the colors in network table
+   */
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+    
+    builder.addStringArrayProperty("Colors", this::getColorsAsHex, null);
+  }
 }
