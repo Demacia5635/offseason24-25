@@ -4,6 +4,7 @@ package frc.robot.chassis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.TalonConfig;
 
 public final class ChassisConstants {
@@ -123,6 +124,12 @@ public static final double SICLE_CAUNT = 50.0;
       BACK_RIGHT.moduleTranslationOffset);
   
 
+      
+  public static final SwerveKinematics KINEMATICS_DEMACIA = new SwerveKinematics(
+      FRONT_LEFT.moduleTranslationOffset,
+      FRONT_RIGHT.moduleTranslationOffset,
+      BACK_LEFT.moduleTranslationOffset,
+      BACK_RIGHT.moduleTranslationOffset);
 
 
   public static class PID_Constants {
