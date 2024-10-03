@@ -80,4 +80,22 @@ public class LedStrip extends SubsystemBase{
     return manager.setColor(this, colors);
   }
 
+  /**
+   * set blink to strip
+   * @param color the wanted color
+   * @return command that makes the strip blink with one color
+   */
+  public Command setBlink(Color color) {
+    return manager.setBlink(this, color);
+  }
+
+  /**
+   * set blink to strip
+   * @param colors the wanted colors
+   * @return command that makes the strip blink with diffrent colors
+   */
+  public Command setBlink(Color[] colors) {
+    return manager.setBlink(this, colors);
+  }
+
 }

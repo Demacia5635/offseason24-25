@@ -92,6 +92,44 @@ public class LedManager{
     .ignoringDisable(true);
   }
     
+  /**
+   * set a strip to blink in one color
+   * @param strip the wanted strip
+   * @param color the wanted color to blink
+   * @return command that blink the strip
+   */
+  public Command setBlink(LedStrip strip, Color color) {
+    return new RunCommand(()-> {
+      for(int i = strip.offset; i < strip.size + strip.offset; i++) {
+        this.ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0
+        ? color
+        : Color.kBlack;
+      }
+
+      update(strip.port);
+    }, strip)
+    .ignoringDisable(true);
+  }
+
+  /**
+   * set a strip to blink in certain colors
+   * @param strip the wanted strip
+   * @param colors the wanted colors (notice that the arr size needs to be the size of the strip)
+   * @return command that blink the strip
+   */
+  public Command setBlink(LedStrip strip, Color[] colors) {
+    return new RunCommand(()-> {
+      for(int i = strip.offset; i < colors.length + strip.offset; i++) {
+        this.ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0 
+        ? colors[i - strip.offset]
+        : Color.kBlack;
+      }
+
+      update(strip.port);
+    }, strip)
+    .ignoringDisable(true);
+  }
+  
   
   /**
    * updated the certain port of leds
