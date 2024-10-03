@@ -1,6 +1,7 @@
 package frc.robot.chassis;
 
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.utils.TalonConfig;
@@ -14,8 +15,8 @@ public final class ChassisConstants {
   public static final double DRIVE_ACCELERATION = 50;
   public static final double MAX_STEER_VELOCITY = 600;
   public static final double STEER_ACCELERATION = 6000;
-  public static final double MAX_STEER_ERROR = 1;
-  public static final double MAX_OMEGA_VELOCITY = Math.toRadians(720);
+  public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
+  public static final double MAX_OMEGA_VELOCITY = Math.toRadians(360);
 
   public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(4000);
 
@@ -32,8 +33,8 @@ public final class ChassisConstants {
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.01, 0, 0.000);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.000, 0.0, 0.0);//0.0008);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(13, 1.57, 0.22);//(0.003, 0.000, 0.000005);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(13, 1.57, 0.22);//(0.0025, 0.000004, 0.000022);
   /*TODO kill who forgot to finish the merge */
   // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
   // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
@@ -41,7 +42,7 @@ public final class ChassisConstants {
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
-  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.03, 0.002, 0.001); //0.0262, 0.0008, 0.0004);
+  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.2101048949, 2.454588675, 0.02710297214); //0.0262, 0.0008, 0.0004);
   public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.2742838015,1.51359078,  0.001411548535);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 

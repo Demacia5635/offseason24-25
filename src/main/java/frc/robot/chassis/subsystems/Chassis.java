@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,6 +57,7 @@ public class Chassis extends SubsystemBase {
     };    
     gyro = new Pigeon2(GYRO_ID);
     gyro.setYaw(0);
+    
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
     
     setBrake(true);
@@ -66,9 +68,9 @@ public class Chassis extends SubsystemBase {
 
     ShuffleboardTab ntTab = Shuffleboard.getTab("Chassis");
     ntTab.add("Chassis", this);
-    var setGyroEntry = ntTab.add("Set Gyro Angle", 0).getEntry();
-    ntTab.add("Change gyro angle ",
-       new InstantCommand( () -> setGyroAngle(setGyroEntry.getDouble(0)))
+    //var setGyroEntry = ntTab.add("Set Gyro Angle", 0).getEntry();
+    ntTab.add("Set gyro to 0 ",
+       new InstantCommand( () -> setGyroAngle(0))
        .ignoringDisable(true));
 
 
@@ -279,7 +281,7 @@ public class Chassis extends SubsystemBase {
    * Returns the angle of the gyro
    */
   public Rotation2d getRawAngle() {
-    return Rotation2d.fromDegrees(gyro.getAngle());
+    return Rotation2d.fromDegrees(-1*gyro.getAngle());
   }
   public Rotation2d getAngle() {
     return getPose().getRotation();

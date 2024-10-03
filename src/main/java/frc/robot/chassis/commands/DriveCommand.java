@@ -44,7 +44,7 @@ public class DriveCommand extends Command {
     
     double joyX = deadband(commandXboxController.getLeftY(), 0.1) * direction;
     double joyY = deadband(commandXboxController.getLeftX(), 0.1) * direction;
-    double rot = -(deadband(commandXboxController.getRightTriggerAxis(), 0.1)
+    double rot = (deadband(commandXboxController.getRightTriggerAxis(), 0.1)
         - deadband(commandXboxController.getLeftTriggerAxis(), 0.1));
 
     double velX = Math.pow(joyX, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyX);
@@ -57,11 +57,7 @@ public class DriveCommand extends Command {
       velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
-    
-    if(Utils.joystickOutOfDeadband(commandXboxController, true)) chassis.setVelocitiesRotateToAngle(
-      speeds, Utils.getStickVector(commandXboxController).getAngle());
-
-    else chassis.setVelocities(speeds);
+    chassis.setVelocities(speeds);
     }
   }
 

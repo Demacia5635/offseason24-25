@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -93,16 +94,18 @@ public class RobotContainer implements Sendable {
 
   private void configureBindings() {
   
-    commandController.b().onTrue(new RunCommand(()->chassis.setGyroAngle(0)));
+    //commandController.b().onTrue(new RunCommand(()->chassis.setGyroAngle(0)));
   
 }
 
    
   public Command getAutonomousCommand() {
-    //return new RunCommand(() -> chassis.setModuleSteerVelocity(num, 2), chassis);
+    //return new RunCommand(() -> chassis.setModuleSteerVelocity(num, 0), chassis);
     //return new RunCommand(()->chassis.setModulesSteerPower(num));
-    //return new RunCommand(()->chassis.setModulesSteerPosition(Rotation2d.fromDegrees(num), 2), chassis);
-    return new RunCommand(()->chassis.setModulesSteerVoltage(num, 2), chassis);
+    //return new RunCommand(()->chassis.setModulesSteerPosition(Rotation2d.fromDegrees(num), 0), chassis);
+    return new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, 1)), chassis)
+    .withTimeout(2).andThen(new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, -1))));
+    //return new RunCommand(()->chassis.setModulesSteerVoltage(num, 0), chassis);
     //return new RunCommand(()->chassis.setModulesSteerPower(num, 2), chassis);
 
     // return new RunCommand(() -> {

@@ -11,6 +11,7 @@ import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
+import static frc.robot.chassis.ChassisConstants.MAX_STEER_ERROR;
 import static frc.robot.chassis.ChassisConstants.SICLE_CAUNT;
 import static frc.robot.chassis.ChassisConstants.WHEEL_DIAMETER;
 
@@ -121,7 +122,7 @@ public class SwerveModule extends SubsystemBase {
    * set position to drive to in rotations in radians
    */
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle);
+        steerMotor.setMotorPosition(angle, MAX_STEER_ERROR);
     }
 
     /**

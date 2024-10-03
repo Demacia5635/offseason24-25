@@ -167,24 +167,30 @@ public class TalonMotor extends TalonFX {
   /**
    * set position to drive to in rotations
    */
-  public void setMotorPosition(Rotation2d position, double feedForward) {
-    Rotation2d wantedPosition = getCurrentPosition().minus(position);
-    setControl(motionMagicVoltage.withPosition((Math.abs(wantedPosition.getDegrees())<=1)?0: wantedPosition.getRotations()));
+  public void setMotorPosition(Rotation2d position, Rotation2d maxEror) {
+    // Rotation2d diffAngle = Rotation2d.fromRotations(MathUtil.inputModulus(getCurrentPosition().getRotations(), -0.5, 0.5)).plus(position);
+    // Rotation2d wantedPosition = getCurrentPosition().plus(diffAngle);
+    double currentPositionRounded = Math.round(getCurrentPosition().getRotations());
+    double wantedPosition = currentPositionRounded + position.getRotations();
+    // setControl(motionMagicVoltage.withPosition(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxEror.getRotations()
+    // ? getCurrentPosition().getRotations() 
+    // : wantedPosition).withSlot(0));
+    setControl(motionMagicVoltage.withPosition(position.getRotations()).withSlot(0));
     positionEntry.log(position.getRotations());
+
+    // Rotation2d wantedPosition = Rotation2d.fromRotations(MathUtil.inputModulus(getCurrentPosition().minus(position).getRotations(),-0.5,0.5));
+    // wantedPosition = getCurrentPosition().plus(wantedPosition);
+    // setControl(motionMagicVoltage.withPosition((Math.abs(wantedPosition.getDegrees())<=1)?0: wantedPosition.getRotations()));
+    // positionEntry.log(position.getRotations());
   }
-  /**
-   * set position to drive to in rotations
-   */
-  public void setMotorPosition(Rotation2d position) {
-    setMotorPosition(position, 0);
-  }
+
 
 
   /**
    * get position in rotations
    */
   public Rotation2d getCurrentPosition() {
-    return Rotation2d.fromRotations(MathUtil.inputModulus(getPosition().getValueAsDouble(),-0.5,0.5));
+    return Rotation2d.fromRotations(getPosition().getValueAsDouble());
   }
 
 
