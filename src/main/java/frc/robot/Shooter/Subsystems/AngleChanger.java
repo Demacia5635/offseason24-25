@@ -10,6 +10,7 @@ import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_CONFIGS;
 import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_VAR;
 import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
 import frc.robot.Shooter.ShooterConstants.STATE;
+import frc.robot.Shooter.utils.ShooterUtils;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -30,6 +31,7 @@ public class AngleChanger extends SubsystemBase {
   private VelocityVoltage velocityVoltage;
   private MotionMagicVoltage motionMagicVoltage;
   public STATE angleState;
+  public double angle;
 
 
   /** Creates a new AngleChanging. */
@@ -37,7 +39,7 @@ public class AngleChanger extends SubsystemBase {
 
     angleChangingMotor = new TalonFX(MOTOR_IDS.ANGLE_CHANGING_ID, MOTOR_IDS.CANBUS);
     config = new TalonFXConfiguration();
-    angleState = angleState.IDLE;
+    angleState = STATE.SPEAKER;
 
     config.Slot0.kP = ANGLE_CHANGING_CONFIGS.KP;
     config.Slot0.kI = ANGLE_CHANGING_CONFIGS.KI;
@@ -57,7 +59,7 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_Acceleration;
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_JERK;
 
-    config.Feedback.SensorToMechanismRatio = OOM_METER_PER_SPIN;
+    config.Feedback.SensorToMechanismRatio = OOM_MILLIMETER_PER_SPIN;
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     angleChangingMotor.getConfigurator().apply(config);
@@ -70,8 +72,10 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.setControl(m_request.withOutput(power));
   }
 
-  public void MotionMagic(double position){
-    angleChangingMotor.setControl(motionMagicVoltage.withPosition(position));
+  public void goToAngle(double wantedAngle){
+    double distance = ShooterUtils.angleToDistance(wantedAngle);
+    angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
+    angle = wantedAngle;
   }
 
   public void angleChangingPID(double vel){
@@ -82,17 +86,12 @@ public class AngleChanger extends SubsystemBase {
     return angleChangingMotor.getVelocity().getValue();
   }
 
-  public void goToAngle(double angle){
-    angleChangingMotor.setPosition(2*A*Math.cos(angle)*OOM_METER_PER_SPIN*ANGLE_CHANGING_GEAR_RATIO);
+  public void setAngle(double angle){
+    this.angle = angle;
   }
 
-  public double getC(){
-    return angleChangingMotor.getPosition().getValue()/ANGLE_CHANGING_GEAR_RATIO*OOM_SPIN_PER_METER + C_AT_TOP;
-  }
-
-  public double getShooterAngle(){
-    double Basis = getC();
-    return Math.acos(-(A*A-B*B-Math.pow(Basis, 2))/(2*B*Basis));
+  public double getAngle(){
+    return angle;
   }
 
   /**
@@ -106,8 +105,8 @@ public class AngleChanger extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("ShooterAngle", getShooterAngle());
-    SmartDashboard.putNumber("ShooterAngle", getShooterAngle());
+    SmartDashboard.putNumber("ShooterAngle", getAngle());
+    SmartDashboard.putNumber("angleMotorVel", getAngleMotorVel());
   }
 
 }

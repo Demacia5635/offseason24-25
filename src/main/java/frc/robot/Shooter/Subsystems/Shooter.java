@@ -31,7 +31,7 @@ public class Shooter extends SubsystemBase {
   
   /** Creates a new Shooter. */
   public Shooter() {
-    shooterState = STATE.IDLE;
+    shooterState = STATE.SPEAKER;
 
     motorFeeding = new TalonSRX(MOTOR_IDS.MOTOR_FEEDING_ID);
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
@@ -80,10 +80,8 @@ public class Shooter extends SubsystemBase {
     motorDown.setControl(velocityVoltage.withVelocity(downVel));
   }
 
-  public void setShooterState(STATE state){
-    shooterState = state;
-  }
 
+  
   @Override
   public void periodic() {
     SmartDashboard.putNumber("upMotorVel", getUpMotorVel());

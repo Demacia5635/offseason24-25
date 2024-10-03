@@ -12,14 +12,12 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
-import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
 import frc.robot.Shooter.utils.LookUpTable;
 
 public class Shoot extends Command {
   
   private Shooter shooter;
-  private AngleChanger angleChanger;
 
   private double upMotorVelocity;
   private double downMotorVelocity;
@@ -36,7 +34,6 @@ public class Shoot extends Command {
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {
     lookupTable = new LookUpTable(testingData);
-    this.angleChanger = new AngleChanger();
     this.shooter = shooter;
     SmartDashboard.putData(this);
     addRequirements(shooter);
@@ -114,7 +111,7 @@ public class Shoot extends Command {
 
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    isReady = Math.abs(GoToAngle.angle - angleChanger.getShooterAngle()) <= ANGLE_ZONE
+    isReady = GoToAngle.isAngleReady
         && Math.abs(upMotorVelocity - shooter.getUpMotorVel()) <= UP_MOTOR_VEL_ZONE
         && Math.abs(downMotorVelocity - shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE
         && (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING)
@@ -124,7 +121,10 @@ public class Shoot extends Command {
       shooter.setFeedingPower(FEEDING_MOTOR_POWER);
       isReady = false;
       isShooterReady = false;
-
+      long time = System.currentTimeMillis();
+      if (System.currentTimeMillis() - time >= MIL_SEC_TO_SHOOT){
+        isfinished = true;
+      }
     }
   }
 

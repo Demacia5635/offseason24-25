@@ -51,14 +51,14 @@ public class ShooterConstants {
     public static final double BASE_ANGLE = -1;
   }
 
-  public static final double RADIOS = 0.035;
+  public static final double RADIOS_AS_MILLIMETER = 0.035;
 
   /*the gear ratio is 1 in motor up and motordown */
-  public static final double SPIN_PER_METER = (RADIOS*2)*Math.PI;
-  public static final double METER_PER_SPIN = 1/SPIN_PER_METER;
+  public static final double MILLIMETER_PER_SPIN = (RADIOS_AS_MILLIMETER*2)*Math.PI;
+  public static final double SPIN_PER_MILLIMETER = 1/MILLIMETER_PER_SPIN;
   public static final double ANGLE_CHANGING_GEAR_RATIO = 0;
-  public static final double OOM_SPIN_PER_METER = 0;
-  public static final double OOM_METER_PER_SPIN = 1 / OOM_SPIN_PER_METER;
+  public static final double OOM_SPIN_PER_MILLIMETER = 0;
+  public static final double OOM_MILLIMETER_PER_SPIN = 1 / OOM_SPIN_PER_MILLIMETER;
 
   public static final double FEEDING_MOTOR_POWER = 0;
   public static final double CALIBRITION_ANGLE_CHAGING_VELOCITY = 0;
@@ -78,12 +78,14 @@ public class ShooterConstants {
   public static final double MOT_IN_METER = 0;
   public static final double A = 0;
   public static final double B = 0;
-  public static final double C_AT_TOP = 0;
+  public static final double C = 0;
   public static final double FreqHz = 200;
 
   public static final double ANGLE_ZONE = 0;
   public static final double UP_MOTOR_VEL_ZONE = 0;
   public static final double DOWN_MOTOR_VEL_ZONE = -0;
+
+  public static final double MIL_SEC_TO_SHOOT = 0;
 
   public static final double WING_DISTANCE = 0;
 

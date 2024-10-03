@@ -87,19 +87,23 @@ public class RobotContainer {
 
     controller.y().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.TESTING;
+        shooter.shooterState = STATE.TESTING;
     }, shooter));
 
     controller.rightTrigger().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.STAGE;
-    }, shooter));
+        angleChanging.angleState = STATE.STAGE;
+    }, shooter, angleChanging));
 
     controller.leftTrigger().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.WING;
-    }, shooter));
+        angleChanging.angleState = STATE.WING;
+    }, shooter, angleChanging));
 
     controller.back().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.IDLE;
-    }, shooter));
+        angleChanging.angleState = STATE.IDLE;
+    }, shooter, angleChanging));
   }
 
   /**

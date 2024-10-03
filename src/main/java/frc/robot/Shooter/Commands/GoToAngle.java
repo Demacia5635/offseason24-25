@@ -6,7 +6,7 @@ package frc.robot.Shooter.Commands;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
@@ -18,33 +18,35 @@ public class GoToAngle extends Command {
   /** Creates a new setShooting. */
   private LookUpTable lookupTable;
   private double[][] testingData;
-  private AngleChanger angleChanging;
-  public static double angle;
+  private AngleChanger angleChanger;
+  public double wantedAngle;
   private double testingAngle; 
   private double distance;
   public STATE state;
+  public static boolean isAngleReady;
 
   
 
-  public GoToAngle(AngleChanger angleChanging) {
+  public GoToAngle(AngleChanger angleChanger) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.angleChanging = angleChanging;
+    this.angleChanger = angleChanger;
     lookupTable = new LookUpTable(testingData);
     SmartDashboard.putData(this);
-    addRequirements(angleChanging);
+    addRequirements(angleChanger);
+    isAngleReady = Math.abs(wantedAngle - angleChanger.getAngle()) <= ANGLE_ZONE;
   }
 
   @Override
   public void initSendable(SendableBuilder builder){
-      builder.addDoubleProperty("Angle", this::getAngle, this::setAngle);
+      builder.addDoubleProperty("Angle", this::getWantedAngle, this::setWantedAngle);
       
   }
 
-  public double getAngle(){
+  public double getWantedAngle(){
       return this.testingAngle;
   }
   
-  public void setAngle(double testingAngle){
+  public void setWantedAngle(double testingAngle){
       this.testingAngle = testingAngle;
   }
 
@@ -65,32 +67,32 @@ public class GoToAngle extends Command {
   public void execute() {
     switch(state){
       case AMP:
-          angle = AMP_ANGLE;
+          wantedAngle = AMP_ANGLE;
           break;
       
       case STAGE:
-          angle = STAGE_ANGLE;
+          wantedAngle = STAGE_ANGLE;
   
           break;
 
       case WING:
-          angle = WING_ANGLE;
+          wantedAngle = WING_ANGLE;
           break;
 
       case SPEAKER:
            distance = -1;
            double[] speakerLookUpTableData = lookupTable.get(distance);
-           angle = speakerLookUpTableData[0];
+           wantedAngle = speakerLookUpTableData[0];
           break;
 
      case DELIVERY:
-          distance = -1;
+           distance = -1;
            double[] deliveryLookUpTableData = lookupTable.get(distance);
-           angle = deliveryLookUpTableData[0];
+           wantedAngle = deliveryLookUpTableData[0];
           break;
 
       case TESTING:
-          angle = testingAngle;
+          wantedAngle = testingAngle;
           break;
 
       case IDLE:
@@ -98,9 +100,7 @@ public class GoToAngle extends Command {
     }
     if (distance > WING_DISTANCE)
       state = STATE.DELIVERY;
-    else
-      state = STATE.SPEAKER;
-    angleChanging.MotionMagic(angle);
+    angleChanger.goToAngle(wantedAngle);
 
 
   }
@@ -108,7 +108,7 @@ public class GoToAngle extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    angleChanging.MotionMagic(DEFULT_ANGLE);
+    angleChanger.goToAngle(DEFULT_ANGLE);
   }
 
   // Returns true when the command should end.
