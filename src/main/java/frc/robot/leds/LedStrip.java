@@ -1,0 +1,65 @@
+package frc.robot.leds;
+
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+/**Strip of led */
+public class LedStrip extends SubsystemBase{
+  
+  /**the port of the strip */
+  public int port;
+
+  /**the size of the strip */
+  public int size;
+
+  /**the offset the strip have on the port */
+  public int offset;
+  
+  /**the manager of the leds */
+  public LedManager manager;
+
+  /**
+   * creates a new strip
+   * @param name the name of the strip (for network table)
+   * @param port the port of the strip
+   * @param size the size of the strip
+   * @param ledManager the led manager 
+   * @param offset the offset of the strip in the port
+   */
+  public LedStrip(String name, int port, int size, LedManager ledManager, int offset) {
+    /*initialize pera */
+    this.port = port;
+    this.size = size;
+    this.offset = offset;
+    this.manager = ledManager;
+    
+    /*puts on the network table all the colors */
+    setName(name);
+    SmartDashboard.putData(name, this);
+  }
+
+  /**
+   * creates a new strip
+   * @param name the name of the strip (for network table)
+   * @param port the port of the strip
+   * @param size the size of the strip
+   * @param ledManager the led manager 
+   */
+  public LedStrip(String name, int port, int size, LedManager ledManager) {
+    /*set offset to 0 */
+    this.offset = 0;
+
+    /*initialize pera */
+    this.port = port;
+    this.size = size;
+    this.manager = ledManager;
+    
+    /*puts on the network table all the colors */
+    setName(name);
+    SmartDashboard.putData(name, this);
+  }
+
+}
