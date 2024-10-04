@@ -1,5 +1,7 @@
 package frc.robot.chassis.utils;
 
+import static frc.robot.chassis.ChassisConstants.CYCLE_DT;
+
 import org.opencv.core.Scalar;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,8 +27,8 @@ import frc.robot.Constants;
 public class SwerveKinematics extends SwerveDriveKinematics {
 
     public SwerveModuleState[] states;
-    private final double MIN_ANGLE_DIFF = 5 * 0.02;
-    private final double MAX_ANGLE_DIFF = 40;
+    private final double MIN_ANGLE_DIFF = 5 * CYCLE_DT;
+    private final double MAX_ANGLE_DIFF = 40 * CYCLE_DT;
 
 
     Translation2d[] moduleTranslationsMeters;
@@ -51,7 +53,13 @@ public class SwerveKinematics extends SwerveDriveKinematics {
     public SwerveModuleState calcStateLine(Pose2d estimatedPose, Pose2d curPose, ChassisSpeeds speeds){
         System.out.println("LINE");
         double distance = estimatedPose.minus(curPose).getTranslation().getNorm();
-        return SwerveModuleState.optimize(new SwerveModuleState(distance / 0.02, new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getAngle()), curPose.getRotation());
+        // TODO check if speed is more then the max 
+        return SwerveModuleState.optimize(
+            new SwerveModuleState(
+                distance / CYCLE_DT,
+                new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getAngle()),
+                 curPose.getRotation()
+                );
     }
 
     
@@ -91,11 +99,20 @@ public class SwerveKinematics extends SwerveDriveKinematics {
 
             Rotation2d alpha = moduleLocationDifference.getAngle()
                     .minus(prevStates[i].angle.plus(curPose.getRotation())); 
+
             
-            
-            newModuleStates[i] = Math.abs(alpha.getDegrees()) >= MIN_ANGLE_DIFF
-            ? calcStateCurve(alpha, estimatedPose, prevStates[i], curPose, moduleLocationDifference) 
-            : calcStateLine(estimatedPose, curPose, speeds);
+
+            if(Math.abs(speeds.vxMetersPerSecond) <= 0.1
+                && Math.abs(speeds.vyMetersPerSecond) <= 0.1 
+                && Math.abs(speeds.omegaRadiansPerSecond) <= 0.1) {
+                    newModuleStates[i] = new SwerveModuleState(0, prevStates[i].angle);
+            }
+            else{
+                newModuleStates[i] = Math.abs(alpha.getDegrees()) >= MIN_ANGLE_DIFF
+                ? calcStateCurve(alpha, estimatedPose, prevStates[i], curPose, moduleLocationDifference) 
+                : calcStateLine(estimatedPose, curPose, speeds);
+            }
+            System.out.println("MODULE STATE " + i + ": " + newModuleStates[i]);
         }
         return newModuleStates;
     }
