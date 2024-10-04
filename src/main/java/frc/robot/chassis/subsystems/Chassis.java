@@ -36,6 +36,7 @@ import static frc.robot.chassis.ChassisConstants.KINEMATICS;
 import static frc.robot.chassis.ChassisConstants.KINEMATICS_DEMACIA;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 
+import frc.robot.chassis.utils.KinematicsFix;
 import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.LogManager;
 
@@ -246,11 +247,15 @@ public class Chassis extends SubsystemBase {
     setModuleStates(states);
   }*/
 
-
+  Rotation2d lastAngle = new Rotation2d();
   public void setVelocities(ChassisSpeeds speeds){
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relativeSpeeds, getPose(), getModuleStates());
+    ChassisSpeeds newSpeeds = KinematicsFix.fixChassisSpeeds(relativeSpeeds);
+    
+    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(newSpeeds);
     setModuleStates(states);
+    
+    
   }
 
   public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
