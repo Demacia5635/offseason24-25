@@ -2,8 +2,6 @@ package frc.robot.Shooter.utils;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-
 /**
  * ShooterUtils
  */
