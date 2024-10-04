@@ -14,7 +14,9 @@ public class ShooterConstants {
     public static final int MOTOR_FEEDING_ID = 4;
     public static final int ANGLE_CHANGING_ID = 5;
 
-    public static final String CANBUS = "RIO";
+    public static final int LIMIT_SWITCH_ID = 0;
+
+    public static final String CANBUS = "CANBUS";
   }
 
 

@@ -5,6 +5,7 @@
 package frc.robot.Shooter.Subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +21,6 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
@@ -34,6 +34,8 @@ public class AngleChanger extends SubsystemBase {
   private MotionMagicVoltage motionMagicVoltage;
   public STATE angleState;
   public double angle;
+
+  public DigitalInput limitSwitch;
 
 
   /** Creates a new AngleChanging. */
@@ -54,8 +56,8 @@ public class AngleChanger extends SubsystemBase {
     velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(FreqHz);
     motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(FreqHz); 
 
-    config.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
-    config.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = -1; /*TODO change to real angle */
+    // config.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
+    // config.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = -1; /*TODO change to real angle */
 
     config.MotionMagic.MotionMagicCruiseVelocity = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_VELOCITY;
     config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_Acceleration;
@@ -68,6 +70,8 @@ public class AngleChanger extends SubsystemBase {
     /*TODO add brake invert  */
 
     SmartDashboard.putData(this);
+    
+    limitSwitch = new DigitalInput(MOTOR_IDS.LIMIT_SWITCH_ID);
   }
    
 
@@ -104,15 +108,17 @@ public class AngleChanger extends SubsystemBase {
 
   /**
    * 
-   * @return returns if reverse hard limit is closed
-   * 
-    */
+   * @return if the limit switch is closed
+   */
+  // * @return returns if reverse hard limit is closed
   public boolean isMaxAngle(){
-    return angleChangingMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
+    return !limitSwitch.get();
+    // return angleChangingMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
   }
 
   @Override
   public void periodic() {
+    if (isMaxAngle()) setBaseAngle();
   }
 
   @Override
