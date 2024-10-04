@@ -59,6 +59,12 @@ public class RobotContainer implements Sendable {
     configureBindings();
   }
 
+  public void resetWheels(){
+    chassis.setModulesAngleFromSB(0);
+
+    System.out.println("******************************************");
+   chassis.printModuleStates();
+  }
 
   public void createCommands() {
     SmartDashboard.putNumber("VEL CALIBRATE", 0);
@@ -88,7 +94,7 @@ public class RobotContainer implements Sendable {
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.addBooleanProperty("is Red",this::isRed, this::isRed);
-    builder.addDoubleProperty("num",this::get, this:: set);
+    builder.addDoubleProperty("num",this::get, this::set);
   }
 
 
@@ -100,7 +106,7 @@ public class RobotContainer implements Sendable {
 
    
   public Command getAutonomousCommand() {
-    //return new RunCommand(()-> chassis.setModulesPower(0.1), chassis);
-    return new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(num, 0, 0)),chassis);
+
+    return new RunCommand(() -> chassis.setModulesAngleFromSB(num), chassis);
   }
 }
