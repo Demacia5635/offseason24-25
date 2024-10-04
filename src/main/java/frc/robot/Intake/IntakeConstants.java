@@ -7,39 +7,39 @@ package frc.robot.Intake;
 import java.util.Collections;
 import java.util.HashMap;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
+import frc.robot.Intake.Subsystem.Intake;
+
 /** Add your docs here. */
 public class IntakeConstants {
-public static final int INTAKE_MOTOR_DOWN_ID = -1;
-public static final int INTAKE_MOTOR_UP_ID = -1;
+  public static final int INTAKE_MOTOR_DOWN_ID = -1;
+  public static final int INTAKE_MOTOR_UP_ID = -1;
   public static final String CANBUS = "canivore";
   public static final double NOTE_VOLTEGE = 4.0;
-  public static final double POWER =1;
   public static final double NOTE_CURRENT = 0.0;
+  public static final Boolean IS_BRAKE_MOTORS = true;
+  public static final Boolean IS_IVERTED_MOTOR_MOVE = true;
+  public static final Boolean IS_IVERTED_MOTOR_PICKUP = true;
+  public static final Boolean IS_TESTING = true;
   public enum NotePosition{
-    NO_NOTE,
-    FIRST_TOUCH,
-    IR_SENSOR,
-    SECOND_TOUCH,
-    FULLY_IN
-  }
+    NO_NOTE(1),
+    FIRST_TOUCH(0.6),
+    IR_SENSOR(0.3),
+    SECOND_TOUCH(0.25),
+    FULLY_IN(0.0),
 
-//   public static HashMap<NotePosition, Double> NotePositionToVoltage;
-//    static {
-//     //NPTV is NotePositionToVoltage
-//       HashMap<NotePosition, Double> NPTV = new HashMap<>();
-//       NPTV.put(NotePosition.NO_NOTE, 5.0);
-//       NPTV.put(NotePosition.FIRST_TOUCH, 4.0);
-//       NPTV.put(NotePosition.IR_SENSOR, 4.0);
-//       NPTV.put(NotePosition.SECOND_TOUCH, 4.0);
-//       NPTV.put(NotePosition.FULLY_IN, 0.0);
-//       NotePositionToVoltage = (HashMap<NotePosition, Double>) NPTV.clone();
-//   }
-// }
-public static final HashMap<NotePosition, Double> NotePositionToVoltage = new HashMap<>() {{
-    put(NotePosition.NO_NOTE, 5.0);
-    put(NotePosition.FIRST_TOUCH, 4.0);
-    put(NotePosition.IR_SENSOR, 4.0);
-    put(NotePosition.SECOND_TOUCH, 4.0);
-    put(NotePosition.FULLY_IN, 0.0);
-}};
+    TEST_NO_NOTE(Intake.testNoNote),
+    TEST_FIRST_TOUCH(Intake.testFirstTouch),
+    TEST_SECOND_TOUCH(Intake.testSecondTouch),
+    TEST_IR_SENSOR(Intake.testIrSensor);
+
+    public double power;
+    /**
+     * constractor for en
+     * @param power
+     */
+    NotePosition(double power) {
+      this.power = power;
+    }
+  }
 }

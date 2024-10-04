@@ -1,4 +1,5 @@
 package frc.robot.Intake.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Intake.IntakeConstants;
@@ -6,44 +7,60 @@ import frc.robot.Intake.IntakeConstants.NotePosition;
 import frc.robot.Intake.Subsystem.Intake;
 
 import static frc.robot.Intake.IntakeConstants.*;
-public class IntakeCommand extends CommandBase {
+public class IntakeCommand extends Command {
 
   private Intake intake;
-  NotePosition currentPosition;
 
   public IntakeCommand(Intake intake) {
-    this.currentPosition = NotePosition.NO_NOTE;// i know you dont have to put "this" but it helps me 
+    
+
     this.intake = intake;
+    
+    Intake.currentPosition = 
+    !IS_TESTING 
+      ? NotePosition.NO_NOTE
+      : NotePosition.TEST_NO_NOTE;
+
     addRequirements(intake);
+
   }
 
-  @Override
-  public void initialize() {
-  }
+
 
   @Override
   public void execute() {
-    if(intake.isAmperHighMotorDown()){
-      currentPosition = NotePosition.FIRST_TOUCH;
-    }
-    else if(intake.isNote()){
-      currentPosition = NotePosition.IR_SENSOR;
-    }
-    else if(intake.isAmperHighMotorUp()){
-      currentPosition = NotePosition.SECOND_TOUCH; 
+
+    if(!Intake.isNoteInIntake){
+      intake.setPowerToMotors(Intake.currentPosition.power);//gose to constractor of enum and gives back the power
+      
+      if(!IS_TESTING){
+
+        if(intake.AmperHighMotorPickUp()){
+          Intake.currentPosition = NotePosition.FIRST_TOUCH;
+        }
+
+      }
+
+      else{   
+
+        if(intake.AmperHighMotorMove()){
+          Intake.currentPosition = NotePosition.TEST_FIRST_TOUCH;
+        }
+
+      }
 
     }
-    // else if(!(currentPosition.equals(currentPosition.NO_NOTE))){
-    // }
 
-    intake.setPower(NotePositionToVoltage.get(currentPosition));
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Intake.isNoteInIntake = true;
+    intake.setPowerToMotors(0);
+  }
 
   @Override
   public boolean isFinished() {
-    return intake.isAmperHighMotorUp();
+    return intake.AmperHighMotorMove() || Intake.isNoteInIntake || intake.isNote();
   }
 }
