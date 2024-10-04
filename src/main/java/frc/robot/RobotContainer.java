@@ -62,10 +62,7 @@ public class RobotContainer implements Sendable {
   public void resetWheels(){
     chassis.setModulesAngleFromSB(0);
 
-    System.out.println("******************************************");
-   chassis.printModuleStates();
   }
-
   public void createCommands() {
     SmartDashboard.putNumber("VEL CALIBRATE", 0);
 
