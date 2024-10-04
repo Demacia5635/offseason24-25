@@ -47,22 +47,18 @@ public class Shooter extends SubsystemBase {
     velocityVoltage = new VelocityVoltage(0).withSlot(0);
     config = new TalonFXConfiguration();
 
-    config.MotorOutput.Inverted = IS_UP_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
-    motorDown.getConfigurator().apply(config);
-    config.MotorOutput.Inverted = IS_DOWN_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
-    motorUp.getConfigurator().apply(config);
-
+    
     config.Slot0.kP = SHOOTER_VAR.KP;
     config.Slot0.kI = SHOOTER_VAR.KI;
     config.Slot0.kD = SHOOTER_VAR.KD;
     config.Slot0.kS = SHOOTER_VAR.KS;
     config.Slot0.kV = SHOOTER_VAR.KV;
-
     
-
-    motorUp.getConfigurator().apply(config);
+    config.MotorOutput.Inverted = IS_UP_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
     motorDown.getConfigurator().apply(config);
-
+    config.MotorOutput.Inverted = IS_DOWN_MOTOR_INVERT? InvertedValue.Clockwise_Positive: InvertedValue.CounterClockwise_Positive;
+    motorUp.getConfigurator().apply(config);
+    
     motorFeeding.configFactoryDefault();
     motorFeeding.setInverted(IS_FEEDING_MOTOR_INVERT);
     motorFeeding.setNeutralMode(NeutralMode.Brake);
