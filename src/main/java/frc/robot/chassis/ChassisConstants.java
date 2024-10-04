@@ -15,7 +15,7 @@ public final class ChassisConstants {
   public static final double DRIVE_ACCELERATION = 50;
   public static final double MAX_STEER_VELOCITY = 600;
   public static final double STEER_ACCELERATION = 6000;
-  public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
+  public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1.5);
   public static final double MAX_OMEGA_VELOCITY = Math.toRadians(360);
 
   public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(4000);
@@ -33,8 +33,8 @@ public final class ChassisConstants {
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(13, 1.57, 0.22);//(0.003, 0.000, 0.000005);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(13, 1.57, 0.22);//(0.0025, 0.000004, 0.000022);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(3, /*1.57*/ 1.22, 2.2);//(0.003, 0.000, 0.000005);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(3, /*1.57*/ 1.22 , 2.2);//(0.0025, 0.000004, 0.000022);
   /*TODO kill who forgot to finish the merge */
   // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
   // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
