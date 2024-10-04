@@ -122,7 +122,7 @@ public class SwerveModule extends SubsystemBase {
    * set position to drive to in rotations in radians
    */
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle, MAX_STEER_ERROR);
+        steerMotor.setMotorPositionOptimized(angle, MAX_STEER_ERROR);
     }
 
     /**
