@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.vision.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utils.ImageProsesing.CalcExpPose;
-import frc.robot.utils.ImageProsesing.NotePoseCalc;
-import frc.robot.utils.ImageProsesing.TagPoseCalc;
+import frc.robot.vision.utils.CalcExpPose;
+import frc.robot.vision.utils.NotePoseCalc;
+import frc.robot.vision.utils.TagPoseCalc;
 
 public class imageProsesingEgsample extends SubsystemBase {
   // NetworkTable for Limelight communication

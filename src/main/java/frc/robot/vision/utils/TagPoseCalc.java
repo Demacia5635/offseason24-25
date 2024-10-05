@@ -1,4 +1,4 @@
-package frc.robot.utils.ImageProsesing;
+package frc.robot.vision.utils;
 
 import java.sql.RowId;
 
@@ -65,7 +65,6 @@ public class TagPoseCalc {
         
     }
 
-    // Calculate vector Camera to tag
     public Translation2d getTagToRobot() {
 
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), 

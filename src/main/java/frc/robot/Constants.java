@@ -135,6 +135,8 @@ public class Constants {
     public static final double TagLimelightXOfset = -0.352;
     public static final double TagLimelightYOfset = -0.035;
 
+    public static final String TagTable = "limelight-tag";
+
     // APRIL TAG NO CODE ROBOT
     // public static final double TagLimelightHight = 0.313;
     // public static final double TagLimelightAngle = 36.28832;
