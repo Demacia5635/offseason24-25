@@ -8,25 +8,37 @@ import static frc.robot.Shooter.ShooterConstants.*;
 
 import frc.robot.RobotContainer;
 import frc.robot.Shooter.ShooterConstants.STATE;
+import frc.robot.Shooter.ShooterConstants.ZONES;
+import frc.robot.Shooter.Commands.GoToAngle;
 
 /** Add your docs here. */
 public class Ready {
     public static boolean isAngleReady(double wantedAngle){
-        return Math.abs(wantedAngle - RobotContainer.angleChanging.getAngle()) <= ANGLE_ZONE;
+        return Math.abs(wantedAngle - RobotContainer.angleChanging.getAngle()) <= ZONES.ANGLE_ZONE;
     }
     public static boolean isUpMotorReady(double wantedUpMotorVel){
-        return Math.abs(wantedUpMotorVel - RobotContainer.shooter.getUpMotorVel()) <= UP_MOTOR_VEL_ZONE;
+        return Math.abs(wantedUpMotorVel - RobotContainer.shooter.getUpMotorVel()) <= ZONES.UP_MOTOR_VEL_ZONE;
     }
     public static boolean isDownMotorReady(double wantedDownMotorVel){
-        return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= DOWN_MOTOR_VEL_ZONE;
+        return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= ZONES.DOWN_MOTOR_VEL_ZONE;
     }
     public static boolean isGoodState(STATE state){
-        return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.WING);
+        return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.SUBWOFFER);
     }
     public static boolean isSeeAprilTag(){
         return true;
     }
     public static boolean isNearAmp(){
         return true;
+    }
+    public static boolean isReady(double upMotorVel, double downMotorVel, STATE state){
+        return GoToAngle.isAngleReady
+          && isUpMotorReady(upMotorVel)
+          && isUpMotorReady(downMotorVel)
+          && isGoodState(state)
+          && ((state == STATE.AMP && isNearAmp()) 
+            || state != STATE.AMP)
+          && (((state == STATE.SPEAKER) && isSeeAprilTag()) 
+            || state != STATE.SPEAKER);
     }
 }

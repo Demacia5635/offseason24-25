@@ -96,8 +96,8 @@ public class RobotContainer {
     }, shooter, angleChanging));
 
     controller.leftTrigger().onTrue(new InstantCommand(() -> {
-        shooter.shooterState = STATE.WING;
-        angleChanging.angleState = STATE.WING;
+        shooter.shooterState = STATE.SUBWOFFER;
+        angleChanging.angleState = STATE.SUBWOFFER;
     }, shooter, angleChanging));
 
     controller.back().onTrue(new InstantCommand(() -> {

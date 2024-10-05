@@ -6,6 +6,7 @@ package frc.robot.Shooter.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.Subsystems.AngleChanger;
+
 import static frc.robot.Shooter.ShooterConstants.*;
 
 public class Calibration extends Command {
@@ -21,18 +22,18 @@ public class Calibration extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angleChanger.angleChangingPID(UP_SPEED_CALIBRATION);
+    angleChanger.angleChangingPID(ANGLE_CHANGING_CALIBRATION.UP_SPEED_CALIBRATION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(angleChanger.isMaxAngle()){
-      angleChanger.angleChangingPID(-DOWN_SPEED_CALIBRATION);
+      angleChanger.angleChangingPID(-ANGLE_CHANGING_CALIBRATION.DOWN_SPEED_CALIBRATION);
       finishedState = 1;
     }
     if(!angleChanger.isMaxAngle() && finishedState == 1){
-      angleChanger.setAngle(TOP_ANGLE);
+      angleChanger.setAngle(ANGLE_CHANGING_VAR.TOP_ANGLE);
       finishedState = 2;
     }
   }

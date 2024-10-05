@@ -14,11 +14,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
-import frc.robot.Shooter.ShooterConstants.SHOOTER_VAR;
-import frc.robot.Shooter.ShooterConstants.STATE;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
@@ -27,6 +26,8 @@ public class Shooter extends SubsystemBase {
   private TalonFX motorUp;
   private TalonFX motorDown;
   private TalonSRX motorFeeding;
+  /**remove when mergin to master */
+  public static boolean tempIRSensor = false;
 
   private TalonFXConfiguration configShooting;
   private TalonFXConfiguration configUp;
@@ -44,32 +45,34 @@ public class Shooter extends SubsystemBase {
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
     motorUp = new TalonFX(MOTOR_IDS.MOTOR_UP_ID, MOTOR_IDS.CANBUS);
 
-    m_request = new DutyCycleOut(0.0);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0);
+    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FreqHz);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FreqHz);
     configShooting = new TalonFXConfiguration();
     
-    configShooting.Slot0.kP = SHOOTER_VAR.KP;
-    configShooting.Slot0.kI = SHOOTER_VAR.KI;
-    configShooting.Slot0.kD = SHOOTER_VAR.KD;
-    configShooting.Slot0.kS = SHOOTER_VAR.KS;
-    configShooting.Slot0.kV = SHOOTER_VAR.KV;
+    configShooting.Slot0.kP = SHOOTER_PID_FF.KP;
+    configShooting.Slot0.kI = SHOOTER_PID_FF.KI;
+    configShooting.Slot0.kD = SHOOTER_PID_FF.KD;
+    configShooting.Slot0.kS = SHOOTER_PID_FF.KS;
+    configShooting.Slot0.kV = SHOOTER_PID_FF.KV;
     
-    configShooting.MotorOutput.NeutralMode = IS_SHOOTING_MOTORS_BRAKE
+    configShooting.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
     ? NeutralModeValue.Brake
     : NeutralModeValue.Coast;
 
     configDown = configShooting;
     configUp = configShooting;    
 
-    configUp.MotorOutput.Inverted = IS_UP_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-    configDown.MotorOutput.Inverted = IS_DOWN_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+    configUp.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_UP_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+    configDown.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_DOWN_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
     motorUp.getConfigurator().apply(configUp);
     motorDown.getConfigurator().apply(configDown);
     
     motorFeeding.configFactoryDefault();
-    motorFeeding.setInverted(IS_FEEDING_MOTOR_INVERT);
-    motorFeeding.setNeutralMode(IS_FEEDING_MOTOR_BRAKE ? NeutralMode.Brake : NeutralMode.Coast);
+    motorFeeding.setInverted(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_INVERT);
+    motorFeeding.setNeutralMode(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_BRAKE ? NeutralMode.Brake : NeutralMode.Coast);
+
+    SmartDashboard.putData(this);
   }
 
   public void setMotorPower(double upPower, double downPower){
@@ -92,11 +95,17 @@ public class Shooter extends SubsystemBase {
   }
 
   public void pidMotorVelocity(double upVel, double downVel){
-    motorUp.setControl(velocityVoltage.withVelocity(upVel));
-    motorDown.setControl(velocityVoltage.withVelocity(downVel));
+    motorUp.setControl(velocityVoltage.withVelocity(upVel).withFeedForward(getFF(getUpMotorVel())));
+    motorDown.setControl(velocityVoltage.withVelocity(downVel).withFeedForward(getFF(getUpMotorVel())));
   }
 
-  public void setShootingBrake(boolean isBrake){
+  public double getFF(double vel) {
+    return SHOOTER_PID_FF.KS * Math.signum(vel) + 
+    SHOOTER_PID_FF.KV * vel + 
+    SHOOTER_PID_FF.KV2 * Math.pow(vel, 2);
+  } 
+
+  public void setShootingNeutralMode(boolean isBrake){
     configUp.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     configDown.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
 
@@ -104,14 +113,20 @@ public class Shooter extends SubsystemBase {
     motorDown.getConfigurator().apply(configDown);
   }
 
-  public void setFeedingBrake(boolean isBrake){
-    motorFeeding.configFactoryDefault();
+  public void setFeedingNeutralMode(boolean isBrake){
     motorFeeding.setNeutralMode(isBrake ? NeutralMode.Brake : NeutralMode.Coast);
   }
 
+
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("upMotorVel", getUpMotorVel());
-    SmartDashboard.putNumber("downMotorVel", getDownMotorVel());
+  public void initSendable(SendableBuilder builder) {
+      SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
+      setShootingNeutralMode(configUp.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
+       , this).ignoringDisable(true));
+       SmartDashboard.putData("change feeding brake", new InstantCommand(()-> 
+      setFeedingNeutralMode(configUp.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
+       , this).ignoringDisable(true));
+      SmartDashboard.putNumber("upMotorVel", getUpMotorVel());
+      SmartDashboard.putNumber("downMotorVel", getDownMotorVel());
   }
 }

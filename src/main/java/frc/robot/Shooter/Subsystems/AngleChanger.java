@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_CONFIGS;
-import frc.robot.Shooter.ShooterConstants.ANGLE_CHANGING_VAR;
-import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
-import frc.robot.Shooter.ShooterConstants.STATE;
+
+import static frc.robot.Shooter.ShooterConstants.*;
+
 import frc.robot.Shooter.utils.ShooterUtils;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -20,9 +19,9 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import static frc.robot.Shooter.ShooterConstants.*;
 
 public class AngleChanger extends SubsystemBase {
   
@@ -45,31 +44,33 @@ public class AngleChanger extends SubsystemBase {
     config = new TalonFXConfiguration();
     angleState = STATE.SPEAKER;
 
-    config.Slot0.kP = ANGLE_CHANGING_CONFIGS.KP;
-    config.Slot0.kI = ANGLE_CHANGING_CONFIGS.KI;
-    config.Slot0.kD = ANGLE_CHANGING_CONFIGS.KD;
-    config.Slot0.kS = ANGLE_CHANGING_CONFIGS.KS;
-    config.Slot0.kV = ANGLE_CHANGING_CONFIGS.KV;
-    config.Slot0.kA = ANGLE_CHANGING_CONFIGS.KA;
+    config.Slot0.kP = ANGLE_CHANGING_PID_FF.KP;
+    config.Slot0.kI = ANGLE_CHANGING_PID_FF.KI;
+    config.Slot0.kD = ANGLE_CHANGING_PID_FF.KD;
+    config.Slot0.kS = ANGLE_CHANGING_PID_FF.KS;
+    config.Slot0.kV = ANGLE_CHANGING_PID_FF.KV;
+    config.Slot0.kA = ANGLE_CHANGING_PID_FF.KA;
 
-    m_request  = new DutyCycleOut(0.0).withUpdateFreqHz(FreqHz);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(FreqHz);
-    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(FreqHz); 
+    m_request  = new DutyCycleOut(0.0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz);
+    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz); 
 
     // config.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
-    // config.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = -1; /*TODO change to real angle */
+    // config.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = -1;
 
-    config.MotionMagic.MotionMagicCruiseVelocity = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_VELOCITY;
-    config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_Acceleration;
-    config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_JERK;
+    config.MotionMagic.MotionMagicCruiseVelocity = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_VELOCITY;
+    config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_Acceleration;
+    config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_JERK;
 
-    config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_GEAR_RATIO;
-    config.MotorOutput.NeutralMode = IS_ANGLE_MOTORS_BRAKE
+    config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_GEAR_RATIO;
+    config.MotorOutput.Inverted = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTOR_INVERT
+    ? InvertedValue.Clockwise_Positive
+    : InvertedValue.CounterClockwise_Positive;
+    config.MotorOutput.NeutralMode = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTORS_BRAKE
     ? NeutralModeValue.Brake
     : NeutralModeValue.Coast;
 
     angleChangingMotor.getConfigurator().apply(config);
-    /*TODO add brake invert  */
 
     SmartDashboard.putData(this);
     
@@ -108,7 +109,7 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_ANGLE);
   }
 
-  public void setAngleBrake(boolean isBrake){
+  public void setAngleNeutralMode(boolean isBrake){
     config.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     angleChangingMotor.getConfigurator().apply(config);
   }
@@ -131,6 +132,9 @@ public class AngleChanger extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
       SmartDashboard.putData("reset angle", new InstantCommand(()-> setBaseAngle(), this).ignoringDisable(true));
+      SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
+      setAngleNeutralMode(config.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
+       , this).ignoringDisable(true));
       builder.addDoubleProperty("ShooterAngle", this::getAngle, null);
       builder.addDoubleProperty("angleMotorVer", this::getAngleMotorVel, null);
   }

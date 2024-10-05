@@ -15,6 +15,7 @@ import frc.robot.Shooter.utils.Ready;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
+
 public class GoToAngle extends Command {
   /** Creates a new setShooting. */
   private LookUpTable lookupTable;
@@ -32,7 +33,6 @@ public class GoToAngle extends Command {
   public GoToAngle(AngleChanger angleChanger) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angleChanger = angleChanger;
-    isAngleReady = Ready.isAngleReady(wantedAngle);
     lookupTable = new LookUpTable(testingData);
     SmartDashboard.putData(this);
     addRequirements(angleChanger);
@@ -71,16 +71,16 @@ public class GoToAngle extends Command {
       state = STATE.DELIVERY;
     switch(state){
       case AMP:
-          wantedAngle = AMP_ANGLE;
+          wantedAngle = AMP_VAR.AMP_ANGLE;
           break;
       
       case STAGE:
-          wantedAngle = STAGE_ANGLE;
+          wantedAngle = STAGE_VAR.STAGE_ANGLE;
   
           break;
 
-      case WING:
-          wantedAngle = WING_ANGLE;
+      case SUBWOFFER:
+          wantedAngle = SUBWOFFER_VAR.SUBWOFFER_ANGLE;
           break;
 
       case SPEAKER:
@@ -103,15 +103,20 @@ public class GoToAngle extends Command {
           break;
     }
     
-    angleChanger.goToAngle(wantedAngle);
+    if (angleChanger.getAngle() <= ANGLE_CHANGING_VAR.MIN_ANGLE){
+      angleChanger.setMotorPower(0);
+    }
 
+    isAngleReady = Ready.isAngleReady(wantedAngle);
+
+    angleChanger.goToAngle(wantedAngle);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    angleChanger.goToAngle(DEFULT_ANGLE);
+    
   }
 
   // Returns true when the command should end.
