@@ -15,12 +15,16 @@ public class IntakeConstants {
   public static final int INTAKE_MOTOR_DOWN_ID = -1;
   public static final int INTAKE_MOTOR_UP_ID = -1;
   public static final String CANBUS = "canivore";
+  
   public static final double NOTE_VOLTEGE = 4.0;
   public static final double NOTE_CURRENT = 0.0;
+
   public static final Boolean IS_BRAKE_MOTORS = true;
-  public static final Boolean IS_IVERTED_MOTOR_MOVE = true;
-  public static final Boolean IS_IVERTED_MOTOR_PICKUP = true;
+  public static final Boolean IS_INVERTED_MOTOR_MOVE = true;
+  public static final Boolean IS_INVERTED_MOTOR_PICKUP = true;
   public static final Boolean IS_TESTING = true;
+
+  /*TODO fix testing */
   public enum NotePosition{
     NO_NOTE(1),
     FIRST_TOUCH(0.6),

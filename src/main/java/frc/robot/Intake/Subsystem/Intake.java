@@ -1,7 +1,6 @@
 package frc.robot.Intake.Subsystem;
 import static frc.robot.Intake.IntakeConstants.*;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -12,10 +11,11 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Intake.IntakeConstants.NotePosition;
 public class Intake extends SubsystemBase {
-  private TalonFX motorPickUp;//floor to intake
   private TalonFX motorMove;// intake to shooter
+  private TalonFX motorPickUp;//floor to intake
   public AnalogInput analogInput;
-  TalonFXConfiguration configBase;
+  TalonFXConfiguration configMove;
+  TalonFXConfiguration configPickUp;
 
   public static NotePosition currentPosition;
   public static boolean isNoteInIntake = false;
@@ -30,19 +30,22 @@ public class Intake extends SubsystemBase {
   public Intake() {
     motorMove = new TalonFX(INTAKE_MOTOR_UP_ID,CANBUS);
     motorPickUp = new TalonFX(INTAKE_MOTOR_DOWN_ID,CANBUS);
-    configBase = new TalonFXConfiguration();
+    configMove = new TalonFXConfiguration();
+    
+    configMove.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    configBase.MotorOutput.Inverted = IS_IVERTED_MOTOR_MOVE
+    configPickUp = configMove;
+
+    configMove.MotorOutput.Inverted = IS_INVERTED_MOTOR_MOVE
     ? InvertedValue.CounterClockwise_Positive
     : InvertedValue.Clockwise_Positive;
 
-    configBase.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    motorMove.getConfigurator().apply(configBase);
-
-    configBase.MotorOutput.Inverted = IS_IVERTED_MOTOR_PICKUP
+    configPickUp.MotorOutput.Inverted = IS_INVERTED_MOTOR_PICKUP
     ? InvertedValue.CounterClockwise_Positive
     : InvertedValue.Clockwise_Positive;
-    motorMove.getConfigurator().apply(configBase);
+    
+    motorMove.getConfigurator().apply(configMove);
+    motorPickUp.getConfigurator().apply(configPickUp);
   }
 
   @Override
@@ -79,16 +82,18 @@ public class Intake extends SubsystemBase {
 
 
   public void setMotorsCoast(){
-    configBase.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    motorMove.getConfigurator().apply(configBase);
-    motorPickUp.getConfigurator().apply(configBase);
+    configMove.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configPickUp.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    motorMove.getConfigurator().apply(configMove);
+    motorPickUp.getConfigurator().apply(configPickUp);
 
   }
 
   public void setMotorsBrake(){
-    configBase.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    motorMove.getConfigurator().apply(configBase);
-    motorPickUp.getConfigurator().apply(configBase);
+    configMove.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    configPickUp.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    motorMove.getConfigurator().apply(configMove);
+    motorPickUp.getConfigurator().apply(configPickUp);
   }
 
 
