@@ -127,9 +127,10 @@ public class Shoot extends Command {
       isReady = false;
       isShooterReady = false;
       long time = System.currentTimeMillis();
-      if (System.currentTimeMillis() - time >= MIL_SEC_TO_SHOOT){
-        isfinished = true;
+      while (System.currentTimeMillis() - time <= MIL_SEC_TO_SHOOT){
+        isfinished = false;
       }
+      isfinished = true;
     }
   }
 
