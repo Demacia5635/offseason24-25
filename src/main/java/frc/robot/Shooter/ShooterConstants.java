@@ -93,7 +93,8 @@ public class ShooterConstants {
   public static final boolean IS_DOWN_MOTOR_INVERT = true;
   public static final boolean IS_FEEDING_MOTOR_INVERT = false;
   
-
+  public static final boolean IS_SHOOTING_MOTORS_BRAKE = false;
+  public static final boolean IS_FEEDING_MOTOR_BRAKE = true;
 
   public enum STATE{
     AMP, STAGE, WING, DELIVERY, SPEAKER, IDLE, TESTING;
