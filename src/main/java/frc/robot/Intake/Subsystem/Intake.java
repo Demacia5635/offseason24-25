@@ -14,6 +14,8 @@ public class Intake extends SubsystemBase {
   private TalonFX motorMove;// intake to shooter
   private TalonFX motorPickUp;//floor to intake
   public AnalogInput analogInput;
+
+  TalonFXConfiguration configBase;
   TalonFXConfiguration configMove;
   TalonFXConfiguration configPickUp;
 
@@ -30,11 +32,12 @@ public class Intake extends SubsystemBase {
   public Intake() {
     motorMove = new TalonFX(INTAKE_MOTOR_UP_ID,CANBUS);
     motorPickUp = new TalonFX(INTAKE_MOTOR_DOWN_ID,CANBUS);
-    configMove = new TalonFXConfiguration();
+    configBase = new TalonFXConfiguration();
     
-    configMove.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    configBase.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    configPickUp = configMove;
+    configMove = configBase;
+    configPickUp = configBase;
 
     configMove.MotorOutput.Inverted = IS_INVERTED_MOTOR_MOVE
     ? InvertedValue.CounterClockwise_Positive
@@ -82,17 +85,17 @@ public class Intake extends SubsystemBase {
 
 
   public void setMotorsCoast(){
-    configMove.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configBase.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configPickUp.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    motorMove.getConfigurator().apply(configMove);
+    motorMove.getConfigurator().apply(configBase);
     motorPickUp.getConfigurator().apply(configPickUp);
 
   }
 
   public void setMotorsBrake(){
-    configMove.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    configBase.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configPickUp.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    motorMove.getConfigurator().apply(configMove);
+    motorMove.getConfigurator().apply(configBase);
     motorPickUp.getConfigurator().apply(configPickUp);
   }
 
