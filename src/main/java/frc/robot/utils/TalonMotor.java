@@ -163,6 +163,42 @@ public class TalonMotor extends TalonFX {
   public void setVelocityMPS(double velocity, double radius) {
     setVelocity(Utils.mpsToRps(velocity, radius ), 0);
   }
+   private double steerOptimization(double currentPosition, double wantedPosition) {
+    // Normalize angles to the range [0, 1)
+    
+    currentPosition = currentPosition % 1.0;
+    wantedPosition = wantedPosition % 1.0;
+    
+
+    // Calculate the difference
+    double rotationsDiff = wantedPosition - currentPosition;
+
+    // Normalize the difference to the range [-0.5, 0.5)
+    if (rotationsDiff > 0.5) {
+        rotationsDiff -= 1.0;
+    } else if (rotationsDiff < -0.5) {
+        rotationsDiff += 1.0;
+    }
+
+    return rotationsDiff; // Return the shortest path to move
+}
+
+/**
+ * only use on swerve module steer
+ * @param position
+ * @param maxError
+ */
+public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError){
+  double wantedPosition = steerOptimization(getCurrentPosition().getRotations(), position.getRotations()) + getCurrentPosition().getRotations();
+  if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);  
+  else{
+    setControl(motionMagicVoltage.withPosition(wantedPosition).withSlot(0));
+  }
+  positionEntry.log(position.getRotations());
+  
+} 
+
+
 
   /**
    * set position to drive to in rotations
