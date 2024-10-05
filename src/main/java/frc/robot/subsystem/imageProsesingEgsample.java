@@ -4,20 +4,20 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.units.Angle;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.ImageProsesing.CalcExpPose;
 import frc.robot.utils.ImageProsesing.NotePoseCalc;
 import frc.robot.utils.ImageProsesing.TagPoseCalc;
 
-public class Subpose extends SubsystemBase {
+public class imageProsesingEgsample extends SubsystemBase {
   // NetworkTable for Limelight communication
   private NetworkTable table;
   private NetworkTable tableNote;
@@ -45,13 +45,14 @@ public class Subpose extends SubsystemBase {
 
   private Field2d fieldNote;
 
-  // Calculate expected Robot position
-  private Pose2d[] poseArray = new Pose2d[5]; 
-  private double[] timestampArray = new double[5];
-  private int arrCount = 0;
+  // // Calculate expected Robot position
+  // private Pose2d[] poseArray = new Pose2d[5]; 
+  // private double[] timestampArray = new double[5];
+  // private int arrCount = 0;
 
-  private CalcExpPose ExpPose;
-  public Subpose() {
+  // private CalcExpPose ExpPose;
+
+  public imageProsesingEgsample() {
 
     // Initialize Field2d for visualization
     
@@ -69,8 +70,8 @@ public class Subpose extends SubsystemBase {
 
         // Get the Limelight NetworkTable
     
-    table = NetworkTableInstance.getDefault().getTable("limelight-shooter");
-    tableNote = NetworkTableInstance.getDefault().getTable("limelight");
+    table = NetworkTableInstance.getDefault().getTable("limelight-tag");
+    tableNote = NetworkTableInstance.getDefault().getTable("limelight-note");
     Pose = new TagPoseCalc(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
     Pose.updatePosValues(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
 
@@ -116,7 +117,7 @@ public class Subpose extends SubsystemBase {
     if (robotPose != null) {
       Pose.updatePosValues(tx, ty, x_offset, y_offset, id,Rotation2d.fromDegrees(giro.getAngle()), false);
         field.setRobotPose(robotPose);
-        updatePoseArr(robotPose);
+        // updatePoseArr(robotPose);
     }
 
         // Display field on SmartDashboard
@@ -126,41 +127,41 @@ public class Subpose extends SubsystemBase {
         if (notepose != null) {
             fieldNote.setRobotPose(notepose);
         }
-
-  double timestamp = Timer.getFPGATimestamp(); 
-  updateTimestampArr(timestamp);
-
-  // Velocity is 0 for now
-  double velocity = 0;
-  if (arrCount == 5){
-    ExpPose = new CalcExpPose(poseArray, timestampArray, velocity){}
   }
-  Pose2d expectedPosition = ExpPose.GetExpectedPos();
-}
 
-public void updatePoseArr(Pose2d newPose) {
-  if (arrCount == 5) {
-      for (int i = 1; i < poseArray.length; i++) {
-          poseArray[i - 1] = poseArray[i];
-      }
-      poseArray[4] = newPose;
-  } else {
-      poseArray[count] = newPose;
-      arrCount++;
-  }
-} 
+//   double timestamp = Timer.getFPGATimestamp(); 
+//   updateTimestampArr(timestamp);
 
-public void updateTimestampArr(double newTimestamp) {
-  if (arrCount == 5) {
-      for (int i = 1; i < poseArray.length; i++) {
-          timestampArray[i - 1] = timestampArray[i];
-      }
-      timestampArray[4] = newTimestamp;
-  } else {
-      timestampArray[count] = newTimestamp;
-      arrCount++;
-  }
-} 
+//   // Velocity is 0 for now
+//   double velocity = 0;
+//   if (arrCount == 5){
+//     ExpPose = new CalcExpPose(poseArray, timestampArray, velocity){}
+//   }
+//   Pose2d expectedPosition = ExpPose.GetExpectedPos();
+// }
+
+// public void updatePoseArr(Pose2d newPose) {
+//   if (arrCount == 5) {
+//       for (int i = 1; i < poseArray.length; i++) {
+//           poseArray[i - 1] = poseArray[i];
+//       }
+//       poseArray[4] = newPose;
+//   } else {
+//       poseArray[count] = newPose;
+//       arrCount++;
+//   }
+// } 
+
+// public void updateTimestampArr(double newTimestamp) {
+//   if (arrCount == 5) {
+//       for (int i = 1; i < poseArray.length; i++) {
+//           timestampArray[i - 1] = timestampArray[i];
+//       }
+//       timestampArray[4] = newTimestamp;
+//   } else {
+//       timestampArray[count] = newTimestamp;
+//       arrCount++;
+// }
 
   public void initSendable(SendableBuilder builder) {
     // Add properties to be displayed on SmartDashboard
@@ -170,8 +171,7 @@ public void updateTimestampArr(double newTimestamp) {
     SmartDashboard.putData("fieldIMGPROS", field);
     SmartDashboard.putData("NotefieldIMGPROS", fieldNote);
     SmartDashboard.putData("resetIMG", new InstantCommand(()->resetGiro()).ignoringDisable(true));
-    SmartDashboard.putData("add_180IMG", new InstantCommand(()->add180Giro()).ignoringDisable(true));
-    SmartDashboard.putData("add_-180IMG", new InstantCommand(()->addmines180Giro()).ignoringDisable(true));
-    builder.addDoubleProperty("getX", ()->Pose.getTagToRobot().getX(),null);
+    builder.addDoubleProperty("gyro angle", ()->giro.getAngle(),null);
+
   }
 }
