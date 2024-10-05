@@ -26,16 +26,16 @@ public class NotePoseCalc {
         this.ty = ty;
         this.pose = pose;
         this.giroYaw = pose.getRotation();
-        this.height = Constants.HEIGHT_MAP.get(id);
+        this.height = ConstantsVision.HEIGHT_MAP.get(id);
     }
 
     
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = Math.abs(ty - Constants.NoteLimelightAngle);
+        sumdegry = Math.abs(ty - ConstantsVision.NoteLimelightAngle);
         sumdegry = Math.toRadians(sumdegry);
-        return ((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
+        return ((Math.abs(height - ConstantsVision.NoteLimelightHight)) * (Math.tan(sumdegry)));
 
     }
 
