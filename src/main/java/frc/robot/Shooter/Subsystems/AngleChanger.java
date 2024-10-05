@@ -64,7 +64,9 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_VAR.ANGLE_CHANGING_MAX_JERK;
 
     config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_GEAR_RATIO;
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.MotorOutput.NeutralMode = IS_ANGLE_MOTORS_BRAKE
+    ? NeutralModeValue.Brake
+    : NeutralModeValue.Coast;
 
     angleChangingMotor.getConfigurator().apply(config);
     /*TODO add brake invert  */
@@ -104,6 +106,11 @@ public class AngleChanger extends SubsystemBase {
 
   public void setBaseAngle() {
     angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_ANGLE);
+  }
+
+  public void setAngleBrake(boolean isBrake){
+    config.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    angleChangingMotor.getConfigurator().apply(config);
   }
 
   /**

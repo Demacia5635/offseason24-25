@@ -96,6 +96,19 @@ public class Shooter extends SubsystemBase {
     motorDown.setControl(velocityVoltage.withVelocity(downVel));
   }
 
+  public void setShootingBrake(boolean isBrake){
+    configUp.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    configDown.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+
+    motorUp.getConfigurator().apply(configUp);
+    motorDown.getConfigurator().apply(configDown);
+  }
+
+  public void setFeedingBrake(boolean isBrake){
+    motorFeeding.configFactoryDefault();
+    motorFeeding.setNeutralMode(isBrake ? NeutralMode.Brake : NeutralMode.Coast);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("upMotorVel", getUpMotorVel());

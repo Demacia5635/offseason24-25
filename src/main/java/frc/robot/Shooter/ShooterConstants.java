@@ -93,6 +93,7 @@ public class ShooterConstants {
   public static final boolean IS_DOWN_MOTOR_INVERT = true;
   public static final boolean IS_FEEDING_MOTOR_INVERT = false;
   
+  public static final boolean IS_ANGLE_MOTORS_BRAKE = false;
   public static final boolean IS_SHOOTING_MOTORS_BRAKE = false;
   public static final boolean IS_FEEDING_MOTOR_BRAKE = true;
 
