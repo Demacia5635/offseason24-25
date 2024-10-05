@@ -4,6 +4,7 @@ package frc.robot.chassis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.TalonConfig;
 
 public final class ChassisConstants {
@@ -15,10 +16,10 @@ public final class ChassisConstants {
   public static final double DRIVE_ACCELERATION = 50;
   public static final double MAX_STEER_VELOCITY = 600;
   public static final double STEER_ACCELERATION = 6000;
-  public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1.5);
+  public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
   public static final double MAX_OMEGA_VELOCITY = Math.toRadians(360);
 
-  public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(4000);
+  public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(720);
 
   // Pulse per meter/degrees
   public static final double WHEEL_DIAMETER = 4 * 0.0254; // 4 inch
@@ -33,8 +34,8 @@ public final class ChassisConstants {
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(3, /*1.57*/ 1.22, 2.2);//(0.003, 0.000, 0.000005);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(3, /*1.57*/ 1.22 , 2.2);//(0.0025, 0.000004, 0.000022);
+  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(29, /*1.57*/ 0.7, 0.07);//(0.003, 0.000, 0.000005);
+  public static final PID_Constants BACK_STEER_PID = new PID_Constants(29, /*1.57*/ 0.7 , 0.07);//(0.0025, 0.000004, 0.000022);
   /*TODO kill who forgot to finish the merge */
   // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
   // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
@@ -123,6 +124,12 @@ public static final double SICLE_CAUNT = 50.0;
       BACK_RIGHT.moduleTranslationOffset);
   
 
+  public static final SwerveKinematics KINEMATICS_DEMACIA = new SwerveKinematics(
+      FRONT_LEFT.moduleTranslationOffset,
+      FRONT_RIGHT.moduleTranslationOffset,
+      BACK_LEFT.moduleTranslationOffset,
+      BACK_RIGHT.moduleTranslationOffset
+  );
 
 
   public static class PID_Constants {

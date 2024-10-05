@@ -4,6 +4,7 @@ package frc.robot.utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -22,7 +23,8 @@ public class TalonMotor extends TalonFX {
   VoltageOut voltageOut = new VoltageOut(0);
 
   DutyCycleOut dutyCycle = new DutyCycleOut(0);
-  MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+  // MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+  PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
   LogManager.LogEntry dutyCycleEntry;
   LogManager.LogEntry velocityEntry;
   LogManager.LogEntry positionEntry;
@@ -91,7 +93,11 @@ public class TalonMotor extends TalonFX {
 
     velocityVoltage.UpdateFreqHz = 200;
     dutyCycle.UpdateFreqHz = 200;
-    motionMagicVoltage.UpdateFreqHz = 200;
+    //motionMagicVoltage.UpdateFreqHz = 200;
+
+    positionVoltage.UpdateFreqHz = 200;
+  
+    
     
 
     getConfigurator().apply(cfg);
@@ -192,7 +198,7 @@ public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError){
   double wantedPosition = steerOptimization(getCurrentPosition().getRotations(), position.getRotations()) + getCurrentPosition().getRotations();
   if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);  
   else{
-    setControl(motionMagicVoltage.withPosition(wantedPosition).withSlot(0));
+    setControl(positionVoltage.withPosition(wantedPosition).withSlot(0));
   }
   positionEntry.log(position.getRotations());
   
@@ -211,7 +217,7 @@ public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError){
     // setControl(motionMagicVoltage.withPosition(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxEror.getRotations()
     // ? getCurrentPosition().getRotations() 
     // : wantedPosition).withSlot(0));
-    setControl(motionMagicVoltage.withPosition(position.getRotations()).withSlot(0));
+    setControl(positionVoltage.withPosition(position.getRotations()).withSlot(0));
     positionEntry.log(position.getRotations());
 
     // Rotation2d wantedPosition = Rotation2d.fromRotations(MathUtil.inputModulus(getCurrentPosition().minus(position).getRotations(),-0.5,0.5));

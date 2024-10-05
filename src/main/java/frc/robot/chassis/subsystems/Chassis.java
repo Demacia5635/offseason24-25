@@ -33,6 +33,7 @@ import static frc.robot.chassis.ChassisConstants.FRONT_LEFT;
 import static frc.robot.chassis.ChassisConstants.FRONT_RIGHT;
 import static frc.robot.chassis.ChassisConstants.GYRO_ID;
 import static frc.robot.chassis.ChassisConstants.KINEMATICS;
+import static frc.robot.chassis.ChassisConstants.KINEMATICS_DEMACIA;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 
 import frc.robot.chassis.utils.SwerveKinematics;
@@ -229,19 +230,21 @@ public class Chassis extends SubsystemBase {
    * 
    * @param speeds In m/s and rad/s
    */
-  public void setVelocities(ChassisSpeeds speeds) {
+  /*public void setVelocities(ChassisSpeeds speeds) {
     double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-    Translation2d newSpeeds = new Translation2d(relativeSpeeds.vxMetersPerSecond,
-      relativeSpeeds.vyMetersPerSecond).rotateBy(Rotation2d.fromRadians(relativeSpeeds.omegaRadiansPerSecond * param));
-    ChassisSpeeds newChassisSpeeds = new ChassisSpeeds(newSpeeds.getX(), newSpeeds.getY(), relativeSpeeds.omegaRadiansPerSecond);
-      newChassisSpeeds.omegaRadiansPerSecond = SwerveKinematics.fixOmega(newChassisSpeeds.omegaRadiansPerSecond);
-    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(newChassisSpeeds);
+    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
 
     // System.out.println("o" + speeds.omegaRadiansPerSecond);
     // System.out.println("vX" + speeds.vxMetersPerSecond);
     // System.out.println("vY" + speeds.vyMetersPerSecond);
+    setModuleStates(states);
+  } */
+
+  public void setVelocities(ChassisSpeeds speeds){
+    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds, getPose(), getModuleStates());
+    SwerveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
     setModuleStates(states);
   }
 

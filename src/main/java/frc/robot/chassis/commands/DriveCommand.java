@@ -44,8 +44,8 @@ public class DriveCommand extends Command {
     
     double joyX = deadband(commandXboxController.getLeftY(), 0.1) * direction;
     double joyY = deadband(commandXboxController.getLeftX(), 0.1) * direction;
-    double rot = (deadband(commandXboxController.getRightTriggerAxis(), 0.1)
-        - deadband(commandXboxController.getLeftTriggerAxis(), 0.1));
+    double rot = (deadband(commandXboxController.getRightTriggerAxis(), 0.03)
+        - deadband(commandXboxController.getLeftTriggerAxis(), 0.03));
 
     double velX = Math.pow(joyX, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyX);
     double velY = Math.pow(joyY, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyY);
