@@ -230,17 +230,17 @@ public class Chassis extends SubsystemBase {
    * 
    * @param speeds In m/s and rad/s
    */
-  /*public void setVelocities(ChassisSpeeds speeds) {
-    double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
-    ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+  // public void setVelocities(ChassisSpeeds speeds) {
+  //   double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
+  //   ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
+  //   SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
+  //   SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
 
-    // System.out.println("o" + speeds.omegaRadiansPerSecond);
-    // System.out.println("vX" + speeds.vxMetersPerSecond);
-    // System.out.println("vY" + speeds.vyMetersPerSecond);
-    setModuleStates(states);
-  } */
+  //   // System.out.println("o" + speeds.omegaRadiansPerSecond);
+  //   // System.out.println("vX" + speeds.vxMetersPerSecond);
+  //   // System.out.println("vY" + speeds.vyMetersPerSecond);
+  //   setModuleStates(states);
+  // }
 
   public void setVelocities(ChassisSpeeds speeds){
     SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds, getPose(), getModuleStates());

@@ -12,6 +12,8 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.chassis.ChassisConstants;
 
@@ -30,7 +32,7 @@ public class SwerveKinematics extends SwerveDriveKinematics {
 
     public SwerveModuleState[] states;
     private final double MIN_ANGLE_DIFF = 5;
-    private final double MAX_ANGLE_DIFF = ChassisConstants.MAX_STEER_VELOCITY * CYCLE_DT;
+    private final double MAX_ANGLE_DIFF = 30;
 
 
     Translation2d[] moduleTranslationsMeters;
@@ -52,7 +54,6 @@ public class SwerveKinematics extends SwerveDriveKinematics {
 
 
     public SwerveModuleState calcStateLine(Pose2d estimatedPose, Pose2d curPose, ChassisSpeeds speeds){
-        System.out.println("LINE");
         double distance = estimatedPose.minus(curPose).getTranslation().getNorm();
         Translation2d velocityVector = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         // TODO check if speed is more then the max 
@@ -71,20 +72,19 @@ public class SwerveKinematics extends SwerveDriveKinematics {
     
     public SwerveModuleState calcStateCurve(Rotation2d alpha, Pose2d estimatedPose, SwerveModuleState prevState, Pose2d curPose, Translation2d moduleLocationDifference){
         if(Math.abs(alpha.getDegrees())>=MAX_ANGLE_DIFF) alpha = new Rotation2d(Math.toRadians(MAX_ANGLE_DIFF*Math.signum(alpha.getDegrees())));
-        System.out.println("CURVE");
-        double radius =  (moduleLocationDifference.getNorm() * Math.sin((Math.PI / 2) - alpha.getRadians()))  / Math.sin(alpha.getRadians() * 2);
+        double radius =  (moduleLocationDifference.getNorm() * Math.sin((Math.PI / 2) - Math.abs(alpha.getRadians())))  / Math.sin(alpha.getRadians() * 2);
         double moduleV = alpha.times(2).getRadians() * radius / CYCLE_DT; // (2alpha * d * sin(0.5pi - alpha)/sin(2alpha))/0.02 = Vn
 
 
         double startingModuleRadians = prevState.angle.getRadians();
-        double chassisDiffRadians = estimatedPose.getRotation().minus(curPose.getRotation()).getRadians();
 
-        double moduleAngle = startingModuleRadians + (2 * alpha.getRadians()) - chassisDiffRadians;
+        
+        double moduleAngle = startingModuleRadians + (2 * alpha.getRadians());
         return SwerveModuleState.optimize(new SwerveModuleState(moduleV, new Rotation2d(moduleAngle)), curPose.getRotation());
     }
     
     public SwerveModuleState[] toSwerveModuleStates(ChassisSpeeds speeds, Pose2d curPose, SwerveModuleState[] prevStates) {
-
+        //looks ok
         Pose2d estimatedPose = new Pose2d(curPose.getX() + getCycleDistance(speeds.vxMetersPerSecond),
             curPose.getY() + getCycleDistance(speeds.vyMetersPerSecond),
             curPose.getRotation().plus(new Rotation2d(getCycleDistance(speeds.omegaRadiansPerSecond))));  // and direction
@@ -93,20 +93,21 @@ public class SwerveKinematics extends SwerveDriveKinematics {
        
         SwerveModuleState[] newModuleStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
-
+            //looks ok
             Translation2d moduleEstimatedPos = estimatedPose.getTranslation().plus(
                     moduleTranslationsMeters[i].rotateBy(estimatedPose.getRotation())); 
-            
+            //looks ok
             Translation2d curModulePos = curPose.getTranslation().plus(moduleTranslationsMeters[i].rotateBy(curPose.getRotation()));
            
-
+            //looks ok
             Translation2d moduleLocationDifference = moduleEstimatedPos.minus(
                 curModulePos); 
-
+            //looks right - might be different sign?
             Rotation2d alpha = moduleLocationDifference.getAngle()
                     .minus(prevStates[i].angle); 
 
-            
+            SmartDashboard.putNumber("Alpha" + i, alpha.getDegrees());
+            SmartDashboard.putNumber("Start" + i, prevStates[i].angle.getDegrees());
 
             if(Math.abs(speeds.vxMetersPerSecond) <= 0.05
                 && Math.abs(speeds.vyMetersPerSecond) <= 0.05
@@ -117,12 +118,14 @@ public class SwerveKinematics extends SwerveDriveKinematics {
                 newModuleStates[i] = Math.abs(alpha.getDegrees()) >= MIN_ANGLE_DIFF
                 ? calcStateCurve(alpha, estimatedPose, prevStates[i], curPose, moduleLocationDifference) 
                 : calcStateLine(estimatedPose, curPose, speeds);
+            SmartDashboard.putBoolean("curve?" + i, Math.abs(alpha.getDegrees()) >= MIN_ANGLE_DIFF);
             }
-            System.out.println("MODULE STATE " + i + ": " + newModuleStates[i]);
         }
+        
+        System.out.println("MODULE STATE 0 "  + 0 + ": " + newModuleStates[0]);
+        SmartDashboard.putNumber("ModuleState", newModuleStates[0].angle.getDegrees());
         return newModuleStates;
     }
-
 
     /**
      * Rotate the speeds back to omega - to drive stright
