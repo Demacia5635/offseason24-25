@@ -17,6 +17,7 @@ import frc.robot.Shooter.utils.ShooterUtils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -31,8 +32,9 @@ public class AngleChanger extends SubsystemBase {
   private DutyCycleOut m_request;
   private VelocityVoltage velocityVoltage;
   private MotionMagicVoltage motionMagicVoltage;
+  private PositionVoltage positionVoltage;
+
   public STATE angleState;
-  public double angle;
 
   public DigitalInput limitSwitch;
 
@@ -51,9 +53,10 @@ public class AngleChanger extends SubsystemBase {
     config.Slot0.kV = ANGLE_CHANGING_PID_FF.KV;
     config.Slot0.kA = ANGLE_CHANGING_PID_FF.KA;
 
-    m_request  = new DutyCycleOut(0.0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz);
-    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FreqHz); 
+    m_request  = new DutyCycleOut(0.0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
+    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
+    positionVoltage = new PositionVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
 
     // config.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
     // config.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = -1;
@@ -76,42 +79,46 @@ public class AngleChanger extends SubsystemBase {
     
     limitSwitch = new DigitalInput(MOTOR_IDS.LIMIT_SWITCH_ID);
   }
-   
-
 
   public void setMotorPower(double power){
     angleChangingMotor.setControl(m_request.withOutput(power));
   }
 
   public void goToAngle(double wantedAngle){
+    if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE){
+      wantedAngle = ANGLE_CHANGING_VAR.MIN_ANGLE;
+    }
+    if (wantedAngle < ANGLE_CHANGING_VAR.TOP_ANGLE){
+      wantedAngle = ANGLE_CHANGING_VAR.TOP_ANGLE;
+    }
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
-    angle = wantedAngle;
   }
 
   public void angleChangingPID(double vel){
     angleChangingMotor.setControl(velocityVoltage.withVelocity(vel));
   }
 
+  public void goToAnglePositionVol(double wantedAngle) {
+    double distance = ShooterUtils.angleToDistance(wantedAngle);
+    angleChangingMotor.setControl(positionVoltage.withPosition(distance));
+  }
+
   public double getAngleMotorVel(){
     return angleChangingMotor.getVelocity().getValue();
   }
 
-  public void setAngle(double angle){
-    this.angle = angle;
-  }
-
-  public double getAngle(){
-    return angle;
-  }
-
   public void setBaseAngle() {
-    angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_ANGLE);
+    angleChangingMotor.setPosition(ShooterUtils.angleToDistance(ANGLE_CHANGING_VAR.BASE_ANGLE));
   }
 
   public void setAngleNeutralMode(boolean isBrake){
     config.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     angleChangingMotor.getConfigurator().apply(config);
+  }
+
+  public double getAngle(){
+    return ShooterUtils.distanceToAngle(angleChangingMotor.getPosition().getValueAsDouble());
   }
 
   /**
@@ -135,7 +142,7 @@ public class AngleChanger extends SubsystemBase {
       SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
       setAngleNeutralMode(config.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
        , this).ignoringDisable(true));
-      builder.addDoubleProperty("ShooterAngle", this::getAngle, null);
-      builder.addDoubleProperty("angleMotorVer", this::getAngleMotorVel, null);
+      builder.addDoubleProperty("angle", this::getAngle, null);
+      builder.addDoubleProperty("angleMotorVel", this::getAngleMotorVel, null);
   }
 }

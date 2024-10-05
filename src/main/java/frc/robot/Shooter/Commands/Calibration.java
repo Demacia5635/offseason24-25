@@ -29,11 +29,11 @@ public class Calibration extends Command {
   @Override
   public void execute() {
     if(angleChanger.isMaxAngle()){
-      angleChanger.angleChangingPID(-ANGLE_CHANGING_CALIBRATION.DOWN_SPEED_CALIBRATION);
+      angleChanger.angleChangingPID(ANGLE_CHANGING_CALIBRATION.DOWN_SPEED_CALIBRATION);
       finishedState = 1;
     }
     if(!angleChanger.isMaxAngle() && finishedState == 1){
-      angleChanger.setAngle(ANGLE_CHANGING_VAR.TOP_ANGLE);
+      angleChanger.setBaseAngle();
       finishedState = 2;
     }
   }

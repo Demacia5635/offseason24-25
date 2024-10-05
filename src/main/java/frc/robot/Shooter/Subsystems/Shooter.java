@@ -45,8 +45,8 @@ public class Shooter extends SubsystemBase {
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
     motorUp = new TalonFX(MOTOR_IDS.MOTOR_UP_ID, MOTOR_IDS.CANBUS);
 
-    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FreqHz);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FreqHz);
+    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FREQHZ);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FREQHZ);
     configShooting = new TalonFXConfiguration();
     
     configShooting.Slot0.kP = SHOOTER_PID_FF.KP;
@@ -55,6 +55,7 @@ public class Shooter extends SubsystemBase {
     configShooting.Slot0.kS = SHOOTER_PID_FF.KS;
     configShooting.Slot0.kV = SHOOTER_PID_FF.KV;
     
+    configShooting.Feedback.SensorToMechanismRatio = SHOOTING_MOTORS_ROTATION_TO_METER;
     configShooting.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
     ? NeutralModeValue.Brake
     : NeutralModeValue.Coast;

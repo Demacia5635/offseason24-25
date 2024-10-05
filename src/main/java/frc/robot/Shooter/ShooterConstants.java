@@ -16,7 +16,7 @@ public class ShooterConstants {
 
     public static final int LIMIT_SWITCH_ID = 0;
 
-    public static final String CANBUS = "CANBUS";
+    public static final String CANBUS = "CANIVORE";
   }
 
 
@@ -33,9 +33,9 @@ public class ShooterConstants {
 
   }
 
-    public static class SHOOTER_VEL{
+    public static class SHOOTER_POW{
 
-      public static final double FEEDING_MOTOR_POWER = 0;
+      public static final double FEEDING_MOTOR_POWER = 1;
 
   }
 
@@ -47,7 +47,7 @@ public class ShooterConstants {
     public static final boolean IS_SHOOTING_MOTORS_BRAKE = false;
     public static final boolean IS_FEEDING_MOTOR_BRAKE = true;
 
-    public static final double SHOOTER_FreqHz = 200;
+    public static final double SHOOTER_FREQHZ = 200;
 
   }
 
@@ -75,11 +75,11 @@ public class ShooterConstants {
     
   }
 
-  public static class ZONES{
+  public static class MAX_ERRORS{
     
-      public static final double ANGLE_ZONE = 0;
-      public static final double UP_MOTOR_VEL_ZONE = 0;
-      public static final double DOWN_MOTOR_VEL_ZONE = 0;
+      public static final double ANGLE_MAX_ERRORS = 0.5;
+      public static final double UP_MOTOR_VEL_MAX_ERRORS = 0.5;
+      public static final double DOWN_MOTOR_VEL_MAX_ERRORS = 0.5;
     
   }
 
@@ -105,12 +105,17 @@ public class ShooterConstants {
     
     public static final boolean IS_ANGLE_MOTORS_BRAKE = false;
 
-    public static final double ANGLE_CHANGING_FreqHz = 200;
-
+    public static final double ANGLE_CHANGING_FREQHZ = 200;
+    
     public static final double ANGLE_CHANGING_GEAR_RATIO = 1/4;
 
   }
 
+  public static class ANGLE_CHANGING_POW{
+
+      public static final double ANGLE_MOTOR_POWER = 0.1;
+
+  }
 
   public static class ANGLE_CHANGING_VAR{
 
@@ -118,25 +123,29 @@ public class ShooterConstants {
       public static final double B = 128;
       public static final double C = 0;
 
-      public static final double BASE_ANGLE = 0;
-      public static final double TOP_ANGLE = 0;
-      public static final double MIN_ANGLE = 0;
+      public static final double BASE_ANGLE = 70;//no
+      public static final double TOP_ANGLE = 70;
+      public static final double MIN_ANGLE = 30;
 
   }
 
   public static class ANGLE_CHANGING_CALIBRATION{
 
-      public static final double UP_SPEED_CALIBRATION = 0;
-      public static final double DOWN_SPEED_CALIBRATION = 0;
+      public static final double UP_SPEED_CALIBRATION = 0.3;
+      public static final double DOWN_SPEED_CALIBRATION = -0.1;
 
   }
 
   public static class DISTANCES{
 
-      public static final double WING_DISTANCE = 0;
+      public static final double WING_DISTANCE = 231;
+      public static final double RIVAL_WING_DISTANCE = 421;
+
 
   }
 
+  public static final double RADIOS = 0.36;
+  public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
   public static final double MIL_SEC_TO_SHOOT = 1000;
 
   public enum STATE{

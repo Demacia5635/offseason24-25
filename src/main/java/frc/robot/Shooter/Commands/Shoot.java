@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Shooter.ShooterConstants.AMP_VAR;
-import frc.robot.Shooter.ShooterConstants.SHOOTER_VEL;
+import frc.robot.Shooter.ShooterConstants.DISTANCES;
+import frc.robot.Shooter.ShooterConstants.SHOOTER_POW;
 import frc.robot.Shooter.ShooterConstants.STAGE_VAR;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.ShooterConstants.SUBWOFFER_VAR;
@@ -31,9 +32,7 @@ public class Shoot extends Command {
   private double testingDownMotorVelocity;
   public STATE state;
   private double distance;
-  private boolean isInWing;//to do
-  private boolean isBetweenWing;
-  private boolean isBetweenRivalWing;
+  private double XDistance;
   public boolean isReady;
   public boolean isfinished;
 
@@ -84,8 +83,11 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (isBetweenWing){
+    if (XDistance >= DISTANCES.WING_DISTANCE && XDistance < DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING){
       state = STATE.DELIVERY_MID;
+    }
+    if (XDistance >= DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING){
+      state = STATE.DELIVERY_RIVAL;
     }
     switch(state){
       case AMP:
@@ -135,10 +137,10 @@ public class Shoot extends Command {
     
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    isReady = Ready.isReady(upMotorVelocity, downMotorVelocity, state)
+    isReady = (Ready.isReady(upMotorVelocity, downMotorVelocity, state) && state != STATE.TESTING)
         || isShooterReady;
     if (isReady){
-      shooter.setFeedingPower(SHOOTER_VEL.FEEDING_MOTOR_POWER);
+      shooter.setFeedingPower(SHOOTER_POW.FEEDING_MOTOR_POWER);
       isReady = false;
       isShooterReady = false;
       if (Shooter.tempIRSensor){
@@ -153,6 +155,9 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (state != STATE.TESTING){
+      angleChanging.angleState = STATE.SPEAKER;
+    }
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
   }

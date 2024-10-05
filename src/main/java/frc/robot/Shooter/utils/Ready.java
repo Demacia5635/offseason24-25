@@ -4,23 +4,21 @@
 
 package frc.robot.Shooter.utils;
 
-import static frc.robot.Shooter.ShooterConstants.*;
-
 import frc.robot.RobotContainer;
 import frc.robot.Shooter.ShooterConstants.STATE;
-import frc.robot.Shooter.ShooterConstants.ZONES;
+import frc.robot.Shooter.ShooterConstants.MAX_ERRORS;
 import frc.robot.Shooter.Commands.GoToAngle;
 
 /** Add your docs here. */
 public class Ready {
     public static boolean isAngleReady(double wantedAngle){
-        return Math.abs(wantedAngle - RobotContainer.angleChanging.getAngle()) <= ZONES.ANGLE_ZONE;
+        return Math.abs(wantedAngle - RobotContainer.angleChanging.getAngle()) <= MAX_ERRORS.ANGLE_MAX_ERRORS;
     }
     public static boolean isUpMotorReady(double wantedUpMotorVel){
-        return Math.abs(wantedUpMotorVel - RobotContainer.shooter.getUpMotorVel()) <= ZONES.UP_MOTOR_VEL_ZONE;
+        return Math.abs(wantedUpMotorVel - RobotContainer.shooter.getUpMotorVel()) <= MAX_ERRORS.UP_MOTOR_VEL_MAX_ERRORS;
     }
     public static boolean isDownMotorReady(double wantedDownMotorVel){
-        return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= ZONES.DOWN_MOTOR_VEL_ZONE;
+        return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= MAX_ERRORS.DOWN_MOTOR_VEL_MAX_ERRORS;
     }
     public static boolean isGoodState(STATE state){
         return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.SUBWOFFER);
