@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,7 +32,6 @@ public class visionByTag extends SubsystemBase {
   private TagPoseCalc Pose;
 
   //pose of robot in field 
-  private Field2d field;
 
 
   public visionByTag(Pigeon2 gyro) {
@@ -41,7 +39,6 @@ public class visionByTag extends SubsystemBase {
 
     // Initialize Field2d for visualization
     
-    field = new Field2d();
     this.x_offset = Constants.TagLimelightXOfset;
     this.y_offset = Constants.TagLimelightYOfset;    
 

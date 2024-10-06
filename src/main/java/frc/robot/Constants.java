@@ -152,4 +152,6 @@ public class Constants {
     public static final double NoteLimelightXOfset = 0.24;
     public static final double NoteLimelightYOfset = 0;
 
+    public static final String NoteTable = "limelight-note";
+
 }

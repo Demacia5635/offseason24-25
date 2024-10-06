@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 
 public class NotePoseCalc {
-    private double height;
     private double x_offset;
     private double y_offset;
     private double tx;
@@ -14,19 +13,27 @@ public class NotePoseCalc {
     private double id;
     private double sumdegry;
     private Pose2d pose;
-    private Rotation2d giroYaw;
-    public boolean isIedMostly;
+    private Rotation2d gyroYaw;
+    private boolean isRed;
 
 
-
-    public NotePoseCalc(double tx, double ty, double x_offset, double y_offset,Pose2d pose) {
+    public NotePoseCalc(double tx, double ty, double x_offset, double y_offset,Pose2d pose, boolean isRed) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.tx = -tx;
         this.ty = ty;
         this.pose = pose;
-        this.giroYaw = pose.getRotation();
-        this.height = Constants.HEIGHT_MAP.get(id);
+        this.gyroYaw = pose.getRotation();
+        this.isRed = isRed;
+    }
+    public void update(double tx, double ty, double x_offset, double y_offset,Pose2d pose, boolean isRed) {
+        this.x_offset = x_offset;
+        this.y_offset = y_offset;
+        this.tx = -tx;
+        this.ty = ty;
+        this.pose = pose;
+        this.gyroYaw = pose.getRotation();
+        this.isRed = isRed;
     }
 
     
@@ -35,7 +42,7 @@ public class NotePoseCalc {
     public double GetDistFromCamera() {
         sumdegry = Math.abs(ty - Constants.NoteLimelightAngle);
         sumdegry = Math.toRadians(sumdegry);
-        return ((Math.abs(height - Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
+        return ((Math.abs(Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
 
     }
 
@@ -44,10 +51,8 @@ public class NotePoseCalc {
 
     // Calculate vector Camera to tag
     public Translation2d getRobotToNote() {
-        Translation2d cameraToNote = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx)).rotateBy(giroYaw);
-
-        
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset*Math.signum(tx)).rotateBy(giroYaw);
+        Translation2d cameraToNote = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx)).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
         Translation2d robotToNote = cameraToNote.plus(robotToCamera);
         return robotToNote;
     }
