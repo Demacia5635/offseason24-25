@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,10 +32,8 @@ import static frc.robot.chassis.ChassisConstants.FRONT_LEFT;
 import static frc.robot.chassis.ChassisConstants.FRONT_RIGHT;
 import static frc.robot.chassis.ChassisConstants.GYRO_ID;
 import static frc.robot.chassis.ChassisConstants.KINEMATICS;
-import static frc.robot.chassis.ChassisConstants.KINEMATICS_DEMACIA;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 
-import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.LogManager;
 
 
@@ -230,23 +227,22 @@ public class Chassis extends SubsystemBase {
    * 
    * @param speeds In m/s and rad/s
    */
-  // public void setVelocities(ChassisSpeeds speeds) {
-  //   double param = speeds.omegaRadiansPerSecond > Math.toRadians(20) ? -0.1 : 0;
-  //   ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-  //   SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
-  //   SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+  public void setVelocities(ChassisSpeeds speeds) {
+    ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
+    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
 
-  //   // System.out.println("o" + speeds.omegaRadiansPerSecond);
-  //   // System.out.println("vX" + speeds.vxMetersPerSecond);
-  //   // System.out.println("vY" + speeds.vyMetersPerSecond);
-  //   setModuleStates(states);
-  // }
-
-  public void setVelocities(ChassisSpeeds speeds){
-    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds, getPose(), getModuleStates());
-    SwerveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+    // System.out.println("o" + speeds.omegaRadiansPerSecond);
+    // System.out.println("vX" + speeds.vxMetersPerSecond);
+    // System.out.println("vY" + speeds.vyMetersPerSecond);
     setModuleStates(states);
   }
+
+  // public void setVelocities(ChassisSpeeds speeds){
+  //   SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds, getPose(), getModuleStates());
+  //   SwerveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+  //   setModuleStates(states);
+  // }
 
   public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
     speeds.omegaRadiansPerSecond = getRadPerSecToAngle(angle);
