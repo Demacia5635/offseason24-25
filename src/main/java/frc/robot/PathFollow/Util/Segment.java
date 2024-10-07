@@ -10,12 +10,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class Segment {
     protected Translation2d p1;
     protected Translation2d p2;
-    protected boolean aprilMode;
 
     
-    public Segment(Translation2d p1, Translation2d p2, boolean aprilMode)
+    public Segment(Translation2d p1, Translation2d p2)
     {
-        this.aprilMode = aprilMode;
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -23,12 +21,10 @@ public class Segment {
     public Translation2d calc(Translation2d position, double velocity) {return new Translation2d();};
     public double distancePassed(Translation2d position) {return 0;};
     public double getLength() {return 0;};
-    public boolean isAprilTagMode(){return aprilMode;};
     public Translation2d[] getPoints() {
         Translation2d[] pArr = {p1,p2}; 
         return pArr;
     }
-    public void setAprilTagMode(boolean aprilMode){ this.aprilMode = aprilMode;};
     @Override
     public String toString() {
         return "\n~\np1 : " + p1 + "\np2 : " + p2;

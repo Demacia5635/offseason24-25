@@ -9,14 +9,14 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import static frc.robot.subsystems.chassis.ChassisConstants.*;
+import static frc.robot.chassis.ChassisConstants.*;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.chassis.*;
+import frc.robot.chassis.subsystems.Chassis;
 
 import static frc.robot.PathFollow.Util.PathsConstants.*;
 
@@ -99,8 +99,8 @@ public class PathFollow extends Command {
 
   private void setFirstPoint(boolean isRed){
 
-    points[0] = isRed ? new pathPoint(convertAlliance(chassis.getPose().getX()), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius(), false)
-      : new pathPoint(chassis.getPose().getX(), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius(), false);
+    points[0] = isRed ? new pathPoint(convertAlliance(chassis.getPose().getX()), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius())
+      : new pathPoint(chassis.getPose().getX(), chassis.getPose().getY(), points[1].getRotation(), points[0].getRadius());
 
   }
   
@@ -119,7 +119,7 @@ public class PathFollow extends Command {
   private void createSegments(){
     //case for only leg
     if (points.length < 3) {
-      segments[0] = new Leg(points[0].getTranslation(), points[1].getTranslation(), points[1].isAprilTag());
+      segments[0] = new Leg(points[0].getTranslation(), points[1].getTranslation());
     
     }
     // case for more then 1 segment
@@ -132,7 +132,7 @@ public class PathFollow extends Command {
       for (int i = 0; i < corners.length - 1; i++) {
 
         segments[segmentIndexCreator] = corners[i].getArc();
-        segments[segmentIndexCreator + 1] = new Leg(corners[i].getCurveEnd(), corners[i + 1].getCurveStart(), points[segmentIndexCreator].isAprilTag());
+        segments[segmentIndexCreator + 1] = new Leg(corners[i].getCurveEnd(), corners[i + 1].getCurveStart());
         segmentIndexCreator += 2;
       }
       // creates the last arc and leg
@@ -196,21 +196,6 @@ public class PathFollow extends Command {
 
   boolean foundAprilTag = false;
 
-  public Rotation2d getAngleApriltag() {
-    Translation2d finalVector = new Translation2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    // checks the distance from each april tag and finds
-    for (int i = 0; i < aprilTagsPositions.length; i++) {
-
-      Translation2d currentAprilTagVector = chassis.getPose().minus(aprilTagsPositions[i]).getTranslation();
-
-      if (currentAprilTagVector.getNorm() < finalVector.getNorm()) {
-        finalVector = currentAprilTagVector;
-      }
-    }
-    foundAprilTag = true;
-    return finalVector.getAngle();
-  }
-
   private boolean finishedSegment(){
     return segments[segmentIndex].distancePassed(chassisPose.getTranslation()) >= segments[segmentIndex].getLength() - DISTANCE_OFFSET;
   }
@@ -238,13 +223,8 @@ public class PathFollow extends Command {
     rotationVelocity = rotationTrapezoid.calc(wantedAngle.getRadians(), chassis.getChassisSpeeds().omegaRadiansPerSecond, 0);
     Translation2d velVector = segments[segmentIndex].calc(chassisPose.getTranslation(), driveVelocity);
 
-    if (segments[segmentIndex].isAprilTagMode()) {
-      if (!foundAprilTag)
-        wantedAngle = getAngleApriltag();
-    }
-    else {
-      wantedAngle = points[segmentIndex].getRotation();
-    }
+    wantedAngle = points[segmentIndex].getRotation();
+    
     ChassisSpeeds speed = new ChassisSpeeds(velVector.getX(), velVector.getY(), rotationVelocity);
     chassis.setVelocities(speed);
 

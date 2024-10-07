@@ -18,11 +18,10 @@ public class Leg extends Segment{
      * creates a leg type segment
      * @param p1 the first point of the leg
      * @param p2 the last point of the leg
-     * @param isAprilTagMode search for closet april tag mode
      */
-    public Leg(Translation2d p1, Translation2d p2, boolean isAprilTagMode)
+    public Leg(Translation2d p1, Translation2d p2)
     {
-        super(p1,p2, isAprilTagMode);
+        super(p1,p2);
         totalVector = p2.minus(p1);
         velDirection = totalVector.div(totalVector.getNorm());
     }
@@ -30,7 +29,6 @@ public class Leg extends Segment{
     @Override
     public Translation2d calc(Translation2d position, double velocity)
     {
-        if(isAprilTagMode()) velocity = Math.min(velocity, 1);
         Translation2d relativePos = position.minus(p2);
 
         Rotation2d diffAngle = p1.minus(p2).getAngle().minus(relativePos.getAngle());

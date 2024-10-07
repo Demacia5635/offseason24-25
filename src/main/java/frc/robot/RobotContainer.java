@@ -8,13 +8,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.vision.VisionLimelight;
 import frc.robot.utils.Utils;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.chassis.DriveCommand;
-import frc.robot.subsystems.chassis.Chassis;
-import frc.robot.subsystems.leds.LedControll;
+import frc.robot.chassis.commands.DriveCommand;
+import frc.robot.chassis.subsystems.Chassis;
 
 public class RobotContainer implements Sendable {
   public static RobotContainer robotContainer;
@@ -25,8 +22,6 @@ public class RobotContainer implements Sendable {
 
 
   public Chassis chassis;
-  public VisionLimelight vision;
-  public LedControll led;
 
   public Command resetOdometry;
 
@@ -39,10 +34,8 @@ public class RobotContainer implements Sendable {
     DriverStation.startDataLog(DataLogManager.getLog());
 
     chassis = new Chassis();
-    vision = new VisionLimelight(chassis, chassis.getSwerveDrivePoseEstimator());
     commandController = new CommandXboxController(0);
     chassis.setDefaultCommand(new DriveCommand(chassis, commandController));
-    led = new LedControll(9, 110);
 
     createCommands();
     
@@ -79,7 +72,6 @@ public class RobotContainer implements Sendable {
 
 
 
-    Trigger overrideAuto = new Trigger(() -> Utils.joystickOutOfDeadband(commandController));
 
     commandController.back().onTrue(resetOdometry);
 

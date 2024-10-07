@@ -1,10 +1,14 @@
 package frc.robot.utils;
 
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Field;
 import frc.robot.RobotContainer;
@@ -21,12 +25,18 @@ public class Utils {
     public static double angleDif(Rotation2d r1, Rotation2d r2) {
       return degrees(r1.minus(r2));
     }
-    public static boolean joystickOutOfDeadband(CommandXboxController controller){
-        return deadband(controller.getLeftX(), 0.1) != 0 ||
-        deadband(controller.getLeftX(), 0.1) != 0
+    public static boolean joystickOutOfDeadband(CommandXboxController controller, boolean isLeft){
+      return deadband(isLeft ? controller.getLeftX() : controller.getRightX(), 0.1) != 0 ||
+        deadband(isLeft ? controller.getLeftY() : controller.getRightY(), 0.1) != 0
         || deadband(controller.getLeftTriggerAxis(), 0.1) != 0||
         deadband(controller.getRightTriggerAxis(), 0.1) != 0;
     }
+
+    public static Translation2d getStickVector(CommandXboxController controller){
+      return new Translation2d(controller.getRightX(), controller.getRightY());
+    }
+
+  
     
   public static double deadband(double x, double threshold) {
     return Math.abs(x) < threshold ? 0 :x;
@@ -101,6 +111,27 @@ public class Utils {
   }
   public static double angelErrorInRadians(Rotation2d r1, Rotation2d r2, double deadband) {
     return deadband(MathUtil.angleModulus(r1.minus(r2).getRadians()),deadband);
+  }
+  public static double getDouble(StatusSignal<Double> st) {
+    if(st.getStatus() == StatusCode.OK) {
+      return st.getValue();
+    } else {
+      return 0;
+    }
+  }
+
+    public static void logDouble(StatusSignal<Double> st, DoubleLogEntry entry) {
+    if(st.getStatus() == StatusCode.OK) {
+      entry.append(st.getValue(), (long)(st.getTimestamp().getTime()*1000));
+    }
+  }
+
+  public static double mpsToRps(double speedMps, double radius) {
+    double circumference = 2 * Math.PI * radius;
+    return speedMps / circumference;
+  }
+  public static double rpsToMps(double rotationsPerSecond, double radius) {
+    return rotationsPerSecond * 2 * Math.PI * radius;
   }
 
 }
