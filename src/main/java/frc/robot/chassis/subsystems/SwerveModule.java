@@ -122,7 +122,7 @@ public class SwerveModule extends SubsystemBase {
    * set position to drive to in rotations in radians
    */
     public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPosition(angle, MAX_STEER_ERROR);
+        steerMotor.setMotorPositionOptimized(angle, MAX_STEER_ERROR, true);
     }
 
     /**
@@ -184,7 +184,6 @@ public class SwerveModule extends SubsystemBase {
     /**
      * Get the module angle in degrees in the -180 to 180 range
      * @return
-     */
     public double getAngleDegrees() {
         return getAbsDegrees().getDegrees();
     }
@@ -203,7 +202,7 @@ public class SwerveModule extends SubsystemBase {
      * Sets velosity to the module  in rps
      */
     public void setSteerVelocity(double v) {
-        steerMotor.setVelocity(v,0);
+        steerMotor.setVelocity(v);
     }
 
     /**

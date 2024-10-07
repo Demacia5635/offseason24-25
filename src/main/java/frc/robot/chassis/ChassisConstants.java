@@ -14,8 +14,9 @@ public final class ChassisConstants {
   
   public static final double MAX_DRIVE_VELOCITY = 4.1;
   public static final double DRIVE_ACCELERATION = 50;
-  public static final double MAX_STEER_VELOCITY = 600;
-  public static final double STEER_ACCELERATION = 6000;
+  public static final double MAX_STEER_VELOCITY = 1.5; //in 
+  public static final double MAX_STEER_POWER = 0.7;
+  public static final double MAX_STEER_ACCELERATION = 3; // in RPS Squared
   public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
   public static final double MAX_OMEGA_VELOCITY = Math.toRadians(360);
 
@@ -68,7 +69,7 @@ public static final double SICLE_CAUNT = 50.0;
       new TalonConfig(5,"rio", "FrontLeft/Steer")
         .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
         .withInvert(false).withMotorRatio(FRONT_STEER_RATIO)
-        .withMotionMagic(720, 1440, 3000),
+        .withLimits(MAX_STEER_VELOCITY, MAX_STEER_ACCELERATION),
       6,
       new Translation2d(0.332, 0.277),
       -0.39599609375);

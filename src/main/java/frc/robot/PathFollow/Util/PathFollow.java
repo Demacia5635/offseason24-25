@@ -241,30 +241,6 @@ public class PathFollow extends Command {
     return distanceLeft <= FINISH_OFFSET;
   }
 
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    // builder.addStringProperty("Current Segment", () -> currentSegmentInfo(),
-    // null);
-    super.initSendable(builder);
-    builder.addDoubleProperty("Distance Passed", () -> {
-      return distancePassed;
-    }, null);
-    builder.addDoubleProperty("Total Left", () -> {
-      return distanceLeft;
-    }, null);
-    builder.addDoubleProperty("Velocity", () -> {
-      return driveVelocity;
-    }, null);
-    builder.addDoubleProperty("Rotation Velocity", () -> {
-      return Math.toDegrees(rotationVelocity);
-    }, null);
-    builder.addDoubleProperty("Angle", () -> {
-      return chassisPose.getRotation().getDegrees();
-    }, null);
-    builder.addDoubleProperty("Pose X", () -> chassis.getPose().getX(), null);
-    builder.addDoubleProperty("Pose Y", () -> chassis.getPose().getY(), null);
-  }
-
   public void printSegments() {
     for (Segment s : segments) {
      System.out.println(s);

@@ -1,6 +1,9 @@
 package frc.robot.utils;
 
 
+import static frc.robot.chassis.ChassisConstants.CYCLE_DT;
+import static frc.robot.chassis.ChassisConstants.MAX_STEER_VELOCITY;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -13,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.chassis.ChassisConstants;
 
 /** Add your docs here. */
 public class TalonMotor extends TalonFX {
@@ -29,6 +33,12 @@ public class TalonMotor extends TalonFX {
   LogManager.LogEntry velocityEntry;
   LogManager.LogEntry positionEntry;
 
+  /*TODO test limits */
+  boolean isLimitsEnable;
+  double maxVel;
+  double maxAcc;
+  double maxDeltaVel;
+
 
   public TalonMotor(TalonConfig config) {
     super(config.id, config.canbus);
@@ -36,6 +46,7 @@ public class TalonMotor extends TalonFX {
     name = config.name;
     configMotor();
     addLog();
+    this.maxDeltaVel = maxAcc * CYCLE_DT;
     LogManager.log(name + " motor initialized");
   }
 
@@ -106,6 +117,10 @@ public class TalonMotor extends TalonFX {
     getAcceleration().setUpdateFrequency(200);
     getMotorVoltage().setUpdateFrequency(200);
 
+    isLimitsEnable = config.isLimitsEnable;
+    maxVel = config.maxVel;
+    maxAcc = config.maxAccel;
+
   }
   /*
    * set motor to brake or coast
@@ -151,8 +166,8 @@ public class TalonMotor extends TalonFX {
    * gets rotations per secon
    * set volocity to motor with PID and FF
    */
-  public void setVelocity(double velocity, double feedForward) {
-    setControl(velocityVoltage.withVelocity(velocity).withFeedForward(feedForward));
+  public void setVelocity(double velocity) {
+    setControl(velocityVoltage.withVelocity(velocity));
     velocityEntry.log(velocity);
   }
   /**
@@ -160,16 +175,16 @@ public class TalonMotor extends TalonFX {
    * set volocity to motor with PID and FF
    */
   public void setVelocityRPS(double velocity) {
-    setVelocity(velocity,0);
+    setVelocity(velocity);
   }
   /**
    * gets m/s
    * set volocity to motor with PID and FF
    */
   public void setVelocityMPS(double velocity, double radius) {
-    setVelocity(Utils.mpsToRps(velocity, radius ), 0);
+    setVelocity(Utils.mpsToRps(velocity, radius ));
   }
-   private double steerOptimization(double currentPosition, double wantedPosition) {
+  private double steerOptimization(double currentPosition, double wantedPosition) {
     // Normalize angles to the range [0, 1)
     
     currentPosition = currentPosition % 1.0;
@@ -187,43 +202,50 @@ public class TalonMotor extends TalonFX {
     }
 
     return rotationsDiff; // Return the shortest path to move
-}
-
-/**
- * only use on swerve module steer
- * @param position
- * @param maxError
- */
-public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError){
-  double wantedPosition = steerOptimization(getCurrentPosition().getRotations(), position.getRotations()) + getCurrentPosition().getRotations();
-  if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);  
-  else{
-    setControl(positionVoltage.withPosition(wantedPosition).withSlot(0));
   }
-  positionEntry.log(position.getRotations());
-  
-} 
 
+  /**
+  * only use on swerve module steer
+  * @param position the wanted poistion 
+  * @param maxError the max vaiable error
+  * @param isWithAccel is testing for max accelaration (NEED TO TEST)
+  */
+  public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError, boolean isWithAccel){
+    double wantedPosition = steerOptimization(getCurrentPosition().getRotations(), position.getRotations()) + getCurrentPosition().getRotations();
+    if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);  
+    else{
+        if(getCurrentVelocity().getRotations() + maxDeltaVel < positionVoltage.withPosition(wantedPosition).Velocity 
+          && isWithAccel){
+          setVelocity(getCurrentVelocity().getRotations() + maxDeltaVel);
+        }
+        else if(positionVoltage.withPosition(wantedPosition).Velocity >= maxVel) {
+          setVelocity(ChassisConstants.MAX_STEER_VELOCITY);
+        } else {
+          setControl(positionVoltage.withPosition(wantedPosition));
+        }
+      }
+    
+    positionEntry.log(position.getRotations());
+  } 
+
+  
+
+
+  
 
 
   /**
    * set position to drive to in rotations
    */
-  public void setMotorPosition(Rotation2d position, Rotation2d maxEror) {
-    // Rotation2d diffAngle = Rotation2d.fromRotations(MathUtil.inputModulus(getCurrentPosition().getRotations(), -0.5, 0.5)).plus(position);
-    // Rotation2d wantedPosition = getCurrentPosition().plus(diffAngle);
+  public void setMotorPosition(Rotation2d position, Rotation2d maxError) {
+    
     double currentPositionRounded = Math.round(getCurrentPosition().getRotations());
     double wantedPosition = currentPositionRounded + position.getRotations();
-    // setControl(motionMagicVoltage.withPosition(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxEror.getRotations()
-    // ? getCurrentPosition().getRotations() 
-    // : wantedPosition).withSlot(0));
-    setControl(positionVoltage.withPosition(position.getRotations()).withSlot(0));
+   
+    if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);
+    else setControl(positionVoltage.withPosition(wantedPosition).withSlot(0));
     positionEntry.log(position.getRotations());
 
-    // Rotation2d wantedPosition = Rotation2d.fromRotations(MathUtil.inputModulus(getCurrentPosition().minus(position).getRotations(),-0.5,0.5));
-    // wantedPosition = getCurrentPosition().plus(wantedPosition);
-    // setControl(motionMagicVoltage.withPosition((Math.abs(wantedPosition.getDegrees())<=1)?0: wantedPosition.getRotations()));
-    // positionEntry.log(position.getRotations());
   }
 
 
