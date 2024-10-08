@@ -1,9 +1,11 @@
-package frc.robot.utils.ImageProsesing;
+package frc.robot.vision.utils;
 
+import java.sql.RowId;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants;
 
 public class TagPoseCalc {
     private double height;
@@ -14,29 +16,29 @@ public class TagPoseCalc {
     private double id;
     private double sumdegry;
     private Pose2d point;
-    private Rotation2d giroYaw;
+    private Rotation2d gyroYaw;
     private boolean isRed;
     public boolean isIedMostly;
 
 
-    public TagPoseCalc(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d giroYaw, boolean isRed) {
+    public TagPoseCalc(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw, boolean isRed) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
         this.tagYaw = tagYaw;
         this.tagPitch = tagPitch;
-        this.giroYaw = giroYaw;
-        this.height = ConstantsVision.HEIGHT_MAP.get(id);
+        this.gyroYaw = gyroYaw;
+        this.height = Constants.HEIGHT_MAP.get(id);
         this.isRed = isRed;
     }
-    public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d giroYaw, boolean isRed) {
+    public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw, boolean isRed) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
         this.tagYaw = tagYaw;
         this.tagPitch = tagPitch;
-        this.giroYaw = giroYaw;
-        this.height = ConstantsVision.HEIGHT_MAP.get(id);
+        this.gyroYaw = gyroYaw;
+        this.height = Constants.HEIGHT_MAP.get(id);
         this.isRed = isRed;
     }
 
@@ -45,9 +47,9 @@ public class TagPoseCalc {
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = tagPitch + ConstantsVision.TagLimelightAngle;
+        sumdegry = tagPitch + Constants.TagLimelightAngle;
         
-        double dist = (Math.abs(height - ConstantsVision.TagLimelightHight)) / (Math.tan(Math.toRadians(sumdegry)));
+        double dist = (Math.abs(height - Constants.TagLimelightHight)) / (Math.tan(Math.toRadians(sumdegry)));
         System.out.println(dist);
         System.out.println("dist" + dist);
 
@@ -63,12 +65,11 @@ public class TagPoseCalc {
         
     }
 
-    // Calculate vector Camera to tag
     public Translation2d getTagToRobot() {
 
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), 
-            Rotation2d.fromDegrees(tagYaw)).rotateBy(isRed ? giroYaw : giroYaw.unaryMinus());
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? giroYaw : giroYaw.unaryMinus());
+            Rotation2d.fromDegrees(tagYaw)).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
         Translation2d robotToTag = cameraToTag.plus(robotToCamera);
         return robotToTag;
     }
@@ -84,12 +85,12 @@ public class TagPoseCalc {
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
         Translation2d originToRobot;
-        Translation2d originToTag = ConstantsVision.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
+        Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
             Translation2d tagToRobot = getTagToRobot();
             originToRobot = originToTag.plus(tagToRobot);
 
-            point = new Pose2d(originToRobot,isRed ? giroYaw : giroYaw.unaryMinus());
+            point = new Pose2d(originToRobot,isRed ? gyroYaw : gyroYaw.unaryMinus());
             return point;
         }
         return new Pose2d();
