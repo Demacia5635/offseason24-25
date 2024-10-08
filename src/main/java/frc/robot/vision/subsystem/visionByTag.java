@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,6 +34,7 @@ public class visionByTag extends SubsystemBase {
   private TagPoseCalc Pose;
 
   //pose of robot in field 
+  Field2d field;
 
 
   public visionByTag(Pigeon2 gyro) {
@@ -46,6 +49,8 @@ public class visionByTag extends SubsystemBase {
     table = NetworkTableInstance.getDefault().getTable(Constants.TagTable);
     Pose = new TagPoseCalc(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), false);
 
+    field = new Field2d();
+    
     SmartDashboard.putData(this);
   }
 
@@ -60,6 +65,7 @@ public class visionByTag extends SubsystemBase {
     tagYaw *=-1;
     //update Pose
     Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), false);
+    field.setRobotPose(getRoobotPose());
   }
   /**
    * returns the position of the robot
@@ -92,6 +98,10 @@ public class visionByTag extends SubsystemBase {
    */
   public Rotation2d getAngleTag(){
     return Pose.getTagToRobot().getAngle();
+  }
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    SmartDashboard.putData("field-tag", field);
   }
 
 }

@@ -29,7 +29,7 @@ public class NotePoseCalc {
     public void update(double tx, double ty, double x_offset, double y_offset,Pose2d pose, boolean isRed) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
-        this.tx = -tx;
+        this.tx = tx;
         this.ty = ty;
         this.pose = pose;
         this.gyroYaw = pose.getRotation();
@@ -42,7 +42,7 @@ public class NotePoseCalc {
     public double GetDistFromCamera() {
         sumdegry = Math.abs(ty - Constants.NoteLimelightAngle);
         sumdegry = Math.toRadians(sumdegry);
-        return ((Math.abs(Constants.NoteLimelightHight)) * (Math.tan(sumdegry)));
+        return ((Math.abs(Constants.NoteLimelightHight)) / (Math.tan(sumdegry)));
 
     }
 

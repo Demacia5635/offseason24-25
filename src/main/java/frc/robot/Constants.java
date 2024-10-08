@@ -146,11 +146,11 @@ public class Constants {
     // public static final double TagLimelightYOfset = -0.08;
 
     // NOTE CODE ROBOT
-    public static final double NoteLimelightHight = 0.615;
-    public static final double NoteLimelightAngle = -52.6;
+    public static final double NoteLimelightHight = 0.21;
+    public static final double NoteLimelightAngle = 0;
 
-    public static final double NoteLimelightXOfset = 0.24;
-    public static final double NoteLimelightYOfset = 0;
+    public static final double NoteLimelightXOfset = 0.41;
+    public static final double NoteLimelightYOfset = 0.04;
 
     public static final String NoteTable = "limelight-note";
 

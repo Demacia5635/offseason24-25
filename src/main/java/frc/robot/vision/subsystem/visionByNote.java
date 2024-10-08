@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,8 +32,10 @@ public class visionByNote extends SubsystemBase {
   private NotePoseCalc notePose;
 
   //pose of robot in field 
+  Field2d field;
 
   public visionByNote(Pose2d robotPose) {
+    this.robotPose = robotPose;
 
     // Initialize Field2d for visualization
 
@@ -41,6 +45,8 @@ public class visionByNote extends SubsystemBase {
     // Get the Limelight NetworkTable
     table = NetworkTableInstance.getDefault().getTable(Constants.NoteTable);
     notePose = new NotePoseCalc(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
+    
+    field = new Field2d();
 
     SmartDashboard.putData(this);
   }
@@ -55,6 +61,8 @@ public class visionByNote extends SubsystemBase {
     noteYaw *=-1;
     //update Pose
     notePose.update(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
+
+    field.setRobotPose(getNotePose());;
   }
   /**
    * returns the position of the note
@@ -81,6 +89,10 @@ public class visionByNote extends SubsystemBase {
    */
   public Rotation2d getAngleTag(){
     return notePose.getRobotToNote().getAngle();
+  }
+  @Override
+  public void initSendable(SendableBuilder builder) {
+      SmartDashboard.putData("field-note", field);
   }
 
 }
