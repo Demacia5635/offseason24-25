@@ -28,7 +28,7 @@ public class TagPoseCalc {
         this.tagYaw = tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
-        this.height = Constants.HEIGHT_MAP.get(id);
+        this.height = ConstantsVision.HEIGHT_MAP.get(id);
         this.isRed = isRed;
     }
     public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw, boolean isRed) {
@@ -38,7 +38,7 @@ public class TagPoseCalc {
         this.tagYaw = tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
-        this.height = Constants.HEIGHT_MAP.get(id);
+        this.height = ConstantsVision.HEIGHT_MAP.get(id);
         this.isRed = isRed;
     }
 
@@ -47,9 +47,9 @@ public class TagPoseCalc {
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = tagPitch + Constants.TagLimelightAngle;
+        sumdegry = tagPitch + ConstantsVision.TagLimelightAngle;
         
-        double dist = (Math.abs(height - Constants.TagLimelightHight)) / (Math.tan(Math.toRadians(sumdegry)));
+        double dist = (Math.abs(height - ConstantsVision.TagLimelightHight)) / (Math.tan(Math.toRadians(sumdegry)));
         System.out.println(dist);
         System.out.println("dist" + dist);
 
@@ -85,7 +85,7 @@ public class TagPoseCalc {
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
         Translation2d originToRobot;
-        Translation2d originToTag = Constants.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
+        Translation2d originToTag = ConstantsVision.CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
         if(originToTag != null){
             Translation2d tagToRobot = getTagToRobot();
             originToRobot = originToTag.plus(tagToRobot);

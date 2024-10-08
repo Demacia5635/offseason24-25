@@ -14,7 +14,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.vision.utils.ConstantsVision;
 import frc.robot.vision.utils.TagPoseCalc;
 
 public class visionByTag extends SubsystemBase {
@@ -42,11 +42,11 @@ public class visionByTag extends SubsystemBase {
 
     // Initialize Field2d for visualization
     
-    this.x_offset = Constants.TagLimelightXOfset;
-    this.y_offset = Constants.TagLimelightYOfset;    
+    this.x_offset = ConstantsVision.TagLimelightXOfset;
+    this.y_offset = ConstantsVision.TagLimelightYOfset;    
 
     // Get the Limelight NetworkTable
-    table = NetworkTableInstance.getDefault().getTable(Constants.TagTable);
+    table = NetworkTableInstance.getDefault().getTable(ConstantsVision.TagTable);
     Pose = new TagPoseCalc(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), false);
 
     field = new Field2d();

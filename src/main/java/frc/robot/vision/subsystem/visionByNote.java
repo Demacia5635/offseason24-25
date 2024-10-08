@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.vision.utils.ConstantsVision;
 import frc.robot.vision.utils.NotePoseCalc;
 
 public class visionByNote extends SubsystemBase {
@@ -39,11 +40,11 @@ public class visionByNote extends SubsystemBase {
 
     // Initialize Field2d for visualization
 
-    this.x_offset = Constants.NoteLimelightXOfset;
-    this.y_offset = Constants.NoteLimelightYOfset;    
+    this.x_offset = ConstantsVision.NoteLimelightXOfset;
+    this.y_offset = ConstantsVision.NoteLimelightYOfset;    
 
     // Get the Limelight NetworkTable
-    table = NetworkTableInstance.getDefault().getTable(Constants.NoteTable);
+    table = NetworkTableInstance.getDefault().getTable(ConstantsVision.NoteTable);
     notePose = new NotePoseCalc(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
     
     field = new Field2d();
