@@ -29,29 +29,23 @@ public final class ChassisConstants {
   public static final double MOTOR_PULSES_PER_ROTATION = 2048;
   public static final double PULSES_PER_METER = MOTOR_PULSES_PER_ROTATION * MOVE_GEAR_RATIO / WHEEL_CIRCUMFERENCE;
 
-  public static final double FRONT_STEER_RATIO = 151.0 / 7.0;
-  public static final double BACK_STEER_RATIO = 12.8;
+  public static final double STEER_RATIO = 12.8;
 
 
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
-  public static final PID_Constants FRONT_STEER_PID = new PID_Constants(29, /*1.57*/ 0.7, 0.07);//(0.003, 0.000, 0.000005);
-  public static final PID_Constants BACK_STEER_PID = new PID_Constants(29, /*1.57*/ 0.7 , 0.07);//(0.0025, 0.000004, 0.000022);
+  public static final PID_Constants STEER_PID = new PID_Constants(29, /*1.57*/ 0.7 , 0.07);//(0.0025, 0.000004, 0.000022);
   /*TODO kill who forgot to finish the merge */
-  // public static final PID_Constants FRONT_STEER_PID = new PID_Constants(0.95, 0.009, 0.0001);
-  // public static final PID_Constants BACK_STEER_PID = new PID_Constants(0.7, 0, 0.0001);
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
   // public static final FF_Constants MOVE_FF = new FF_Constants(0.1496659759518384, 0.405476931680402, 0.02251759948634);
-  public static final FF_Constants FRONT_STEER_FF = new FF_Constants(0.2101048949, 2.454588675, 0.02710297214); //0.0262, 0.0008, 0.0004);
-  public static final FF_Constants BACK_STEER_FF = new FF_Constants(0.2742838015,1.51359078,  0.001411548535);
+  public static final FF_Constants STEER_FF = new FF_Constants(0.2742838015,1.51359078,  0.001411548535);
   public static final FF_Constants MOVE_FF_MORE = new FF_Constants(0.4, 2.7, 0.03251759948634);
 
 
 
-  public static final double FRONT_INTEGRAL_ZONE = 9;
-  public static final double BACK_INTEGRAL_ZONE = 8;
+  public static final double INTEGRAL_ZONE = 8;
 
 
 //useful data
@@ -60,18 +54,17 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
 
 public static final double SICLE_CAUNT = 50.0;
 
-  //מגדירים שכל סיבוב של המערת הוא יחס גיר - ממיר ל ביחידות של רדיאנים
   public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants(
       "FrontLeft",
       new TalonConfig(4,"rio", "FrontLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
         .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(5,"rio", "FrontLeft/Steer")
-        .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO)
+        .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD, STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
+        .withInvert(false).withMotorRatio(STEER_RATIO)
         .withLimits(MAX_STEER_VELOCITY, MAX_STEER_ACCELERATION),
       6,
-      new Translation2d(0.332, 0.277),
+      new Translation2d(0.173, -0.277),
       -0.39599609375);
 
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
@@ -81,11 +74,11 @@ public static final double SICLE_CAUNT = 50.0;
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
         .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(2,"rio", "FrontRight/Steer")
-        .withPID(FRONT_STEER_PID.KP, FRONT_STEER_PID.KI, FRONT_STEER_PID.KD,FRONT_STEER_FF.KS,FRONT_STEER_FF.KV,FRONT_STEER_FF.KA,0)
-        .withInvert(false).withMotorRatio(FRONT_STEER_RATIO)
+        .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD,STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
+        .withInvert(false).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       3,
-      new Translation2d(0.332, -0.277),
+      new Translation2d(0.173, 0.277),
       -0.448974609375);
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
@@ -95,11 +88,11 @@ public static final double SICLE_CAUNT = 50.0;
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
         .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(11,"rio", "BackLeft/Steer")
-        .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(BACK_STEER_RATIO)
+        .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD,STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
+        .withInvert(true).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       12,
-      new Translation2d(-0.332, 0.288),
+      new Translation2d(-0.313, -0.277),
       -0.1357421875);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
@@ -109,11 +102,11 @@ public static final double SICLE_CAUNT = 50.0;
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
         .withInvert(true).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(8,"rio", "BackRight/Steer")
-        .withPID(BACK_STEER_PID.KP, BACK_STEER_PID.KI, BACK_STEER_PID.KD,BACK_STEER_FF.KS,BACK_STEER_FF.KV,BACK_STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(BACK_STEER_RATIO)
+        .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD,STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
+        .withInvert(true).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       9,
-      new Translation2d(-0.332, -0.288),
+      new Translation2d(-0.332, 0.277),
       -0.48095703125);
 
       

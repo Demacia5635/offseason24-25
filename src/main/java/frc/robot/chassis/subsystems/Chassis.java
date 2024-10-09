@@ -309,13 +309,6 @@ public class Chassis extends SubsystemBase {
     return res;
   }
 
-  public double[] getModulesAngles() {
-    double[] angles = new double[modules.length];
-    for (int i = 0; i < modules.length; i++) {
-      angles[i] = modules[i].getAngleDegrees();
-    }
-    return angles;
-  }
 
   
   public double getPoseX(){
