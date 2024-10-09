@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.subsystems.Chassis;
 import frc.robot.utils.LogManager;
+import frc.robot.utils.Logger;
 
 public class RobotContainer implements Sendable {
   public static RobotContainer robotContainer;
@@ -43,6 +45,7 @@ public class RobotContainer implements Sendable {
   
 
   public RobotContainer() {
+    Logger.addTranslation2d("test", () -> new Translation2d(2, -3));
     robotContainer = this;
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
@@ -100,11 +103,12 @@ public class RobotContainer implements Sendable {
 
    
   public Command getAutonomousCommand() {
+    return null;
     //return new RunCommand(() -> chassis.setModuleSteerVelocity(num, 0), chassis);
     //return new RunCommand(()->chassis.setModulesSteerPower(num));
     //return new RunCommand(()->chassis.setModulesSteerPosition(Rotation2d.fromDegrees(num), 0), chassis);
-    return new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, 1)), chassis)
-    .withTimeout(2).andThen(new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, -1))));
+    // return new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, 1)), chassis)
+    // .withTimeout(2).andThen(new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0, 0, -1))));
     //return new RunCommand(()->chassis.setModulesSteerVoltage(num, 0), chassis);
     //return new RunCommand(()->chassis.setModulesSteerPower(num, 2), chassis);
 

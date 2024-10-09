@@ -110,7 +110,7 @@ public class TalonMotor extends TalonFX {
     getConfigurator().apply(cfg.MotorOutput);
   }
 
-  private void addLog() {
+  /*private void addLog() {
     LogManager.addEntry(name + "/position", this::getPosition);// rotation
     LogManager.addEntry(name + "/position in degres", this::getCurrentPositionAsDegrees);// degrees
     LogManager.addEntry(name + "/Velocity", this::getVelocity);// rotation per seconds
@@ -127,7 +127,27 @@ public class TalonMotor extends TalonFX {
     dutyCycleEntry = LogManager.getEntry(name + "/setDutyCycle");
     velocityEntry = LogManager.getEntry(name + "/setVelocity");
     positionEntry = LogManager.getEntry(name + "/setPosition");
+  }*/
+
+  private void addLog() {
+    Logger.addStatusSignal(name + "/position", this::getPosition);// rotation
+    Logger.addRotation2d(name + "/position in degres", this::getCurrentPosition);// degrees
+    Logger.addStatusSignal(name + "/Velocity", this::getVelocity);// rotation per seconds
+    Logger.addStatusSignal(name + "/Acceleration", this::getAcceleration);// rotation per seconds^2
+    Logger.addStatusSignal(name + "/Voltage", this::getMotorVoltage);
+    Logger.addStatusSignal(name + "/Current", this::getStatorCurrent);
+    Logger.addStatusSignal(name + "/CloseLoopError", this::getClosedLoopError);
+    Logger.addStatusSignal(name + "/CloseLoopOutput", this::getClosedLoopOutput);
+    Logger.addStatusSignal(name + "/CloseLoopP", this::getClosedLoopProportionalOutput);
+    Logger.addStatusSignal(name + "/CloseLoopI", this::getClosedLoopIntegratedOutput);
+    Logger.addStatusSignal(name + "/CloseLoopD", this::getClosedLoopDerivativeOutput);
+    Logger.addStatusSignal(name + "/CloseLoopFF", this::getClosedLoopFeedForward);
+    Logger.addStatusSignal(name + "/CloseLoopSP", this::getClosedLoopReference);
+    dutyCycleEntry = LogManager.getEntry(name + "/setDutyCycle");
+    velocityEntry = LogManager.getEntry(name + "/setVelocity");
+    positionEntry = LogManager.getEntry(name + "/setPosition");
   }
+
   /**
    * set power from 1 to -1 (v/12) no PID/FF
    */
