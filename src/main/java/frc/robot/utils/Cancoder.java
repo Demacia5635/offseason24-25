@@ -13,18 +13,31 @@ public class Cancoder {
         canConfig = new CANcoderConfiguration();
         cancoder.getConfigurator().apply(canConfig);
     }
+    /** when the cancoder opens its start at the absolute position
+     * @return the none absolute amaunt of rotations the motor did
+    */
     public double getNonAbsPosition() {
         return cancoder.getPosition().getValue();
     }
+    /**when the cancoder opens its start at the absolute position
+     * @return the none absolute amaunt of rotations the motor did in rotation2d
+    */
     public Rotation2d getNonAbsRotation2d() {
         return Rotation2d.fromRotations(getNonAbsPosition());
     }
+    /**
+     * @return the absolute amaunt of rotations the motor did
+     */
     public double getAbsRotation() {
         return cancoder.getAbsolutePosition().getValue();
     }
+    /**
+     * @return the absolute amaunt of rotations the motor did in rotation2d
+     */
     public Rotation2d getAbsRotation2d() {
         return Rotation2d.fromRotations(getAbsRotation());
     }
+    
     public double getVelocityRotation(){
         return cancoder.getVelocity().getValue();
     }
