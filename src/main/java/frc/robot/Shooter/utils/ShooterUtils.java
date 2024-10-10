@@ -14,4 +14,16 @@ public class ShooterUtils {
         return Math.acos(((Math.pow(ANGLE_CHANGING_VAR.A, 2)-Math.pow(ANGLE_CHANGING_VAR.B, 2))/(ANGLE_CHANGING_VAR.C+distance)-ANGLE_CHANGING_VAR.C-distance)/(-2*ANGLE_CHANGING_VAR.B));
         //return  Math.acos((distance + C)/(2*B)); if A = B
     }
+
+    public static double getUpMotorFF(double vel) {
+        return SHOOTER_PID_FF.UP_MOTOR_KS * Math.signum(vel) + 
+        SHOOTER_PID_FF.UP_MOTOR_KV * vel + 
+        SHOOTER_PID_FF.UP_MOTOR_KV2 * Math.pow(vel, 2);
+    } 
+
+    public static double getDownMotorFF(double vel) {
+        return SHOOTER_PID_FF.UP_MOTOR_KS * Math.signum(vel) + 
+        SHOOTER_PID_FF.UP_MOTOR_KV * vel + 
+        SHOOTER_PID_FF.UP_MOTOR_KV2 * Math.pow(vel, 2);
+    }
 }

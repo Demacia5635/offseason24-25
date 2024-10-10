@@ -22,14 +22,21 @@ public class ShooterConstants {
 
   public static class SHOOTER_PID_FF{
     
-    public static final double KP = 0.5;
-    public static final double KI = 0.0;
-    public static final double KD = 0.0;
-    public static final double KS = 0.0;
-    public static final double KV = 0.0;
-    public static final double KA = 0.0;
+    public static final double UP_MOTOR_KP = 0.5;
+    public static final double UP_MOTOR_KI = 0.0;
+    public static final double UP_MOTOR_KD = 0.0;
+    public static final double UP_MOTOR_KS = 0.0;
+    public static final double UP_MOTOR_KV = 0.0;
+    public static final double UP_MOTOR_KA = 0.0;
+    public static final double UP_MOTOR_KV2 = 0.0;
 
-    public static final double KV2 = 0.0;
+    public static final double DOWN_MOTOR_KP = 0.5;
+    public static final double DOWN_MOTOR_KI = 0.0;
+    public static final double DOWN_MOTOR_KD = 0.0;
+    public static final double DOWN_MOTOR_KS = 0.0;
+    public static final double DOWN_MOTOR_KV = 0.0;
+    public static final double DOWN_MOTOR_KA = 0.0;
+    public static final double DOWN_MOTOR_KV2 = 0.0;
 
   }
 
