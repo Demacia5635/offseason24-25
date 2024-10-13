@@ -7,7 +7,7 @@ package frc.robot.leds;
 /**constants for leds */
 public class LedConstants {
   /**the size of every strip for every port */
-  public static final int[] STRIPS = {};
+  public static final int[] STRIPS = {10};
 
   /**
    * the blink time between what is color and what is off
