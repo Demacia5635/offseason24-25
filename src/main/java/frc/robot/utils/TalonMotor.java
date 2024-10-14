@@ -2,11 +2,9 @@ package frc.robot.utils;
 
 
 import static frc.robot.chassis.ChassisConstants.CYCLE_DT;
-import static frc.robot.chassis.ChassisConstants.MAX_STEER_VELOCITY;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -16,7 +14,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.chassis.ChassisConstants;
 
 /** Add your docs here. */
 public class TalonMotor extends TalonFX {
@@ -184,25 +181,6 @@ public class TalonMotor extends TalonFX {
   public void setVelocityMPS(double velocity, double radius) {
     setVelocity(Utils.mpsToRps(velocity, radius ));
   }
-  private double steerOptimization(double currentPosition, double wantedPosition) {
-    // Normalize angles to the range [0, 1)
-    
-    currentPosition = currentPosition % 1.0;
-    wantedPosition = wantedPosition % 1.0;
-    
-
-    // Calculate the difference
-    double rotationsDiff = wantedPosition - currentPosition;
-
-    // Normalize the difference to the range [-0.5, 0.5)
-    if (rotationsDiff > 0.5) {
-        rotationsDiff -= 1.0;
-    } else if (rotationsDiff < -0.5) {
-        rotationsDiff += 1.0;
-    }
-
-    return rotationsDiff; // Return the shortest path to move
-  }
 
   /**
   * only use on swerve module steer
@@ -210,44 +188,12 @@ public class TalonMotor extends TalonFX {
   * @param maxError the max vaiable error
   * @param isWithAccel is testing for max accelaration (NEED TO TEST)
   */
-  public void setMotorPositionOptimized(Rotation2d position, Rotation2d maxError, boolean isWithAccel){
-    double wantedPosition = steerOptimization(getCurrentPosition().getRotations(), position.getRotations()) + getCurrentPosition().getRotations();
-    if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);  
-    else{
-        if(getCurrentVelocity().getRotations() + maxDeltaVel < positionVoltage.withPosition(wantedPosition).Velocity 
-          && isWithAccel){
-          setVelocity(getCurrentVelocity().getRotations() + maxDeltaVel);
-        }
-        else if(positionVoltage.withPosition(wantedPosition).Velocity >= maxVel) {
-          setVelocity(ChassisConstants.MAX_STEER_VELOCITY);
-        } else {
-          setControl(positionVoltage.withPosition(wantedPosition));
-        }
-      }
-    
-    positionEntry.log(position.getRotations());
-  } 
-
-  
 
 
-  
-
-
-  /**
-   * set position to drive to in rotations
-   */
-  public void setMotorPosition(Rotation2d position, Rotation2d maxError) {
-    
-    double currentPositionRounded = Math.round(getCurrentPosition().getRotations());
-    double wantedPosition = currentPositionRounded + position.getRotations();
-   
-    if(Math.abs(wantedPosition - getCurrentPosition().getRotations()) <= maxError.getRotations()) set(0);
-    else setControl(positionVoltage.withPosition(wantedPosition).withSlot(0));
-    positionEntry.log(position.getRotations());
-
+  public void setMotorPosition(double position) {
+    setControl(positionVoltage.withPosition(position));
+    positionEntry.log(position);
   }
-
 
 
   /**
@@ -268,20 +214,14 @@ public class TalonMotor extends TalonFX {
   /**
    * get Velosity in rotations per seconds
    */
-  public Rotation2d getCurrentVelocity() {
-    return Rotation2d.fromRotations(getVelocity().getValueAsDouble());
+  public double getCurrentVelocity() {
+    return getVelocity().getValueAsDouble();
   }
   /**
    * get Velosity in meters per second
    */
   public double getCurrentVelocityInMS(double RadiusInM) {
-    return Utils.rpsToMps(getCurrentVelocity().getRotations(), RadiusInM);
-  }
-  /**
-   * get Velosity in degrees per seconds
-   */
-  public double getCurrentVelocityDegrees(){
-    return getCurrentVelocity().getDegrees();
+    return Utils.rpsToMps(getCurrentVelocity(), RadiusInM);
   }
 
 

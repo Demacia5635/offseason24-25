@@ -5,7 +5,6 @@
 package frc.robot.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -13,7 +12,6 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;

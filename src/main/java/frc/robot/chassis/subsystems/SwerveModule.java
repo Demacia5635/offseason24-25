@@ -1,19 +1,20 @@
 package frc.robot.chassis.subsystems;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
-import frc.robot.utils.LogManager;
 import frc.robot.utils.TalonMotor;
 
-import static frc.robot.chassis.ChassisConstants.MAX_STEER_ERROR;
-import static frc.robot.chassis.ChassisConstants.SICLE_CAUNT;
 import static frc.robot.chassis.ChassisConstants.WHEEL_DIAMETER;
+
+import javax.swing.plaf.basic.BasicScrollPaneUI.VSBChangeListener;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -53,12 +54,13 @@ public class SwerveModule extends SubsystemBase {
         // define motors and encoder
         name = (constants.moduleTranslationOffset.getX()>0?"Front":"Back") + 
                (constants.moduleTranslationOffset.getY()>0?"Left":"Right");
-
-
+        debug = constants.moduleTranslationOffset.getX()>0
+             //&& constants.moduleTranslationOffset.getY()<0
+             ; 
 
         moveMotor = new TalonMotor(constants.driveConfig);
         steerMotor = new TalonMotor(constants.steerConfig);
-        absoluteEncoder = new CANcoder(constants.absoluteEncoderId);
+        absoluteEncoder = new CANcoder(constants.absoluteEncoderId, Constants.CANBAS);
 
         // set the controls
         // moveFF = new FeedForward_SVA_V2_VSQRT(constants.moveFF.KS, constants.moveFF.KV, constants.moveFF.KA,
@@ -67,48 +69,34 @@ public class SwerveModule extends SubsystemBase {
         
         canCOnfig = new CANcoderConfiguration();
 
-        canCOnfig.MagnetSensor.MagnetOffset = angleOffset;
+//        canCOnfig.MagnetSensor.MagnetOffset = angleOffset;
 
         absoluteEncoder.getConfigurator().apply(canCOnfig);
-        // name
-        debug = constants.moduleTranslationOffset.getX() < 0 && constants.moduleTranslationOffset.getY() >0;
+
+        
 
         // set motors paramters
         moveMotor.setBrake(true);
         steerMotor.setBrake(true);
         moveMotor.setPosition(0);
-        steerMotor.setPosition(getAngleDegreesRaw());
+        steerMotor.setPosition(getAngleRaw() - angleOffset);
 
         SmartDashboard.putData(name, this);
-
-        LogManager.addEntry(name + "/angle", this::getSteerTalonAngle);
-
 
     }
 
     @Override
     public void periodic() {
+        /*
         if(caunt >= SICLE_CAUNT){
             //steerMotor.setPosition(getAbsDegrees().getDegrees());
             caunt =0;
         }
         caunt ++;
         
-        
+        */
     }
 
-
-
-
-
-    /**
-     * Get the module angle from Talon encoder 
-     * Use to make sure steer direction and gear ratio/pulse per degree are correct
-     * @return angle based on talon encoder
-     */
-    public double getSteerTalonAngle() {
-        return steerMotor.getCurrentPositionAsDegrees();
-    }
 
 
     /**
@@ -119,11 +107,13 @@ public class SwerveModule extends SubsystemBase {
         return moveMotor.getCurrentVelocityInMS(WHEEL_DIAMETER/2);
     }
     /**
-   * set position to drive to in rotations in radians
+   * set position to drive to in rotations
    */
-    public void setSteerPosition(Rotation2d angle){
-        steerMotor.setMotorPositionOptimized(angle, MAX_STEER_ERROR, true);
-    }
+    public void setSteerPosition(double tgt){
+//        double cur = steerMotor.getPosition().getValue();
+//        double off = MathUtil.inputModulus(angle.getRotations()-cur, -0.5, 0.5);
+        steerMotor.setMotorPosition(tgt);
+    }   
 
     /**
      * Stops the module completely
@@ -176,8 +166,8 @@ public class SwerveModule extends SubsystemBase {
         return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValue());
     }
 
+    public double getAngleRaw() {
 
-    public double getAngleDegreesRaw() {
         return absoluteEncoder.getAbsolutePosition().getValueAsDouble();
     }
 
@@ -210,7 +200,7 @@ public class SwerveModule extends SubsystemBase {
      * @return Velocity in degrees per second
      */
     public double getSteerVelocity() {  
-        return steerMotor.getCurrentVelocity().getDegrees();
+        return steerMotor.getCurrentVelocity();
     }
 
     /**
@@ -226,9 +216,31 @@ public class SwerveModule extends SubsystemBase {
      * Sets the state of the module
      */
     public void setState(SwerveModuleState state) {
-        SwerveModuleState optimized = SwerveModuleState.optimize(state, getAbsDegrees());
-        setSteerPosition(optimized.angle);
-        setVelocity(optimized.speedMetersPerSecond);
+        double cur = steerMotor.getPosition().getValue();
+        double tgt = state.angle.getRotations();
+        double dif = tgt - cur;
+        double v = state.speedMetersPerSecond;
+        dif = MathUtil.inputModulus(dif, -0.5, 0.5);
+        if(dif > 0.25) {
+            v = -v;
+            dif = dif-0.5;
+        } else if(dif < -0.25) {
+            v = -v;
+            dif = dif + 0.5;
+        }
+
+        if(v == 0) {
+            steerMotor.set(0);
+        } else {
+            if(debug) System.out.println("id = " + steerMotor.getDeviceID() + 
+                " v=" + state.speedMetersPerSecond + " / " + v +
+                " state = " + state.angle.getRotations() + 
+                " cur=" + cur +
+                " tgt=" + (cur + dif) + 
+                " dif=" + dif);
+            setSteerPosition(cur + dif);
+        }
+        setVelocity(v);
     }
 
     /**

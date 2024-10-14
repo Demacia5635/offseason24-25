@@ -1,6 +1,5 @@
 package frc.robot.chassis.commands;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -8,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 import static frc.robot.chassis.ChassisConstants.MAX_OMEGA_VELOCITY;
 import frc.robot.chassis.subsystems.Chassis;
-import frc.robot.utils.Utils;
 
 import static frc.robot.utils.Utils.deadband;
 
@@ -57,7 +55,15 @@ public class DriveCommand extends Command {
       velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
+    if(velX != 0 || velY != 0 || velRot != 0)
+      System.out.println("Chassis speeds: " + speeds);
     chassis.setVelocities(speeds);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        
+      chassis.stop();
     }
   }
 

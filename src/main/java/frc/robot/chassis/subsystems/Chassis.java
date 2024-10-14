@@ -17,12 +17,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Sysid.Sysid;
 import frc.robot.Sysid.Sysid.Gains;
@@ -32,7 +34,6 @@ import static frc.robot.chassis.ChassisConstants.FRONT_LEFT;
 import static frc.robot.chassis.ChassisConstants.FRONT_RIGHT;
 import static frc.robot.chassis.ChassisConstants.GYRO_ID;
 import static frc.robot.chassis.ChassisConstants.KINEMATICS;
-import static frc.robot.chassis.ChassisConstants.KINEMATICS_DEMACIA;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 
 import frc.robot.utils.LogManager;
@@ -54,7 +55,7 @@ public class Chassis extends SubsystemBase {
         new SwerveModule(BACK_LEFT, this),
         new SwerveModule(BACK_RIGHT, this),
     };    
-    gyro = new Pigeon2(GYRO_ID);
+    gyro = new Pigeon2(GYRO_ID, Constants.CANBAS);
     gyro.setYaw(0);
     
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
@@ -62,11 +63,10 @@ public class Chassis extends SubsystemBase {
     setBrake(true);
     field = new Field2d();
     SmartDashboard.putData(field);
-    SmartDashboard.putData(this);
+//    SmartDashboard.putData(this);
     modules[0].debug = true;
 
     ShuffleboardTab ntTab = Shuffleboard.getTab("Chassis");
-    ntTab.add("Chassis", this);
     //var setGyroEntry = ntTab.add("Set Gyro Angle", 0).getEntry();
     ntTab.add("Set gyro to 0 ",
        new InstantCommand( () -> setGyroAngle(0))
@@ -76,6 +76,7 @@ public class Chassis extends SubsystemBase {
     ntTab.add("run command", 
       new RunCommand(()->{setModulesPower(1); setModulesAngleFromSB(0);}, this));
 
+    ntTab.add("reset gyro", new InstantCommand(()-> gyro.setYaw(0)));
     ntTab.add("set coast",
         new InstantCommand(() -> setBrake(false)).ignoringDisable(true));
     ntTab.add("set brake",
@@ -100,23 +101,19 @@ public class Chassis extends SubsystemBase {
         1,
         1,
         this)).getCommand());
-    ntTab.add("Set Modules Angle", new RunCommand(() -> setModulesAngleFromSB(0)).ignoringDisable(true));
-   // SmartDashboard.putData("Test Steer Velocity", (new CheckModulesSteerVelocity(this, 200)));
-   // SmartDashboard.putData("Set Modules Angle", (new SetModuleAngle(this)));
-   // new TestVelocity("Chassis", this::setVelocity, this::getMoveVelocity, 0.05, this);
-   // SmartDashboard.putNumber("angle for chassis", 0);
-   // SmartDashboard.putData("go to 0", new RunCommand(()->setModulesAngleFromSB(SmartDashboard.getNumber("angle for chassis", 0)), this));
-
-   // SmartDashboard.putNumber("ANG", 0);
-   // SmartDashboard.putData("go to angle position", new RunCommand(()->modules[0].setAngleByPositionPID(Rotation2d.fromDegrees(SmartDashboard.getNumber("ANG", 0))), this));
-
-   setBrake(true);
+        /*
+    ntTab.add("Set Modules Angle", 
+      new RunCommand(() -> setModulesAngleFromSB(0)).ignoringDisable(true));
    ntTab.add("SetAngle45", new RunCommand(() -> {
     Rotation2d angle = Rotation2d.fromDegrees(45);
     for (SwerveModule module : modules) {
       module.setSteerPosition(angle);  
-    }
-   }, this));
+    }});
+    */
+
+    var e = ntTab.add("Set Steer Rot", 0.5).getEntry();
+    ntTab.add("Set Steer CMD", new RunCommand(()->modules[1].setSteerPosition(
+      e.getDouble(0)),this));
   }
 
   public SwerveModule[] getModules() {
@@ -124,10 +121,10 @@ public class Chassis extends SubsystemBase {
   }
 
   public void calibrate() {
-    SmartDashboard.putNumber("LEFT FRONT", modules[0].getAngleDegreesRaw());
-    SmartDashboard.putNumber("RIGHT FRONT", modules[1].getAngleDegreesRaw());
-    SmartDashboard.putNumber("LEFT BACK", modules[2].getAngleDegreesRaw());
-    SmartDashboard.putNumber("RIGHT BACK", modules[3].getAngleDegreesRaw());
+    SmartDashboard.putNumber("LEFT FRONT", modules[0].getAngleRaw());
+    SmartDashboard.putNumber("RIGHT FRONT", modules[1].getAngleRaw());
+    SmartDashboard.putNumber("LEFT BACK", modules[2].getAngleRaw());
+    SmartDashboard.putNumber("RIGHT BACK", modules[3].getAngleRaw());
   }
 
   public boolean isRed() {
@@ -145,7 +142,7 @@ public class Chassis extends SubsystemBase {
   public void resetWheels() {
     Rotation2d angle = Rotation2d.fromDegrees(0);
     for (var module : modules) {
-      module.setSteerPosition(angle);
+      module.setSteerPosition(angle.getRotations());
     }
   }
 
@@ -228,9 +225,9 @@ public class Chassis extends SubsystemBase {
   public void setVelocities(ChassisSpeeds speeds) {
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
 
-    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relativeSpeeds);
+    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
-
+    
     setModuleStates(states);
   }
 
@@ -330,7 +327,7 @@ public class Chassis extends SubsystemBase {
   }
 
   public void setModulesSteerPosition(Rotation2d angle, int i) {
-    modules[i].setSteerPosition(angle);
+    modules[i].setSteerPosition(angle.getRotations());
 
   }
 
@@ -355,11 +352,10 @@ public class Chassis extends SubsystemBase {
     LogManager.addEntry("chassis/poseX", this::getPoseX);
     LogManager.addEntry("chassis/poseY", this::getPoseY);
   }
-
   public void setModulesAngleFromSB(double angle) {;
     Rotation2d a = Rotation2d.fromDegrees(angle);
     for (SwerveModule module : modules) {
-      module.setSteerPosition(a);
+      module.setSteerPosition(a.getRotations());
     }
   }
 
