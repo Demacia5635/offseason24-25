@@ -6,6 +6,7 @@ package frc.robot.SubSystem;
 
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Cancoder;
@@ -22,9 +23,9 @@ public class TestSubSytem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("getNonAbsPosition", cancoder.getNonAbsPosition());
-    SmartDashboard.putNumber("getAbsRotation", cancoder.getAbsRotation());
-    SmartDashboard.putNumber("getVelocityRotation", cancoder.getVelocityRotation());
+    SmartDashboard.putNumber("getNonAbsRotation2d", cancoder.getNonAbsRotation2d().getRotations());
+    SmartDashboard.putNumber("getAbsRotation2d", cancoder.getAbsRotation2d().getRotations());
+    SmartDashboard.putNumber("getVelocityRotation2d", cancoder.getVelocityRotation2dPerSec().getRotations());
     SmartDashboard.putNumber("getPigeonAngleDegree", pigeon.getPigeonAngleDegree());
     SmartDashboard.putNumber("getPigeonPitchDegree", pigeon.getPigeonPitchDegree());
     SmartDashboard.putNumber("getPigeonRollDegree", pigeon.getPigeonRollDegree());
@@ -36,7 +37,7 @@ public class TestSubSytem extends SubsystemBase {
     pigeon.resetPigeon();
   }
   public void setOffset(double offset){
-    cancoder.setOffset(offset);
+    cancoder.setOffset(Rotation2d.fromRotations(offset));
   }
   public void setCanCoderClockwise(Boolean boolDirection){
     cancoder.setCanCoderClockwise(boolDirection);;

@@ -13,41 +13,36 @@ public class Cancoder {
         canConfig = new CANcoderConfiguration();
         cancoder.getConfigurator().apply(canConfig);
     }
-    /** when the cancoder opens its start at the absolute position
-     * @return the none absolute amaunt of rotations the motor did
-    */
-    public double getNonAbsPosition() {
-        return cancoder.getPosition().getValue();
-    }
     /**when the cancoder opens its start at the absolute position
      * @return the none absolute amaunt of rotations the motor did in rotation2d
     */
     public Rotation2d getNonAbsRotation2d() {
-        return Rotation2d.fromRotations(getNonAbsPosition());
-    }
-    /**
-     * @return the absolute amaunt of rotations the motor did
-     */
-    public double getAbsRotation() {
-        return cancoder.getAbsolutePosition().getValue();
+        return Rotation2d.fromRotations(cancoder.getPosition().getValueAsDouble());
     }
     /**
      * @return the absolute amaunt of rotations the motor did in rotation2d
      */
     public Rotation2d getAbsRotation2d() {
-        return Rotation2d.fromRotations(getAbsRotation());
+        return Rotation2d.fromRotations(cancoder.getAbsolutePosition().getValueAsDouble());
     }
-    
-    public double getVelocityRotation(){
-        return cancoder.getVelocity().getValue();
+    /** 
+     * @return the amount of rotations the motor do per second in Rotation2d
+     */
+    public Rotation2d getVelocityRotation2dPerSec(){
+        return Rotation2d.fromRotations(cancoder.getVelocity().getValueAsDouble());
     }
-    public Rotation2d getVelocityRotation2d(){
-        return Rotation2d.fromRotations(getVelocityRotation());
-    }
-    public void setOffset(double offset){
-        canConfig.MagnetSensor.MagnetOffset = offset;
+    /** set the offset of the cancoder to offset
+     * subtracts from the position the offset at all time
+     * @param 
+     */
+    public void setOffset(Rotation2d offset){
+        canConfig.MagnetSensor.MagnetOffset = offset.getRotations();
         cancoder.getConfigurator().apply(canConfig); 
     }
+    /** set the diraction of the cancoder
+     * when changing the diraction the position will moltiply by minus one at all time
+     * @param
+     */
     public void setCanCoderClockwise(Boolean boolDirection){
         SensorDirectionValue direction = boolDirection ? SensorDirectionValue.Clockwise_Positive: SensorDirectionValue.CounterClockwise_Positive;
         canConfig.MagnetSensor.SensorDirection = direction;

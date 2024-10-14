@@ -14,14 +14,12 @@ public class Pigeon {
     public Pigeon(int ID, String CANBUS) {
         pigeon = new Pigeon2(ID, CANBUS);
     }
+    /**  */
     public double getPigeonAngleDegree(){
         return pigeon.getAngle();
     }
     public Rotation2d getPigeonAngleRotation2d(){
         return Rotation2d.fromDegrees(getPigeonAngleDegree());
-    }
-    public double getPigeonAngleRotation(){
-        return getPigeonAngleRotation2d().getRotations();
     }
     public double getPigeonPitchDegree(){
         return pigeon.getPitch().getValue();
