@@ -1,7 +1,6 @@
 package frc.robot.utils;
 
 
-import static frc.robot.chassis.ChassisConstants.CYCLE_DT;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -30,20 +29,12 @@ public class TalonMotor extends TalonFX {
   LogManager.LogEntry velocityEntry;
   LogManager.LogEntry positionEntry;
 
-  /*TODO test limits */
-  boolean isLimitsEnable;
-  double maxVel;
-  double maxAcc;
-  double maxDeltaVel;
-
-
   public TalonMotor(TalonConfig config) {
     super(config.id, config.canbus);
     this.config = config;
     name = config.name;
     configMotor();
     addLog();
-    this.maxDeltaVel = maxAcc * CYCLE_DT;
     LogManager.log(name + " motor initialized");
   }
 
@@ -113,10 +104,6 @@ public class TalonMotor extends TalonFX {
     getVelocity().setUpdateFrequency(200);
     getAcceleration().setUpdateFrequency(200);
     getMotorVoltage().setUpdateFrequency(200);
-
-    isLimitsEnable = config.isLimitsEnable;
-    maxVel = config.maxVel;
-    maxAcc = config.maxAccel;
 
   }
   /*

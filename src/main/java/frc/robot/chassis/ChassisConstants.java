@@ -64,8 +64,7 @@ public static final double SICLE_CAUNT = 50.0;
       .withInvert(false).withMotorRatio(MOVE_GEAR_RATIO),
       new TalonConfig(5,CANBAS, "FrontLeft/Steer")
         .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD, STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
-        .withInvert(true).withMotorRatio(STEER_RATIO)
-        .withLimits(MAX_STEER_VELOCITY, MAX_STEER_ACCELERATION),
+        .withInvert(true).withMotorRatio(STEER_RATIO),
       6,
       new Translation2d(0.173, 0.277),
       0.395263671875);

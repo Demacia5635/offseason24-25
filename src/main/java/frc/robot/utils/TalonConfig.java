@@ -27,11 +27,6 @@ public class TalonConfig {
     public double ksin = 0;
     public double posToRad = 0;
 
-    /*TODO testing limits */
-    public boolean isLimitsEnable = false;
-    public double maxVel = 0;
-    public double maxAccel = 0;
-
     /** 
     * Class to hold closed loop param
     *  */
@@ -76,20 +71,6 @@ public class TalonConfig {
     public TalonConfig withVolts(double maxVolt, double minVolt) {
         this.maxVolt = maxVolt;
         this.minVolt = minVolt;
-        return this;
-    }
-
-    /**
-     * puting limits to the motor position
-     * <br> </br> also enable the limits
-     * @param maxVel the max velocity in rps
-     * @param accel the max accelaration in rps^2
-     * @return this config with limits
-     */
-    public TalonConfig withLimits(double maxVel, double accel) {
-        this.isLimitsEnable = true;
-        this.maxVel = maxVel;
-        this.maxAccel = accel;
         return this;
     }
     
