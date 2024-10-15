@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -12,17 +13,19 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utils.LogManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.chassis.commands.DriveCommand;
-import frc.robot.chassis.subsystems.Chassis;
 import frc.robot.Intake.Command.IntakeCommand;
 import frc.robot.Intake.Subsystem.Intake;
+import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Commands.GoToAngle;
 import frc.robot.Shooter.Commands.Shoot;
-import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
+import frc.robot.chassis.commands.DriveCommand;
+import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.utils.LogManager;
+
+import static frc.robot.Constants.*;
 
 public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
@@ -31,16 +34,20 @@ public class RobotContainer implements Sendable{
 
   public LogManager logManager = new LogManager();
 
-  public Chassis chassis;
+  public static Chassis chassis;
   public static Shooter shooter;
   public static AngleChanger angleChanging;
-  private Shoot shootCommand;
   public static Intake intake;
-  public static IntakeCommand intakeCommand;
+
+  private IntakeCommand intakeCommand;
+  private Shoot shootCommand;
+  private Command resetOdometry;
+  private DriveCommand driveCommand;
+  private GoToAngle gotoAngleCommand;
+  private Command stopAll;
 
   public static boolean isShooterReady = false;
 
-  public Command resetOdometry;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -48,26 +55,32 @@ public class RobotContainer implements Sendable{
     robotContainer = this;
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
+    controller = new CommandXboxController(CONTROLLER_PORT);
 
     chassis = new Chassis();
-    controller = new CommandXboxController(0);
-    chassis.setDefaultCommand(new DriveCommand(chassis, controller));
     shooter = new Shooter();
     angleChanging = new AngleChanger();
-    angleChanging.setDefaultCommand(new GoToAngle(angleChanging));
-    shootCommand = new Shoot(shooter);
     intake = new Intake();
+
+    shootCommand = new Shoot(shooter, intake);
     intakeCommand = new IntakeCommand(intake);
+    resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward())
+                        .ignoringDisable(true);
+    driveCommand = new DriveCommand(chassis, controller);
+    // gotoAngleCommand = new GoToAngle(angleChanging);
+    stopAll = new InstantCommand(()-> {
+      chassis.stop();
+      shooter.setMotorPower(0, 0);;
+      shooter.setFeedingPower(0);
+      angleChanging.setMotorPower(0);
+      intake.setPowerToMotors(0);
+    }, chassis, shooter, angleChanging, intake);
+    
+    chassis.setDefaultCommand(driveCommand);
+    angleChanging.setDefaultCommand(gotoAngleCommand);
 
     SmartDashboard.putData("RobotContainer", this);
-
-    // Configure the trigger bindings
-    createCommands();
     configureBindings();
-  }
-
-  private void createCommands() {
-    resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward()).ignoringDisable(true);
   }
 
 
@@ -77,42 +90,23 @@ public class RobotContainer implements Sendable{
     
     controller.a().onTrue(shootCommand);
 
-    controller.b().onTrue(new InstantCommand(() -> {
-      if (shooter.shooterState == STATE.SPEAKER){
-        shooter.shooterState = STATE.AMP;
-        angleChanging.angleState = STATE.AMP;
-      }
-      if (shooter.shooterState == STATE.AMP){
-        shooter.shooterState = STATE.SPEAKER;
-        angleChanging.angleState = STATE.SPEAKER;
-      }
-    }, shooter, angleChanging));
-
     controller.x().onTrue(new InstantCommand(() -> {
         isShooterReady = true;
-    }, shooter));
+    }));
 
     controller.y().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.TESTING;
         angleChanging.angleState = STATE.TESTING;
-    }, shooter).ignoringDisable(true));
+    }).ignoringDisable(true));
 
-    controller.rightTrigger().onTrue(new InstantCommand(() -> {
-        shooter.shooterState = STATE.STAGE;
-        angleChanging.angleState = STATE.STAGE;
-    }, shooter, angleChanging));
-
-    controller.leftTrigger().onTrue(new InstantCommand(() -> {
-        shooter.shooterState = STATE.SUBWOFFER;
-        angleChanging.angleState = STATE.SUBWOFFER;
-    }, shooter, angleChanging));
-
-    controller.back().onTrue(new InstantCommand(() -> {
+    controller.b().onTrue(new InstantCommand(() -> {
         shooter.shooterState = STATE.IDLE;
         angleChanging.angleState = STATE.IDLE;
-    }, shooter, angleChanging));
+    }));
     
-    controller.leftBumper().onTrue(intakeCommand);
+    controller.povUp().onTrue(intakeCommand);
+
+    controller.leftBumper().onTrue(stopAll);
   }
    
   public void isRed(boolean isRed) {
