@@ -47,7 +47,7 @@ public class AngleChanger extends SubsystemBase {
 
     angleChangingMotor = new TalonFX(MOTOR_IDS.ANGLE_CHANGING_ID, MOTOR_IDS.CANBUS);
     config = new TalonFXConfiguration();
-    angleState = STATE.SPEAKER;
+    angleState = STATE.TESTING;
 
     config.Slot0.kP = ANGLE_CHANGING_PID_FF.KP;
     config.Slot0.kI = ANGLE_CHANGING_PID_FF.KI;
