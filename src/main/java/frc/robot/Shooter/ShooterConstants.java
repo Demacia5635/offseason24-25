@@ -4,6 +4,8 @@
 
 package frc.robot.Shooter;
 
+import frc.robot.Constants;
+
 /** Add your docs here. */
 public class ShooterConstants {
 
@@ -16,7 +18,7 @@ public class ShooterConstants {
 
     public static final int LIMIT_SWITCH_ID = 0;
 
-    public static final String CANBUS = "CANIVORE";
+    public static final String CANBUS = Constants.CANBUS;
   }
 
 

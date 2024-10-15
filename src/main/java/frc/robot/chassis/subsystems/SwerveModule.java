@@ -60,7 +60,7 @@ public class SwerveModule extends SubsystemBase {
 
         moveMotor = new TalonMotor(constants.driveConfig);
         steerMotor = new TalonMotor(constants.steerConfig);
-        absoluteEncoder = new CANcoder(constants.absoluteEncoderId, Constants.CANBAS);
+        absoluteEncoder = new CANcoder(constants.absoluteEncoderId, Constants.CANBUS);
 
         // set the controls
         // moveFF = new FeedForward_SVA_V2_VSQRT(constants.moveFF.KS, constants.moveFF.KV, constants.moveFF.KA,

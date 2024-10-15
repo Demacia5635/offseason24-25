@@ -41,8 +41,9 @@ public class Intake extends SubsystemBase {
    * Configars the motors and and the configs
    */
   public Intake() {
-    motorMove = new TalonFX(IdOfMotors.INTAKE_MOTOR_UP_ID,IdOfMotors.CANBUS);
-    motorPickUp = new TalonFX(IdOfMotors.INTAKE_MOTOR_DOWN_ID,IdOfMotors.CANBUS);
+    motorMove = new TalonFX(IdOfMotors.MOTOR_MOVE_ID,IdOfMotors.CANBUS);
+    motorPickUp = new TalonFX(IdOfMotors.MOTOR_PICKUP_ID,IdOfMotors.CANBUS);
+    analogIRSenor = new AnalogInput(IdOfMotors.IR_SENSOR);
     configBase = new TalonFXConfiguration();
 
     configBase.MotorOutput.NeutralMode = Config.IS_BRAKE_MOTORS ?NeutralModeValue.Brake :NeutralModeValue.Coast;

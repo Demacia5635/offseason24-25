@@ -55,7 +55,7 @@ public class Chassis extends SubsystemBase {
         new SwerveModule(BACK_LEFT, this),
         new SwerveModule(BACK_RIGHT, this),
     };    
-    gyro = new Pigeon2(GYRO_ID, Constants.CANBAS);
+    gyro = new Pigeon2(GYRO_ID, Constants.CANBUS);
     gyro.setYaw(0);
     
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());

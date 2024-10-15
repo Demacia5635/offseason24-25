@@ -1,5 +1,6 @@
 package frc.robot.Intake;
 
+import frc.robot.Constants;
 
 /**
  * The intake constants
@@ -13,6 +14,8 @@ public class IntakeConstants {
     public static final int INTAKE_MOTOR_DOWN_ID = -1;
     public static final int INTAKE_MOTOR_UP_ID = -1;
     public static final String CANBUS = "canivore";
+
+    public static final String CANBUS = Constants.CANBUS;
   }
 
   /**

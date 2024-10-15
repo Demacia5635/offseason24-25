@@ -10,7 +10,7 @@ import frc.robot.Constants;
 
 public final class ChassisConstants {
 
-  private static final String CANBAS = Constants.CANBAS;
+  private static final String CANBAS = Constants.CANBUS;
   public static final int GYRO_ID = 14;
 
   public static final double CYCLE_DT = 0.02;
