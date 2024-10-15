@@ -16,7 +16,8 @@ import frc.robot.utils.LogManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.subsystems.Chassis;
-
+import frc.robot.Intake.Command.IntakeCommand;
+import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.Commands.GoToAngle;
 import frc.robot.Shooter.Commands.Shoot;
 import frc.robot.Shooter.ShooterConstants.STATE;
@@ -34,6 +35,8 @@ public class RobotContainer implements Sendable{
   public static Shooter shooter;
   public static AngleChanger angleChanging;
   private Shoot shootCommand;
+  public static Intake intake;
+  public static IntakeCommand intakeCommand;
 
   public static boolean isShooterReady = false;
 
@@ -53,6 +56,8 @@ public class RobotContainer implements Sendable{
     angleChanging = new AngleChanger();
     angleChanging.setDefaultCommand(new GoToAngle(angleChanging));
     shootCommand = new Shoot(shooter);
+    intake = new Intake();
+    intakeCommand = new IntakeCommand(intake);
 
     SmartDashboard.putData("RobotContainer", this);
 
@@ -70,7 +75,7 @@ public class RobotContainer implements Sendable{
 
     controller.back().onTrue(resetOdometry);
     
-      controller.a().onTrue(shootCommand);
+    controller.a().onTrue(shootCommand);
 
     controller.b().onTrue(new InstantCommand(() -> {
       if (shooter.shooterState == STATE.SPEAKER){
@@ -106,6 +111,8 @@ public class RobotContainer implements Sendable{
         shooter.shooterState = STATE.IDLE;
         angleChanging.angleState = STATE.IDLE;
     }, shooter, angleChanging));
+    
+    controller.leftBumper().onTrue(intakeCommand);
   }
    
   public void isRed(boolean isRed) {
