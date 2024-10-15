@@ -28,8 +28,6 @@ public class Shooter extends SubsystemBase {
   private TalonFX motorUp;
   private TalonFX motorDown;
   private TalonSRX motorFeeding;
-  /**remove when mergin to master */
-  public static boolean tempIRSensor = false;
 
   private TalonFXConfiguration configShooting;
   private TalonFXConfiguration configUp;

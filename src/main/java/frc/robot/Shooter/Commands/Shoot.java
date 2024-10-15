@@ -146,7 +146,7 @@ public class Shoot extends Command {
       intake.motorMoveSetPower(SHOOTER_POW.INTAKE_MOTOR_POWER);
       isReady = false;
       isShooterReady = false;
-      if (Shooter.tempIRSensor){
+      if (intake.isNote()){
         shooterTimer.start();
       }
       while (shooterTimer.get()/1000 <= MIL_SEC_TO_SHOOT){}
