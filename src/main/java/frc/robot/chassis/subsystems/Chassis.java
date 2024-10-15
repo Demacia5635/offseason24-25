@@ -33,7 +33,7 @@ import frc.robot.utils.LogManager;
 
 public class Chassis extends SubsystemBase {
   private final SwerveModule[] modules;
-  private final Pigeon2 gyro;
+  public final Pigeon2 gyro;
   private SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field;
 
