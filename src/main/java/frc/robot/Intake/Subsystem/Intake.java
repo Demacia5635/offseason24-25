@@ -46,23 +46,26 @@ public class Intake extends SubsystemBase {
     analogIRSenor = new AnalogInput(IdOfMotors.IR_SENSOR);
     configBase = new TalonFXConfiguration();
 
+    
     configBase.MotorOutput.NeutralMode = Config.IS_BRAKE_MOTORS ?NeutralModeValue.Brake :NeutralModeValue.Coast;
-
+    
     configMove = configBase;
     configPickUp = configBase;
-
+    
     configMove.MotorOutput.Inverted = Config.IS_INVERTED_MOTOR_MOVE
     ? InvertedValue.CounterClockwise_Positive
     : InvertedValue.Clockwise_Positive;
-
+    
     configPickUp.MotorOutput.Inverted = Config.IS_INVERTED_MOTOR_PICKUP
     ? InvertedValue.CounterClockwise_Positive
     : InvertedValue.Clockwise_Positive;
     
     motorMove.getConfigurator().apply(configMove);
     motorPickUp.getConfigurator().apply(configPickUp);
+    
+    currentPosition = NotePosition.NO_NOTE;
   }
-
+  
   /** Set power to motor Move */
   public void motorMoveSetPower(double power){
     motorMove.set(power);
