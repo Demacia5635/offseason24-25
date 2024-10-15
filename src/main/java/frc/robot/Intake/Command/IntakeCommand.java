@@ -59,6 +59,6 @@ public class IntakeCommand extends Command {
    */
   @Override
   public boolean isFinished() {
-    return intake.AmperHighMotorMove() || Intake.isNoteInIntake || intake.isNote();
+    return /*intake.AmperHighMotorMove() ||*/  Intake.isNoteInIntake || intake.isNote();
   }
 }
