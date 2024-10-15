@@ -11,10 +11,10 @@ public class ShooterConstants {
 
   public static class MOTOR_IDS{
     
-    public static final int MOTOR_UP_ID = 2;
-    public static final int MOTOR_DOWN_ID = 35;
-    public static final int MOTOR_FEEDING_ID = 4;
-    public static final int ANGLE_CHANGING_ID = 5;
+    public static final int MOTOR_UP_ID = 30;
+    public static final int MOTOR_DOWN_ID = 31;
+    public static final int MOTOR_FEEDING_ID = 32;
+    public static final int ANGLE_CHANGING_ID = 33;
 
     public static final int LIMIT_SWITCH_ID = 0;
 

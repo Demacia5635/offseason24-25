@@ -11,9 +11,9 @@ public class IntakeConstants {
    * The id of motors and the name of the canivore
    */
   public static class IdOfMotors{
-    public static final int INTAKE_MOTOR_DOWN_ID = -1;
-    public static final int INTAKE_MOTOR_UP_ID = -1;
-    public static final String CANBUS = "canivore";
+    public static final int MOTOR_PICKUP_ID = 20;
+    public static final int MOTOR_MOVE_ID = 21;
+    public static final int IR_SENSOR = 1;
 
     public static final String CANBUS = Constants.CANBUS;
   }
