@@ -10,6 +10,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.ShooterConstants.AMP_VAR;
 import frc.robot.Shooter.ShooterConstants.DISTANCES;
 import frc.robot.Shooter.ShooterConstants.SHOOTER_POW;
@@ -25,6 +26,7 @@ import static frc.robot.Shooter.ShooterConstants.*;
 public class Shoot extends Command {
   
   private Shooter shooter;
+  private Intake intake;
 
   private double upMotorVelocity;
   private double downMotorVelocity;
@@ -42,14 +44,15 @@ public class Shoot extends Command {
   private Timer shooterTimer;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter) {
+  public Shoot(Shooter shooter, Intake intake) {
     lookupTable = new LookUpTable(testingData);
     this.shooter = shooter;
+    this.intake = intake;
     shooterTimer = new Timer();
     isReady = false;
     isfinished = false;
     SmartDashboard.putData(this);
-    addRequirements(shooter);
+    addRequirements(shooter, intake);
     // Use addRequirements() here to declare subsystem dependencies.ll
   }
 
@@ -141,6 +144,7 @@ public class Shoot extends Command {
         || isShooterReady;
     if (isReady){
       shooter.setFeedingPower(SHOOTER_POW.FEEDING_MOTOR_POWER);
+      intake.motorMoveSetPower(SHOOTER_POW.INTAKE_MOTOR_POWER);
       isReady = false;
       isShooterReady = false;
       if (Shooter.tempIRSensor){
@@ -160,6 +164,8 @@ public class Shoot extends Command {
     }
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
+    intake.motorMoveSetPower(0);
+    shooterTimer.reset();
   }
 
   // Returns true when the command should end.
