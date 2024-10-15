@@ -14,8 +14,6 @@ import frc.robot.utils.TalonMotor;
 
 import static frc.robot.chassis.ChassisConstants.WHEEL_DIAMETER;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI.VSBChangeListener;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 
