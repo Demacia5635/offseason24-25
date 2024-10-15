@@ -38,7 +38,6 @@ public final class ChassisConstants {
   // PID
   public static final PID_Constants MOVE_PID = new PID_Constants(0.0000001, 0, 0);
   public static final PID_Constants STEER_PID = new PID_Constants(29, /*1.57*/ 0.7 , 0.07);//(0.0025, 0.000004, 0.000022);
-  /*TODO kill who forgot to finish the merge */
   public static final double MOVE_KV2 = -0.059217884557999;
   public static final double MOVE_KVSQRT = -0.506283997180385;
   // Feed Forward Gains
