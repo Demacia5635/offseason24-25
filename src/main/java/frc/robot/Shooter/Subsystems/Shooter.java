@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Shooter.ShooterConstants.*;
+import frc.robot.Shooter.utils.LookUpTable;
 
 public class Shooter extends SubsystemBase {
   
@@ -42,6 +43,8 @@ public class Shooter extends SubsystemBase {
   private DutyCycleOut m_request;
   private VelocityVoltage velocityVoltage;
   public STATE shooterState;
+  
+  public LookUpTable lookUpTable;
   
   /** Creates a new Shooter. */
   public Shooter() {
@@ -84,6 +87,8 @@ public class Shooter extends SubsystemBase {
     motorFeeding.configFactoryDefault();
     motorFeeding.setInverted(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_INVERT);
     motorFeeding.setNeutralMode(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_BRAKE ? NeutralMode.Brake : NeutralMode.Coast);
+
+    lookUpTable = new LookUpTable(LookUpTableData.DATA);
 
     SmartDashboard.putData(this);
   }

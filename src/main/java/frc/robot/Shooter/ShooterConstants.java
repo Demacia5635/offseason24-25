@@ -149,13 +149,28 @@ public class ShooterConstants {
 
       public static final double WING_DISTANCE = 231;
       public static final double RIVAL_WING_DISTANCE = 421;
-
-
   }
 
   public static final double RADIOS = 0.36;
   public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
   public static final double MIL_SEC_TO_SHOOT = 1000;
+
+  /**
+   * Lookup table in the format of: <br> </br>
+   * {@code [dis, angle, upMotorVel, downMotorVel]}
+   * <br></br>
+   * <ul>
+   *  <li> dis - distance from the wanted shooting place in meters (primary key) </li>
+   *  <li> angle - the working angle in this position in degrees </li>
+   *  <li> upMotorVel - the working up motor vel in this location in meter per seconds </li>
+   *  <li> downMotorVel - the working down motor vel in this location in meters per seconds </li>
+   * </ul>
+   */
+  public static class LookUpTableData {
+    public static final double[][] DATA = {
+      {}
+    };
+  }
 
   public enum STATE{
     AMP, STAGE, SUBWOFFER, DELIVERY_MID, DELIVERY_RIVAL, SPEAKER, IDLE, TESTING;

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Shooter.ShooterConstants.*;
 
+import frc.robot.Shooter.utils.LookUpTable;
 import frc.robot.Shooter.utils.ShooterUtils;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -37,6 +38,8 @@ public class AngleChanger extends SubsystemBase {
   public STATE angleState;
 
   public DigitalInput limitSwitch;
+
+  public LookUpTable lookUpTable;
 
 
   /** Creates a new AngleChanging. */
@@ -74,6 +77,8 @@ public class AngleChanger extends SubsystemBase {
     : NeutralModeValue.Coast;
 
     angleChangingMotor.getConfigurator().apply(config);
+
+    lookUpTable = new LookUpTable(LookUpTableData.DATA);
 
     SmartDashboard.putData(this);
     

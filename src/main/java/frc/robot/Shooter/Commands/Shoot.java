@@ -39,15 +39,14 @@ public class Shoot extends Command {
   public boolean isfinished;
 
   private LookUpTable lookupTable;
-  private double[][] testingData;
 
   private Timer shooterTimer;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Intake intake) {
-    lookupTable = new LookUpTable(testingData);
     this.shooter = shooter;
     this.intake = intake;
+    lookupTable = shooter.lookUpTable;
     shooterTimer = new Timer();
     isReady = false;
     isfinished = false;

@@ -24,7 +24,6 @@ import static frc.robot.Shooter.ShooterConstants.*;
 public class GoToAngle extends Command {
   /** Creates a new setShooting. */
   private LookUpTable lookupTable;
-  private double[][] testingData;
   private AngleChanger angleChanger;
   public double wantedAngle;
   private double testingAngle; 
@@ -37,9 +36,8 @@ public class GoToAngle extends Command {
   
 
   public GoToAngle(AngleChanger angleChanger) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.angleChanger = angleChanger;
-    lookupTable = new LookUpTable(testingData);
+    lookupTable = angleChanger.lookUpTable;
     SmartDashboard.putData(this);
     addRequirements(angleChanger);
   }
