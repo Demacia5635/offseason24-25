@@ -4,11 +4,7 @@
 
 package frc.robot.Shooter.Subsystems;
 
-import frc.robot.Shooter.ShooterConstants.MOTOR_IDS;
-import frc.robot.Shooter.ShooterConstants.SHOOTER_CONFIGS;
-import frc.robot.Shooter.ShooterConstants.SHOOTER_PID_FF;
-import frc.robot.Shooter.ShooterConstants.STATE;
-import frc.robot.Shooter.utils.ShooterUtils;
+import static frc.robot.Shooter.ShooterConstants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -24,9 +20,8 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static frc.robot.Shooter.ShooterConstants.*;
 import frc.robot.Shooter.utils.LookUpTable;
+import frc.robot.Shooter.utils.ShooterUtils;
 
 public class Shooter extends SubsystemBase {
   
