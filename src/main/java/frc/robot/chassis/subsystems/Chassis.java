@@ -1,6 +1,8 @@
 package frc.robot.chassis.subsystems;
 
 
+import static frc.robot.chassis.ChassisConstants.*;
+
 import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -17,7 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,16 +27,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.Sysid.Sysid;
-import frc.robot.Sysid.Sysid.Gains;
-import static frc.robot.chassis.ChassisConstants.BACK_LEFT;
-import static frc.robot.chassis.ChassisConstants.BACK_RIGHT;
-import static frc.robot.chassis.ChassisConstants.FRONT_LEFT;
-import static frc.robot.chassis.ChassisConstants.FRONT_RIGHT;
-import static frc.robot.chassis.ChassisConstants.GYRO_ID;
-import static frc.robot.chassis.ChassisConstants.KINEMATICS;
-import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
-
 import frc.robot.utils.LogManager;
 
 
@@ -87,29 +78,13 @@ public class Chassis extends SubsystemBase {
     ntTab.add("calibrate", new InstantCommand(()->calibrate(), this).ignoringDisable(true));
 
 
-    ntTab.add("Chassis Move Sysid",
-        (new Sysid(this::setModulesPower, this::getMoveVelocity, 0.2, 0.8, this)).getCommand());
-    ntTab.add("Chassis Move Sysid2",
-        (new Sysid(new Gains[] { Gains.KS, Gains.KV, Gains.KA, Gains.KV2, Gains.KVsqrt},
-        this::setModulesPower,
-        this::getMoveVelocity,
-        null,
-        null,
-        0.1,
-        0.6,
-        3,
-        1,
-        1,
-        this)).getCommand());
-        /*
-    ntTab.add("Set Modules Angle", 
-      new RunCommand(() -> setModulesAngleFromSB(0)).ignoringDisable(true));
-   ntTab.add("SetAngle45", new RunCommand(() -> {
-    Rotation2d angle = Rotation2d.fromDegrees(45);
-    for (SwerveModule module : modules) {
-      module.setSteerPosition(angle);  
-    }});
-    */
+    //   ntTab.add("Set Modules Angle", 
+    //     new RunCommand(() -> setModulesAngleFromSB(0)).ignoringDisable(true));
+    //  ntTab.add("SetAngle45", new RunCommand(() -> {
+    //   Rotation2d angle = Rotation2d.fromDegrees(45);
+    //   for (SwerveModule module : modules) {
+    //     module.setSteerPosition(angle);  
+    //   }});
 
     var e = ntTab.add("Set Steer Rot", 0.5).getEntry();
     ntTab.add("Set Steer CMD", new RunCommand(()->modules[1].setSteerPosition(
