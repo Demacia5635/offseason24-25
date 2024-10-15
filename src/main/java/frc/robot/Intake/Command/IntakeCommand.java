@@ -1,5 +1,8 @@
 package frc.robot.Intake.Command;
 
+import static frc.robot.Intake.IntakeConstants.STOP_COMMAND_TIME;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Intake.IntakeConstants.NotePosition;
@@ -11,12 +14,15 @@ public class IntakeCommand extends Command {
   /** The intake subsistem */
   private Intake intake;
 
+  Timer timer;
+
   /**
    * Takes the intake subsystem
    * @param intake
    */
   public IntakeCommand(Intake intake) {
     this.intake = intake;
+    timer = new Timer();
     addRequirements(intake);
   }
 
@@ -26,6 +32,7 @@ public class IntakeCommand extends Command {
   @Override
   public void initialize(){
     Intake.currentPosition = NotePosition.NO_NOTE;
+    timer.start();
   }
 
 
@@ -52,6 +59,8 @@ public class IntakeCommand extends Command {
   public void end(boolean interrupted) {
     Intake.isNoteInIntake = true;
     intake.setPowerToMotors(0);
+    timer.stop();
+    timer.reset();
   }
 
   /**
@@ -59,6 +68,6 @@ public class IntakeCommand extends Command {
    */
   @Override
   public boolean isFinished() {
-    return /*intake.AmperHighMotorMove() ||*/  Intake.isNoteInIntake || intake.isNote();
+    return intake.AmperHighMotorMove() ||  Intake.isNoteInIntake || intake.isNote() || timer.get()/1000 > STOP_COMMAND_TIME;
   }
 }

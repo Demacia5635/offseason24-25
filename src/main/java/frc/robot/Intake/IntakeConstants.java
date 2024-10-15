@@ -34,6 +34,9 @@ public class IntakeConstants {
   //The amper of when the not is fed to the intake
   public static final double NOTE_AMPER = 0.0;
 
+  /**The amount of time the intake command will auto stop (in miliseconds) */
+  public static final double STOP_COMMAND_TIME = 5000;
+
   /**
    * The current position of the note to power fo the motors
    */
@@ -51,7 +54,5 @@ public class IntakeConstants {
     NotePosition(double power) {
       this.power = power;
     }
-
-
   }
 }
