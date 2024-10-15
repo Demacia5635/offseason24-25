@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Intake.IntakeConstants.Config;
 import frc.robot.Intake.IntakeConstants.IdOfMotors;
@@ -64,6 +65,7 @@ public class Intake extends SubsystemBase {
     motorPickUp.getConfigurator().apply(configPickUp);
     
     currentPosition = NotePosition.NO_NOTE;
+    SmartDashboard.putData("intake", this);
   }
   
   /** Set power to motor Move */
