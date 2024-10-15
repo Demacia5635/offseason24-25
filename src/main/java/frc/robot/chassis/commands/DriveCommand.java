@@ -40,8 +40,8 @@ public class DriveCommand extends Command {
     isRed = chassis.isRed();
     direction = isRed ? 1 : -1;
     
-    double joyX = deadband(commandXboxController.getLeftY(), 0.1) * direction;
-    double joyY = deadband(commandXboxController.getLeftX(), 0.1) * direction;
+    double joyX = deadband(commandXboxController.getLeftY(), 0.13) * direction;
+    double joyY = deadband(commandXboxController.getLeftX(), 0.13) * direction;
     double rot = (deadband(commandXboxController.getRightTriggerAxis(), 0.03)
         - deadband(commandXboxController.getLeftTriggerAxis(), 0.03));
 
