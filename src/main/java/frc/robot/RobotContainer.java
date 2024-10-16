@@ -77,7 +77,7 @@ public class RobotContainer implements Sendable{
     resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward())
                         .ignoringDisable(true);
     driveCommand = new DriveCommand(chassis, controller);
-    // gotoAngleCommand = new GoToAngle(angleChanging);
+    gotoAngleCommand = new GoToAngle(angleChanging);
     stopAll = new InstantCommand(()-> {
       chassis.stop();
       shooter.setMotorPower(0, 0);;
@@ -86,8 +86,8 @@ public class RobotContainer implements Sendable{
       intake.setPowerToMotors(0);
     }, chassis, shooter, angleChanging, intake);
     
-    chassis.setDefaultCommand(driveCommand);
-    angleChanging.setDefaultCommand(gotoAngleCommand);
+    // chassis.setDefaultCommand(driveCommand);
+    // angleChanging.setDefaultCommand(gotoAngleCommand);
     
     gyro = chassis.gyro;
     pose = new visionByTag(gyro);
