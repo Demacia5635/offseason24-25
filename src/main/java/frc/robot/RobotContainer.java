@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.vision.subsystem.visionByNote;
 import frc.robot.vision.subsystem.visionByTag;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -123,6 +124,15 @@ public class RobotContainer implements Sendable{
     controller.povUp().onTrue(intakeCommand);
 
     controller.leftBumper().onTrue(stopAll);
+
+    controller.povRight().onTrue(new RunCommand(()-> {
+      shooter.setMotorPower(0.7, 0.7);
+    }, shooter));
+
+    controller.povLeft().onTrue(new RunCommand(()-> {
+      shooter.setFeedingPower(1);
+      intake.motorMoveSetPower(1);
+    }, shooter, intake));
   }
    
   public void isRed(boolean isRed) {
