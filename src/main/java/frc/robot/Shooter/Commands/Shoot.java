@@ -161,10 +161,16 @@ public class Shoot extends Command {
     if (state != STATE.TESTING){
       angleChanging.angleState = STATE.SPEAKER;
     }
+
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
     intake.motorMoveSetPower(0);
     shooterTimer.reset();
+    isfinished = false;
+  
+    if (!interrupted) {
+      intake.isNoteInIntake = false;
+    }
   }
 
   // Returns true when the command should end.

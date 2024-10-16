@@ -33,10 +33,10 @@ public class Intake extends SubsystemBase {
   TalonFXConfiguration configPickUp;
 
   /** The position of the note */
-  public static NotePosition currentPosition;
+  public NotePosition currentPosition;
 
   /** If the note is the intake */
-  public static boolean isNoteInIntake = false;
+  public boolean isNoteInIntake = false;
 
   /** 
    * Configars the motors and and the configs

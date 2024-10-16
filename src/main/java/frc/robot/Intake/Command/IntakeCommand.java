@@ -31,7 +31,7 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void initialize(){
-    Intake.currentPosition = NotePosition.NO_NOTE;
+    intake.currentPosition = NotePosition.NO_NOTE;
     timer.start();
   }
 
@@ -42,12 +42,10 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void execute() {
+    intake.setPowerToMotors(intake.currentPosition.power);
 
-    if(!Intake.isNoteInIntake){
-      intake.setPowerToMotors(Intake.currentPosition.power);
-      if(intake.AmperHighMotorPickUp()){
-        Intake.currentPosition = NotePosition.FIRST_TOUCH; 
-      }
+    if(intake.AmperHighMotorPickUp()){
+      intake.currentPosition = NotePosition.FIRST_TOUCH; 
     }
   }
 
@@ -57,7 +55,9 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    Intake.isNoteInIntake = true;
+    if (!interrupted) {
+      intake.isNoteInIntake = true;
+    }
     intake.setPowerToMotors(0);
     timer.stop();
     timer.reset();
@@ -68,6 +68,6 @@ public class IntakeCommand extends Command {
    */
   @Override
   public boolean isFinished() {
-    return intake.AmperHighMotorMove() ||  Intake.isNoteInIntake || intake.isNote() || timer.get()/1000 > STOP_COMMAND_TIME;
+    return intake.AmperHighMotorMove() ||  intake.isNoteInIntake || intake.isNote() /*|| timer.get()/1000 > STOP_COMMAND_TIME*/;
   }
 }
