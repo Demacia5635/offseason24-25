@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.utils.LookUpTable;
 import frc.robot.Shooter.utils.ShooterUtils;
+import frc.robot.utils.LogManager;
 
 public class Shooter extends SubsystemBase {
   
@@ -98,11 +99,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getDownMotorVel(){
-    return motorDown.getVelocity().getValue();
+    return motorDown.getVelocity().getValueAsDouble();
   }
 
   public double getUpMotorVel(){
-    return motorUp.getVelocity().getValue();
+    return motorUp.getVelocity().getValueAsDouble();
   }
 
   public void pidMotorVelocity(double upVel, double downVel){
@@ -125,13 +126,44 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void initSendable(SendableBuilder builder) {
-      SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
+    super.initSendable(builder);;
+
+    SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
       setShootingNeutralMode(configUp.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
        , this).ignoringDisable(true));
-       SmartDashboard.putData("change feeding brake", new InstantCommand(()-> 
+
+    SmartDashboard.putData("change feeding brake", new InstantCommand(()-> 
       setFeedingNeutralMode(configUp.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
        , this).ignoringDisable(true));
-      SmartDashboard.putNumber("upMotorVel", getUpMotorVel());
-      SmartDashboard.putNumber("downMotorVel", getDownMotorVel());
+
+    builder.addStringProperty("Shooter state", ()->shooterState.toString(), null);
+
+    LogManager.addEntry("Shooter/UpMotor/Velocity", this::getUpMotorVel);
+    LogManager.addEntry("Shooter/UpMotor/Acceleration", ()-> motorUp.getAcceleration().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/Voltage", ()-> motorUp.getMotorVoltage().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/Current", ()-> motorUp.getSupplyCurrent().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopError", ()-> motorUp.getClosedLoopError().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopOutput", ()-> motorUp.getClosedLoopOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopP", ()-> motorUp.getClosedLoopProportionalOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopI", ()-> motorUp.getClosedLoopIntegratedOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopD", ()-> motorUp.getClosedLoopDerivativeOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopFF", ()-> motorUp.getClosedLoopFeedForward().getValueAsDouble());
+    LogManager.addEntry("Shooter/UpMotor/CloseLoopSP", ()-> motorUp.getClosedLoopReference().getValueAsDouble());
+
+    LogManager.addEntry("Shooter/DownMotor/Velocity", this::getDownMotorVel);
+    LogManager.addEntry("Shooter/DownMotor/Acceleration", ()-> motorDown.getAcceleration().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/Voltage", ()-> motorDown.getMotorVoltage().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/Current", ()-> motorDown.getSupplyCurrent().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopError", ()-> motorDown.getClosedLoopError().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopOutput", ()-> motorDown.getClosedLoopOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopP", ()-> motorDown.getClosedLoopProportionalOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopI", ()-> motorDown.getClosedLoopIntegratedOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopD", ()-> motorDown.getClosedLoopDerivativeOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopFF", ()-> motorDown.getClosedLoopFeedForward().getValueAsDouble());
+    LogManager.addEntry("Shooter/DownMotor/CloseLoopSP", ()-> motorDown.getClosedLoopReference().getValueAsDouble());
+    
+    LogManager.addEntry("Shooter/FeedingMotor/Velocity", ()-> motorFeeding.getSelectedSensorVelocity()*10);
+    LogManager.addEntry("Shooter/FeedingMotor/Voltage", ()-> motorFeeding.getMotorOutputVoltage());
+    LogManager.addEntry("Shooter/FeedingMotor/Current", ()-> motorFeeding.getSupplyCurrent());
   }
 }
