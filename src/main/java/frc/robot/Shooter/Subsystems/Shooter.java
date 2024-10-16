@@ -47,11 +47,11 @@ public class Shooter extends SubsystemBase {
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);
     motorUp = new TalonFX(MOTOR_IDS.MOTOR_UP_ID, MOTOR_IDS.CANBUS);
 
-    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FREQHZ);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.SHOOTER_FREQHZ);
+    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.FREQHZ);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.FREQHZ);
     configShooting = new TalonFXConfiguration();
     
-    configShooting.Feedback.SensorToMechanismRatio = SHOOTING_MOTORS_ROTATION_TO_METER;
+    configShooting.Feedback.SensorToMechanismRatio = SHOOTER_ATRIBUTES.SHOOTING_MOTORS_ROTATION_TO_METER;
     configShooting.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
     ? NeutralModeValue.Brake
     : NeutralModeValue.Coast;
@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
     motorFeeding.setInverted(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_INVERT);
     motorFeeding.setNeutralMode(SHOOTER_CONFIGS.IS_FEEDING_MOTOR_BRAKE ? NeutralMode.Brake : NeutralMode.Coast);
 
-    lookUpTable = new LookUpTable(LookUpTableData.DATA);
+    lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
 
     SmartDashboard.putData(this);
   }
@@ -107,7 +107,7 @@ public class Shooter extends SubsystemBase {
 
   public void pidMotorVelocity(double upVel, double downVel){
     motorUp.setControl(velocityVoltage.withVelocity(upVel).withFeedForward(ShooterUtils.getUpMotorFF(getUpMotorVel())));
-    motorDown.setControl(velocityVoltage.withVelocity(downVel).withFeedForward(ShooterUtils.getDownMotorFF(getUpMotorVel())));
+    motorDown.setControl(velocityVoltage.withVelocity(downVel).withFeedForward(ShooterUtils.getDownMotorFF(getDownMotorVel())));
   }
 
   public void setShootingNeutralMode(boolean isBrake){

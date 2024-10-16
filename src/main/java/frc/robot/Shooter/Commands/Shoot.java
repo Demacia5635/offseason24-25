@@ -151,7 +151,7 @@ public class Shoot extends Command {
       if (intake.isNote()){
         shooterTimer.start();
       }
-      while (shooterTimer.get()/1000 <= MIL_SEC_TO_SHOOT){}
+      while (shooterTimer.get()/1000 <= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT){}
         shooterTimer.stop();
         isfinished = true;
     }

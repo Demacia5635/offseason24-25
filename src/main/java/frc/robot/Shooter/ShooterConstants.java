@@ -56,7 +56,7 @@ public class ShooterConstants {
     public static final boolean IS_SHOOTING_MOTORS_BRAKE = false;
     public static final boolean IS_FEEDING_MOTOR_BRAKE = true;
 
-    public static final double SHOOTER_FREQHZ = 200;
+    public static final double FREQHZ = 200;
 
   }
 
@@ -113,7 +113,6 @@ public class ShooterConstants {
     public static final double ANGLE_CHANGING_MAX_VELOCITY = 10;
     public static final double ANGLE_CHANGING_MAX_Acceleration  = 15;
     public static final double ANGLE_CHANGING_MAX_JERK = 20;
-    public static final double BASE_ANGLE = 0;
 
     public static final boolean IS_ANGLE_MOTOR_INVERT = false;
     
@@ -156,9 +155,12 @@ public class ShooterConstants {
       public static final double RIVAL_WING_DISTANCE = 421;
   }
 
-  public static final double RADIOS = 0.36;
-  public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
-  public static final double MIL_SEC_TO_SHOOT = 1000;
+  public static class SHOOTER_ATRIBUTES {
+    public static final double RADIOS = 0.36;
+    public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
+    public static final double MIL_SEC_TO_SHOOT = 1000;
+
+  }  
 
   /**
    * Lookup table in the format of: <br> </br>
@@ -171,7 +173,7 @@ public class ShooterConstants {
    *  <li> downMotorVel - the working down motor vel in this location in meters per seconds </li>
    * </ul>
    */
-  public static class LookUpTableData {
+  public static class LOOKUP_TABLE_DATA {
     public static final double[][] DATA = {
       {}
     };
