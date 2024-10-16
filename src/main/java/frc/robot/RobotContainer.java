@@ -130,6 +130,7 @@ public class RobotContainer implements Sendable{
     }, shooter));
 
     controller.povLeft().onTrue(new RunCommand(()-> {
+      shooter.setMotorPower(0.7, 0.7);
       shooter.setFeedingPower(1);
       intake.motorMoveSetPower(1);
     }, shooter, intake));
