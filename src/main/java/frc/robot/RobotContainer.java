@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Intake.Command.IntakeCommand;
 import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.ShooterConstants.STATE;
+import frc.robot.Shooter.Commands.Calibration;
 import frc.robot.Shooter.Commands.GoToAngle;
 import frc.robot.Shooter.Commands.Shoot;
 import frc.robot.Shooter.Subsystems.AngleChanger;
@@ -87,8 +88,8 @@ public class RobotContainer implements Sendable{
       intake.setPowerToMotors(0);
     }, chassis, shooter, angleChanging, intake);
     
-    // chassis.setDefaultCommand(driveCommand);
-    // angleChanging.setDefaultCommand(gotoAngleCommand);
+    chassis.setDefaultCommand(driveCommand);
+    angleChanging.setDefaultCommand(gotoAngleCommand);
     
     gyro = chassis.gyro;
     pose = new visionByTag(gyro);
@@ -111,15 +112,17 @@ public class RobotContainer implements Sendable{
         isShooterReady = true;
     }));
 
-    controller.y().onTrue(new InstantCommand(() -> {
-        shooter.shooterState = STATE.TESTING;
-        angleChanging.angleState = STATE.TESTING;
-    }).ignoringDisable(true));
+    // controller.y().onTrue(new InstantCommand(() -> {
+    //     shooter.shooterState = STATE.TESTING;
+    //     angleChanging.angleState = STATE.TESTING;
+    // }).ignoringDisable(true));
 
-    controller.b().onTrue(new InstantCommand(() -> {
-        shooter.shooterState = STATE.IDLE;
-        angleChanging.angleState = STATE.IDLE;
-    }));
+    controller.b().onTrue(new Calibration(angleChanging));
+
+    // controller.b().onTrue(new InstantCommand(() -> {
+    //     shooter.shooterState = STATE.IDLE;
+    //     angleChanging.angleState = STATE.IDLE;
+    // }));
     
     controller.povUp().onTrue(intakeCommand);
 
@@ -134,6 +137,10 @@ public class RobotContainer implements Sendable{
       shooter.setFeedingPower(1);
       intake.motorMoveSetPower(1);
     }, shooter, intake));
+
+    controller.povDown().onTrue(new RunCommand(()-> {
+      intake.setPowerToMotors(-1);
+    }, intake));
   }
    
   public void isRed(boolean isRed) {

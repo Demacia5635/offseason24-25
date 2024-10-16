@@ -54,7 +54,7 @@ public class DriveCommand extends Command {
       velY /= 4;
       velRot /= 4;
     }
-    ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
+    ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, -velRot);
     if(velX != 0 || velY != 0 || velRot != 0)
       System.out.println("Chassis speeds: " + speeds);
     chassis.setVelocities(speeds);

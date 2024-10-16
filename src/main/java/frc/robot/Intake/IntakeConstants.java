@@ -29,13 +29,13 @@ public class IntakeConstants {
   }
 
   /**The voltege of the sensor when he detects the note */
-  public static final double NOTE_VOLTEGE = 4.0;
+  public static final double NOTE_VOLTEGE = 3.0;
 
   //The amper of when the not is fed to the intake
   public static final double NOTE_AMPER = 25.0;
 
   /**The amount of time the intake command will auto stop (in miliseconds) */
-  public static final double STOP_COMMAND_TIME = 5000;
+  public static final double STOP_COMMAND_TIME = 20000;
 
   /**
    * The current position of the note to power fo the motors

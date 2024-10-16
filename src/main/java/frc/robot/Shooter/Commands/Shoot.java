@@ -24,7 +24,7 @@ import frc.robot.Shooter.utils.Ready;
 import static frc.robot.Shooter.ShooterConstants.*;
 
 public class Shoot extends Command {
-  
+
   private Shooter shooter;
   private Intake intake;
 
@@ -41,6 +41,7 @@ public class Shoot extends Command {
   private LookUpTable lookupTable;
 
   private Timer shooterTimer;
+  private boolean isTimerRunning;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Intake intake) {
@@ -48,6 +49,7 @@ public class Shoot extends Command {
     this.intake = intake;
     lookupTable = shooter.lookUpTable;
     shooterTimer = new Timer();
+    isTimerRunning = false;
     isReady = false;
     isfinished = false;
     SmartDashboard.putData(this);
@@ -56,120 +58,134 @@ public class Shoot extends Command {
   }
 
   @Override
-  public void initSendable(SendableBuilder builder){
+  public void initSendable(SendableBuilder builder) {
     builder.addDoubleProperty("testingUpMotorVelocity", this::getUpMotorVelocity, this::setUpMotorVelocity);
     builder.addDoubleProperty("testingDownMotorVelocity", this::getDownMotorVelocity, this::setDownMotorVelocity);
   }
 
-    public double getUpMotorVelocity(){
-      return this.testingUpMotorVelocity;
-    }
-  
-    public void setUpMotorVelocity(double testingUpMotorVelocity){
-      this.testingUpMotorVelocity = testingUpMotorVelocity;
-    }
+  public double getUpMotorVelocity() {
+    return this.testingUpMotorVelocity;
+  }
 
-    public double getDownMotorVelocity(){
-      return this.testingDownMotorVelocity;
-    }
-  
-    public void setDownMotorVelocity(double testingDownMotorVelocity){
-      this.testingDownMotorVelocity = testingDownMotorVelocity;
-    }
+  public void setUpMotorVelocity(double testingUpMotorVelocity) {
+    this.testingUpMotorVelocity = testingUpMotorVelocity;
+  }
 
+  public double getDownMotorVelocity() {
+    return this.testingDownMotorVelocity;
+  }
+
+  public void setDownMotorVelocity(double testingDownMotorVelocity) {
+    this.testingDownMotorVelocity = testingDownMotorVelocity;
+  }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    isTimerRunning = false;
+    shooterTimer.stop();
+    shooterTimer.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (XDistance >= DISTANCES.WING_DISTANCE && XDistance < DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING){
+    if (XDistance >= DISTANCES.WING_DISTANCE && XDistance < DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP
+        && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING) {
       state = STATE.DELIVERY_MID;
     }
-    if (XDistance >= DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING){
+    if (XDistance >= DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP && state != STATE.STAGE
+        && state != STATE.SUBWOFFER && state != STATE.TESTING) {
       state = STATE.DELIVERY_RIVAL;
     }
-    switch(state){
+    switch (state) {
       case AMP:
-          upMotorVelocity = AMP_VAR.MOTOR_UP_AMP_VELOCITY;
-          downMotorVelocity = AMP_VAR.MOTOR_DOWN_AMP_VELOCITY;
-          break;
+        upMotorVelocity = AMP_VAR.MOTOR_UP_AMP_VELOCITY;
+        downMotorVelocity = AMP_VAR.MOTOR_DOWN_AMP_VELOCITY;
+        break;
 
       case STAGE:
-          upMotorVelocity = STAGE_VAR.MOTOR_UP_STAGE_VELOCITY;
-          downMotorVelocity = STAGE_VAR.MOTOR_DOWN_STAGE_VELOCITY;
-          break;
+        upMotorVelocity = STAGE_VAR.MOTOR_UP_STAGE_VELOCITY;
+        downMotorVelocity = STAGE_VAR.MOTOR_DOWN_STAGE_VELOCITY;
+        break;
 
       case SUBWOFFER:
-          upMotorVelocity = SUBWOFFER_VAR.MOTOR_UP_SUBWOFFER_VELOCITY;
-          downMotorVelocity = SUBWOFFER_VAR.MOTOR_DOWN_SUBWOFFER_VELOCITY;
-          break;
+        upMotorVelocity = SUBWOFFER_VAR.MOTOR_UP_SUBWOFFER_VELOCITY;
+        downMotorVelocity = SUBWOFFER_VAR.MOTOR_DOWN_SUBWOFFER_VELOCITY;
+        break;
 
       case SPEAKER:
         distance = -1;
-         double[] lookUpTableData = lookupTable.get(distance);
-         upMotorVelocity = lookUpTableData[1];
-         downMotorVelocity = lookUpTableData[2];
+        double[] lookUpTableData = lookupTable.get(distance);
+        upMotorVelocity = lookUpTableData[1];
+        downMotorVelocity = lookUpTableData[2];
         break;
 
-     case TESTING:
-          upMotorVelocity = testingUpMotorVelocity;
-          downMotorVelocity = testingDownMotorVelocity;
-          break;
+      case TESTING:
+        upMotorVelocity = testingUpMotorVelocity;
+        downMotorVelocity = testingDownMotorVelocity;
+        break;
 
       case DELIVERY_MID:
-          distance = -1;
-          double[] deliveryMisLookUpTableData = lookupTable.get(distance);
-          upMotorVelocity = deliveryMisLookUpTableData[1];
-          downMotorVelocity = deliveryMisLookUpTableData[2];
-          break;
+        distance = -1;
+        double[] deliveryMisLookUpTableData = lookupTable.get(distance);
+        upMotorVelocity = deliveryMisLookUpTableData[1];
+        downMotorVelocity = deliveryMisLookUpTableData[2];
+        break;
 
       case DELIVERY_RIVAL:
-          distance = -1;
-          double[] deliveryRivalLookUpTableData = lookupTable.get(distance);
-          upMotorVelocity = deliveryRivalLookUpTableData[1];
-          downMotorVelocity = deliveryRivalLookUpTableData[2];
-          break;
+        distance = -1;
+        double[] deliveryRivalLookUpTableData = lookupTable.get(distance);
+        upMotorVelocity = deliveryRivalLookUpTableData[1];
+        downMotorVelocity = deliveryRivalLookUpTableData[2];
+        break;
 
       case IDLE:
         upMotorVelocity = IDLE_VAR.MOTOR_UP_IDLE_VELOCITY;
         downMotorVelocity = IDLE_VAR.MOTOR_DOWN_IDLE_VELOCITY;
         break;
     }
-    
+
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
     isReady = (Ready.isReady(upMotorVelocity, downMotorVelocity, state) && state != STATE.TESTING)
         || isShooterReady;
-    if (isReady){
+    if (isReady) {
       shooter.setFeedingPower(SHOOTER_POW.FEEDING_MOTOR_POWER);
       intake.motorMoveSetPower(SHOOTER_POW.INTAKE_MOTOR_POWER);
+      // intake.motorPickUpSetPower(0.5);
       isReady = false;
       isShooterReady = false;
-      if (intake.isNote()){
+
+      if (intake.isNote() && !isTimerRunning) {
         shooterTimer.start();
+        isTimerRunning = true;
       }
-      while (shooterTimer.get()/1000 <= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT){}
+
+      if (shooterTimer.get() / 1000 >= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT) {
         shooterTimer.stop();
+        shooterTimer.reset();
+        isTimerRunning = false;
         isfinished = true;
+      }
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (state != STATE.TESTING){
+    if (state != STATE.TESTING) {
       angleChanging.angleState = STATE.SPEAKER;
     }
 
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
     intake.motorMoveSetPower(0);
+    shooterTimer.stop();
     shooterTimer.reset();
+    isTimerRunning = false;
     isfinished = false;
-  
+
     if (!interrupted) {
       intake.isNoteInIntake = false;
     }

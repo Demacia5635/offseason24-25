@@ -22,18 +22,18 @@ public class Calibration extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angleChanger.angleChangingPID(ANGLE_CHANGING_CALIBRATION.UP_SPEED_CALIBRATION);
+    finishedState = 0;
+    angleChanger.setMotorPower(ANGLE_CHANGING_CALIBRATION.DOWN_SPEED_CALIBRATION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(angleChanger.isMaxAngle()){
-      angleChanger.angleChangingPID(ANGLE_CHANGING_CALIBRATION.DOWN_SPEED_CALIBRATION);
+      angleChanger.setMotorPower(ANGLE_CHANGING_CALIBRATION.UP_SPEED_CALIBRATION);
       finishedState = 1;
     }
     if(!angleChanger.isMaxAngle() && finishedState == 1){
-      angleChanger.setBaseAngle();
       finishedState = 2;
     }
   }

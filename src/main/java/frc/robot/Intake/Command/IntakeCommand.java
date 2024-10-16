@@ -15,6 +15,8 @@ public class IntakeCommand extends Command {
   private Intake intake;
 
   Timer timer;
+  Timer timerIntake;
+  boolean hasTaken = false;
 
   /**
    * Takes the intake subsystem
@@ -23,6 +25,7 @@ public class IntakeCommand extends Command {
   public IntakeCommand(Intake intake) {
     this.intake = intake;
     timer = new Timer();
+    timerIntake = new Timer();
     addRequirements(intake);
   }
 
@@ -33,6 +36,7 @@ public class IntakeCommand extends Command {
   public void initialize(){
     intake.currentPosition = NotePosition.NO_NOTE;
     timer.start();
+    hasTaken = false;
   }
 
 
@@ -44,8 +48,15 @@ public class IntakeCommand extends Command {
   public void execute() {
     intake.setPowerToMotors(intake.currentPosition.power);
 
-    if(intake.AmperHighMotorPickUp()){
-      intake.currentPosition = NotePosition.FIRST_TOUCH; 
+    if(intake.AmperHighMotorPickUp() && !hasTaken){
+      // intake.currentPosition = NotePosition.FIRST_TOUCH; 
+      timerIntake.start();
+      hasTaken = true;
+    }
+
+    if (intake.isNote() && !hasTaken) {
+      timerIntake.start();
+      hasTaken = true;
     }
   }
 
@@ -55,12 +66,15 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    if (!interrupted) {
-      intake.isNoteInIntake = true;
-    }
+    // if (!interrupted) {
+    //   intake.isNoteInIntake = true;
+    // }
     intake.setPowerToMotors(0);
     timer.stop();
     timer.reset();
+    timerIntake.stop();
+    timerIntake.reset();
+    hasTaken = false;
   }
 
   /**
@@ -68,6 +82,6 @@ public class IntakeCommand extends Command {
    */
   @Override
   public boolean isFinished() {
-    return intake.AmperHighMotorMove() ||  intake.isNoteInIntake || intake.isNote() /*|| timer.get()/1000 > STOP_COMMAND_TIME*/;
+    return timerIntake.get()*1000 > 500 || timer.get()*1000 > STOP_COMMAND_TIME;
   }
 }

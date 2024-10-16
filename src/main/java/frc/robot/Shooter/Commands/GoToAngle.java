@@ -37,6 +37,7 @@ public class GoToAngle extends Command {
 
   public GoToAngle(AngleChanger angleChanger) {
     this.angleChanger = angleChanger;
+    state = angleChanger.angleState;
     lookupTable = angleChanger.lookUpTable;
     SmartDashboard.putData(this);
     addRequirements(angleChanger);
@@ -119,16 +120,16 @@ public class GoToAngle extends Command {
     }
     
     while (angleChanger.getAngle() <= ANGLE_CHANGING_VAR.MIN_ANGLE){
-      angleChanger.setMotorPower(ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
+      angleChanger.setMotorPower(-ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
     }
     while (angleChanger.getAngle() >= ANGLE_CHANGING_VAR.TOP_ANGLE){
-      angleChanger.setMotorPower(-ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
+      angleChanger.setMotorPower(ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
     }
 
     isAngleReady = Ready.isAngleReady(wantedAngle);
 
-    angleChanger.goToAngle(wantedAngle);
-
+    // angleChanger.goToAngle(wantedAngle);
+    angleChanger.goToAnglePositionVol(wantedAngle);
   }
 
   // Called once the command ends or is interrupted.

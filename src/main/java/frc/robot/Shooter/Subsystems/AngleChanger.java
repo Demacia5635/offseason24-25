@@ -68,6 +68,8 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_Acceleration;
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_JERK;
 
+    config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.7;
+
     config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_GEAR_RATIO;
     config.MotorOutput.Inverted = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTOR_INVERT
         ? InvertedValue.Clockwise_Positive
@@ -91,11 +93,12 @@ public class AngleChanger extends SubsystemBase {
 
   public void goToAngle(double wantedAngle) {
     if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE) {
-      wantedAngle = ANGLE_CHANGING_VAR.MIN_ANGLE;
+      return ;
     }
-    if (wantedAngle < ANGLE_CHANGING_VAR.TOP_ANGLE) {
-      wantedAngle = ANGLE_CHANGING_VAR.TOP_ANGLE;
+    if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
+      return ;
     }
+
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
   }
@@ -105,6 +108,13 @@ public class AngleChanger extends SubsystemBase {
   }
 
   public void goToAnglePositionVol(double wantedAngle) {
+    if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE) {
+      return ;
+    }
+    if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
+      return ;
+    }
+
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(positionVoltage.withPosition(distance));
   }
@@ -114,7 +124,7 @@ public class AngleChanger extends SubsystemBase {
   }
 
   public void setBaseAngle() {
-    angleChangingMotor.setPosition(ShooterUtils.angleToDistance(ANGLE_CHANGING_VAR.BASE_ANGLE));
+    angleChangingMotor.setPosition(25.12);
   }
 
   public void setAngleNeutralMode(boolean isBrake) {
@@ -154,6 +164,7 @@ public class AngleChanger extends SubsystemBase {
     builder.addStringProperty("Angle changing state", ()-> angleState.toString(), null);
 
     LogManager.addEntry("Shooter/AngleChanging/Angle", this::getAngle);
+    LogManager.addEntry("Shooter/AngleChanging/Distance", ()-> angleChangingMotor.getPosition().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/LimitSwitch", ()-> isMaxAngle() ? 1 : 0);
 
     LogManager.addEntry("Shooter/AngleChanging/Velocity", this::getAngleMotorVel);
