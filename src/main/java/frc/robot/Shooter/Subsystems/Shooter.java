@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
 
     lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
 
-    SmartDashboard.putData(this);
+    SmartDashboard.putData("Shooter", this);
   }
 
   public void setMotorPower(double upPower, double downPower){
