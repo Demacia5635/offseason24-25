@@ -32,6 +32,7 @@ import frc.robot.utils.LogManager;
 
 import static frc.robot.Constants.*;
 
+/** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
   private Boolean isRed = true;
@@ -52,10 +53,6 @@ public class RobotContainer implements Sendable{
   private Command stopAll;
 
   public static boolean isShooterReady = false;
-
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-
 
   Pigeon2 gyro;
 
