@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.vision.utils.ConstantsVision;
+import frc.robot.vision.ConstantsVision;
 import frc.robot.vision.utils.NotePoseCalc;
 
 public class visionByNote extends SubsystemBase {

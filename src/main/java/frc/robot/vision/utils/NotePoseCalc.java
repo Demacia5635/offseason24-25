@@ -3,6 +3,7 @@ package frc.robot.vision.utils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.vision.ConstantsVision;
 
 public class NotePoseCalc {
     private double x_offset;

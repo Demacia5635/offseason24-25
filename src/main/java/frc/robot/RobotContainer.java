@@ -93,7 +93,7 @@ public class RobotContainer implements Sendable{
     
     gyro = chassis.gyro;
     pose = new visionByTag(gyro);
-    note = new visionByNote(pose.getRoobotPose());
+    note = new visionByNote(pose.getRobotPose());
 
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));
