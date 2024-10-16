@@ -28,13 +28,13 @@ public class Shoot extends Command {
   private Shooter shooter;
   private Intake intake;
 
-  private double upMotorVelocity;
-  private double downMotorVelocity;
-  private double testingUpMotorVelocity;
-  private double testingDownMotorVelocity;
-  public STATE state;
-  private double distance;
-  private double XDistance;
+  private double upMotorVelocity = 0;
+  private double downMotorVelocity = 0;
+  private double testingUpMotorVelocity = 0;
+  private double testingDownMotorVelocity = 0;
+  public STATE state = STATE.TESTING;
+  private double distance = 0;
+  private double XDistance = 0;
   public boolean isReady;
   public boolean isfinished;
 
@@ -134,7 +134,9 @@ public class Shoot extends Command {
           break;
 
       case IDLE:
-          break;
+        upMotorVelocity = IDLE_VAR.MOTOR_UP_IDLE_VELOCITY;
+        downMotorVelocity = IDLE_VAR.MOTOR_DOWN_IDLE_VELOCITY;
+        break;
     }
     
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);

@@ -78,7 +78,7 @@ public class AngleChanger extends SubsystemBase {
 
     angleChangingMotor.getConfigurator().apply(config);
 
-    lookUpTable = new LookUpTable(LookUpTableData.DATA);
+    lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
 
     SmartDashboard.putData(this);
     

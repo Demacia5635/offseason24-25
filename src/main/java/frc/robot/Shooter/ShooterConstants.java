@@ -81,8 +81,13 @@ public class ShooterConstants {
     
       public static final double SUBWOFFER_ANGLE = 0;
       public static final double MOTOR_UP_SUBWOFFER_VELOCITY = 0;
-      public static final double MOTOR_DOWN_SUBWOFFER_VELOCITY = 0;
-    
+      public static final double MOTOR_DOWN_SUBWOFFER_VELOCITY = 0; 
+  }
+
+  public static class IDLE_VAR {
+    public static final double IDLE_ANGLE = 35;
+    public static final double MOTOR_UP_IDLE_VELOCITY = 0;
+    public static final double MOTOR_DOWN_IDLE_VELOCITY = 0;
   }
 
   public static class MAX_ERRORS{
