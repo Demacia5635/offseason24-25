@@ -25,13 +25,13 @@ public class GoToAngle extends Command {
   /** Creates a new setShooting. */
   private LookUpTable lookupTable;
   private AngleChanger angleChanger;
-  public double wantedAngle;
-  private double testingAngle; 
-  private double distance;
-  public double XDistance;
+  public double wantedAngle = 35;
+  private double testingAngle = 35; 
+  private double distance = 0;
+  public double XDistance = 0;
 
   public STATE state;
-  public static boolean isAngleReady;
+  public static boolean isAngleReady = false;
 
   
 
@@ -114,6 +114,7 @@ public class GoToAngle extends Command {
           break;
 
       case IDLE:
+        wantedAngle = IDLE_VAR.IDLE_ANGLE;
           break;
     }
     
