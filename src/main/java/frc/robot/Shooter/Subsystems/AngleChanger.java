@@ -14,6 +14,7 @@ import static frc.robot.Shooter.ShooterConstants.*;
 
 import frc.robot.Shooter.utils.LookUpTable;
 import frc.robot.Shooter.utils.ShooterUtils;
+import frc.robot.utils.LogManager;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -24,9 +25,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-
 public class AngleChanger extends SubsystemBase {
-  
+
   private TalonFX angleChangingMotor;
 
   private TalonFXConfiguration config;
@@ -40,7 +40,6 @@ public class AngleChanger extends SubsystemBase {
   public DigitalInput limitSwitch;
 
   public LookUpTable lookUpTable;
-
 
   /** Creates a new AngleChanging. */
   public AngleChanger() {
@@ -56,9 +55,10 @@ public class AngleChanger extends SubsystemBase {
     config.Slot0.kV = ANGLE_CHANGING_PID_FF.KV;
     config.Slot0.kA = ANGLE_CHANGING_PID_FF.KA;
 
-    m_request  = new DutyCycleOut(0.0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
+    m_request = new DutyCycleOut(0.0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
     velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
-    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
+    motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0)
+        .withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
     positionVoltage = new PositionVoltage(0).withSlot(0).withUpdateFreqHz(ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_FREQHZ);
 
     // config.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
@@ -70,37 +70,37 @@ public class AngleChanger extends SubsystemBase {
 
     config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_GEAR_RATIO;
     config.MotorOutput.Inverted = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTOR_INVERT
-    ? InvertedValue.Clockwise_Positive
-    : InvertedValue.CounterClockwise_Positive;
+        ? InvertedValue.Clockwise_Positive
+        : InvertedValue.CounterClockwise_Positive;
     config.MotorOutput.NeutralMode = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTORS_BRAKE
-    ? NeutralModeValue.Brake
-    : NeutralModeValue.Coast;
+        ? NeutralModeValue.Brake
+        : NeutralModeValue.Coast;
 
     angleChangingMotor.getConfigurator().apply(config);
 
     lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
 
     SmartDashboard.putData(this);
-    
+
     limitSwitch = new DigitalInput(MOTOR_IDS.LIMIT_SWITCH_ID);
   }
 
-  public void setMotorPower(double power){
+  public void setMotorPower(double power) {
     angleChangingMotor.setControl(m_request.withOutput(power));
   }
 
-  public void goToAngle(double wantedAngle){
-    if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE){
+  public void goToAngle(double wantedAngle) {
+    if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE) {
       wantedAngle = ANGLE_CHANGING_VAR.MIN_ANGLE;
     }
-    if (wantedAngle < ANGLE_CHANGING_VAR.TOP_ANGLE){
+    if (wantedAngle < ANGLE_CHANGING_VAR.TOP_ANGLE) {
       wantedAngle = ANGLE_CHANGING_VAR.TOP_ANGLE;
     }
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
   }
 
-  public void angleChangingPID(double vel){
+  public void angleChangingPID(double vel) {
     angleChangingMotor.setControl(velocityVoltage.withVelocity(vel));
   }
 
@@ -109,7 +109,7 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.setControl(positionVoltage.withPosition(distance));
   }
 
-  public double getAngleMotorVel(){
+  public double getAngleMotorVel() {
     return angleChangingMotor.getVelocity().getValue();
   }
 
@@ -117,12 +117,12 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.setPosition(ShooterUtils.angleToDistance(ANGLE_CHANGING_VAR.BASE_ANGLE));
   }
 
-  public void setAngleNeutralMode(boolean isBrake){
+  public void setAngleNeutralMode(boolean isBrake) {
     config.MotorOutput.NeutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     angleChangingMotor.getConfigurator().apply(config);
   }
 
-  public double getAngle(){
+  public double getAngle() {
     return ShooterUtils.distanceToAngle(angleChangingMotor.getPosition().getValueAsDouble());
   }
 
@@ -131,23 +131,42 @@ public class AngleChanger extends SubsystemBase {
    * @return if the limit switch is closed
    */
   // * @return returns if reverse hard limit is closed
-  public boolean isMaxAngle(){
+  public boolean isMaxAngle() {
     return !limitSwitch.get();
-    // return angleChangingMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
+    // return angleChangingMotor.getReverseLimit().getValue() ==
+    // ReverseLimitValue.ClosedToGround;
   }
 
   @Override
   public void periodic() {
-    if (isMaxAngle()) setBaseAngle();
+    if (isMaxAngle())
+      setBaseAngle();
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
-      SmartDashboard.putData("reset angle", new InstantCommand(()-> setBaseAngle(), this).ignoringDisable(true));
-      SmartDashboard.putData("change shooting brake", new InstantCommand(()-> 
-      setAngleNeutralMode(config.MotorOutput.NeutralMode==NeutralModeValue.Brake ? false : true)
-       , this).ignoringDisable(true));
-      builder.addDoubleProperty("angle", this::getAngle, null);
-      builder.addDoubleProperty("angleMotorVel", this::getAngleMotorVel, null);
+    SmartDashboard.putData("reset angle", new InstantCommand(() -> setBaseAngle(), this).ignoringDisable(true));
+    SmartDashboard.putData("change shooting brake",
+        new InstantCommand(
+            () -> setAngleNeutralMode(config.MotorOutput.NeutralMode == NeutralModeValue.Brake ? false : true), this)
+            .ignoringDisable(true));
+
+    builder.addStringProperty("Angle changing state", ()-> angleState.toString(), null);
+
+    LogManager.addEntry("Shooter/AngleChanging/Angle", this::getAngle);
+    LogManager.addEntry("Shooter/AngleChanging/LimitSwitch", ()-> isMaxAngle() ? 1 : 0);
+
+    LogManager.addEntry("Shooter/AngleChanging/Velocity", this::getAngleMotorVel);
+    LogManager.addEntry("Shooter/AngleChanging/Acceleration", () -> angleChangingMotor.getAcceleration().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/Voltage", () -> angleChangingMotor.getMotorVoltage().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/Current", () -> angleChangingMotor.getSupplyCurrent().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopError", () -> angleChangingMotor.getClosedLoopError().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopOutput", () -> angleChangingMotor.getClosedLoopOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopP", () -> angleChangingMotor.getClosedLoopProportionalOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopI", () -> angleChangingMotor.getClosedLoopIntegratedOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopD", () -> angleChangingMotor.getClosedLoopDerivativeOutput().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopFF", () -> angleChangingMotor.getClosedLoopFeedForward().getValueAsDouble());
+    LogManager.addEntry("Shooter/AngleChanging/CloseLoopSP", () -> angleChangingMotor.getClosedLoopReference().getValueAsDouble());
+
   }
 }
