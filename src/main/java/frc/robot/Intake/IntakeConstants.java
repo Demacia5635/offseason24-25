@@ -24,7 +24,7 @@ public class IntakeConstants {
   public static class Config{
     public static final Boolean IS_BRAKE_MOTORS = true;
     public static final Boolean IS_INVERTED_MOTOR_MOVE = true;
-    public static final Boolean IS_INVERTED_MOTOR_PICKUP = true;
+    public static final Boolean IS_INVERTED_MOTOR_PICKUP = false;
     public static final Boolean IS_TESTING = true;
   }
 
@@ -32,7 +32,7 @@ public class IntakeConstants {
   public static final double NOTE_VOLTEGE = 4.0;
 
   //The amper of when the not is fed to the intake
-  public static final double NOTE_AMPER = 0.0;
+  public static final double NOTE_AMPER = 25.0;
 
   /**The amount of time the intake command will auto stop (in miliseconds) */
   public static final double STOP_COMMAND_TIME = 5000;

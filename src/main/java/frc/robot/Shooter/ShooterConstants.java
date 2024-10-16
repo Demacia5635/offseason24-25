@@ -24,33 +24,32 @@ public class ShooterConstants {
 
   public static class SHOOTER_PID_FF{
     
-    public static final double UP_MOTOR_KP = 0.5;
+    public static final double UP_MOTOR_KP = 0.0;
     public static final double UP_MOTOR_KI = 0.0;
     public static final double UP_MOTOR_KD = 0.0;
-    public static final double UP_MOTOR_KS = 0.0;
-    public static final double UP_MOTOR_KV = 0.0;
+    public static final double UP_MOTOR_KS = 1.052;
+    public static final double UP_MOTOR_KV = 0.187;
     public static final double UP_MOTOR_KA = 0.0;
-    public static final double UP_MOTOR_KV2 = 0.0;
+    public static final double UP_MOTOR_KV2 = 0.00131;
 
-    public static final double DOWN_MOTOR_KP = 0.5;
-    public static final double DOWN_MOTOR_KI = 0.0;
-    public static final double DOWN_MOTOR_KD = 0.0;
-    public static final double DOWN_MOTOR_KS = 0.0;
-    public static final double DOWN_MOTOR_KV = 0.0;
-    public static final double DOWN_MOTOR_KA = 0.0;
-    public static final double DOWN_MOTOR_KV2 = 0.0;
+    public static final double DOWN_MOTOR_KP = UP_MOTOR_KP;
+    public static final double DOWN_MOTOR_KI = UP_MOTOR_KI;
+    public static final double DOWN_MOTOR_KD = UP_MOTOR_KD;
+    public static final double DOWN_MOTOR_KS = UP_MOTOR_KS;
+    public static final double DOWN_MOTOR_KV = UP_MOTOR_KV;
+    public static final double DOWN_MOTOR_KA = UP_MOTOR_KA;
+    public static final double DOWN_MOTOR_KV2 = UP_MOTOR_KV2;
 
   }
 
   public static class SHOOTER_POW{
-
     public static final double FEEDING_MOTOR_POWER = 1;
     public static final double INTAKE_MOTOR_POWER = 1;
 
   }
 
   public static class SHOOTER_CONFIGS{
-    public static final boolean IS_UP_MOTOR_INVERT = false;
+    public static final boolean IS_UP_MOTOR_INVERT = true;
     public static final boolean IS_DOWN_MOTOR_INVERT = true;
     public static final boolean IS_FEEDING_MOTOR_INVERT = false;
 
