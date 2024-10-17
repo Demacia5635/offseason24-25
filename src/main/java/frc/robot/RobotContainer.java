@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.vision.subsystem.visionByNote;
-import frc.robot.vision.subsystem.visionByTag;
+import frc.robot.vision.subsystem.VisionByNote;
+import frc.robot.vision.subsystem.VisionByTag;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Intake.Command.IntakeCommand;
 import frc.robot.Intake.Subsystem.Intake;
@@ -37,7 +37,7 @@ import static frc.robot.Constants.*;
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
-  public static Boolean isRed = true;
+  public static Boolean isRed = false;
   CommandXboxController controller;
 
   public LogManager logManager = new LogManager();
@@ -58,8 +58,8 @@ public class RobotContainer implements Sendable{
 
   Pigeon2 gyro;
 
-  visionByTag pose;
-  visionByNote note;
+  VisionByTag pose;
+  VisionByNote note;
   Field2d field;
 
   public RobotContainer() {
@@ -76,17 +76,18 @@ public class RobotContainer implements Sendable{
 
     calibration = new Calibration(angleChanging);
     shootCommand = new Shoot(shooter, intake, chassis);
-    intakeCommand = new IntakeCommand(intake);
+    intakeCommand = new IntakeCommand(intake, shooter);
     resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward())
                         .ignoringDisable(true);
     driveCommand = new DriveCommand(chassis, controller);
     gotoAngleCommand = new GoToAngle(angleChanging, chassis);
     
     chassis.setDefaultCommand(driveCommand);
+    angleChanging.setDefaultCommand(gotoAngleCommand);
     
     gyro = chassis.gyro;
-    pose = new visionByTag(gyro);
-    note = new visionByNote(pose.getRoobotPose());
+    pose = new VisionByTag(gyro);
+    note = new VisionByNote(pose.getRobotPose());
 
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));
@@ -103,6 +104,8 @@ public class RobotContainer implements Sendable{
       intake.setPowerToMotors(-1);
     }, intake));
     controller.a().onTrue(intakeCommand);
+
+    controller.y().onTrue(calibration);
     
     controller.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
     controller.x().onTrue(shootCommand);
@@ -111,7 +114,7 @@ public class RobotContainer implements Sendable{
     controller.povRight().onTrue(new InstantCommand(()-> {
       if (shooter.shooterState == STATE.AMP
           || shooter.shooterState == STATE.IDLE) {
-        shooter.shooterState = STATE.SPEAKER;
+        shooter.shooterState = STATE.TESTING;
 
       } else if (shooter.shooterState == STATE.SPEAKER 
                 || shooter.shooterState == STATE.SUBWOFFER 
@@ -121,9 +124,10 @@ public class RobotContainer implements Sendable{
         shooter.shooterState = STATE.AMP;
       }
 
+
       if (angleChanging.angleState == STATE.AMP
           || angleChanging.angleState == STATE.IDLE) {
-        angleChanging.angleState = STATE.SPEAKER;
+        angleChanging.angleState = STATE.TESTING;
 
       } else if (angleChanging.angleState == STATE.SPEAKER 
                 || angleChanging.angleState == STATE.SUBWOFFER 
@@ -137,7 +141,7 @@ public class RobotContainer implements Sendable{
       shooter.shooterState = STATE.TESTING;
       angleChanging.angleState = STATE.TESTING;
     }));
-    controller.povRight().onTrue(new InstantCommand(()-> {
+    controller.povUp().onTrue(new InstantCommand(()-> {
       shooter.shooterState = STATE.SUBWOFFER;
       angleChanging.angleState = STATE.SUBWOFFER;
     }));
@@ -167,12 +171,16 @@ public class RobotContainer implements Sendable{
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return calibration;
   }
 
-  public Command calibration() {
-    return calibration.andThen(new InstantCommand(()->angleChanging.setDefaultCommand(gotoAngleCommand)));
-  }
+  // public Command calibration() {
+  //   return calibration; // .andThen(new InstantCommand(()->angleChanging.setDefaultCommand(gotoAngleCommand)));
+  // }
+
+  // public void setAngleChangeCmd() {
+  //   angleChanging.setDefaultCommand(gotoAngleCommand);
+  // }
 
   public Command stopAll() {
     return new InstantCommand(()-> {
@@ -182,8 +190,8 @@ public class RobotContainer implements Sendable{
       angleChanging.setMotorPower(0);
       intake.setPowerToMotors(0);
       
-      shooter.shooterState = STATE.IDLE;
-      angleChanging.angleState = STATE.IDLE;
+      // shooter.shooterState = STATE.IDLE;
+      // angleChanging.angleState = STATE.IDLE;
     }, chassis, shooter, angleChanging, intake);
   }
 }

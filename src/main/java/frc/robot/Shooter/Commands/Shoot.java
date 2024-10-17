@@ -177,7 +177,7 @@ public class Shoot extends Command {
         || isDriverOverwriteShooter;
     if (isReady) {
       shooter.setFeedingPower(SHOOTER_POW.FEEDING_MOTOR_POWER);
-      intake.motorMoveSetPower(SHOOTER_POW.INTAKE_MOTOR_POWER);
+      intake.setPowerToMotors(SHOOTER_POW.INTAKE_MOTOR_POWER);
       // intake.motorPickUpSetPower(0.5);
       isReady = false;
       isDriverOverwriteShooter = false;
@@ -205,7 +205,7 @@ public class Shoot extends Command {
 
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
-    intake.motorMoveSetPower(0);
+    intake.setPowerToMotors(0);
     shooterTimer.stop();
     shooterTimer.reset();
     isTimerRunning = false;

@@ -7,12 +7,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Intake.IntakeConstants.NotePosition;
 import frc.robot.Intake.Subsystem.Intake;
+import frc.robot.Shooter.Subsystems.Shooter;
 
 /** The command that feeds the note to the robot */
 public class IntakeCommand extends Command {
 
   /** The intake subsistem */
   private Intake intake;
+  private Shooter shooter;
 
   Timer timer;
   Timer timerIntake;
@@ -22,8 +24,9 @@ public class IntakeCommand extends Command {
    * Takes the intake subsystem
    * @param intake
    */
-  public IntakeCommand(Intake intake) {
+  public IntakeCommand(Intake intake, Shooter shooter) {
     this.intake = intake;
+    this.shooter = shooter;
     timer = new Timer();
     timerIntake = new Timer();
     hasTaken = false;
@@ -48,18 +51,19 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void execute() {
-    intake.setPowerToMotors(intake.currentPosition.power);
-
-    if(intake.AmperHighMotorPickUp() && !hasTaken){
-      intake.currentPosition = NotePosition.FIRST_TOUCH; 
+    
+    if (intake.AmperHighMotorPickUp()) {
+      intake.currentPosition = NotePosition.FIRST_TOUCH;
+      
+    }
+    
+    if (intake.isNote()) {
+      intake.currentPosition = NotePosition.AFTER_SEEING_NOTE;
       timerIntake.start();
-      hasTaken = true;
     }
 
-    if (intake.isNote() && !hasTaken) {
-      timerIntake.start();
-      hasTaken = true;
-    }
+    intake.motorPickUpSetPower(intake.currentPosition.pickUpPow);
+    intake.motorMoveSetPower(intake.currentPosition.movePow);
   }
 
   /**
@@ -72,6 +76,7 @@ public class IntakeCommand extends Command {
     //   intake.isNoteInIntake = true;
     // }
     intake.setPowerToMotors(0);
+    shooter.setFeedingPower(0);
     timer.stop();
     timer.reset();
     timerIntake.stop();

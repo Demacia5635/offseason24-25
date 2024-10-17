@@ -36,24 +36,27 @@ public class IntakeConstants {
   public static final double STOP_COMMAND_TIME = 20000;
 
   /**The amount of time the intake command will stop after takinng note */
-  public static final double STOP_AFTER_NOTE = 500;
+  public static final double STOP_AFTER_NOTE = 450;
 
   /**
    * The current position of the note to power fo the motors
    */
   public enum NotePosition{
-    NO_NOTE(1),
-    FIRST_TOUCH(1);
+    NO_NOTE(0.85, 0.85),
+    FIRST_TOUCH(0.7, 0.5),
+    AFTER_SEEING_NOTE(0.4, 0.4);
 
     /** The voltage to the motors */
-    public final double power;
+    public final double movePow;
+    public final double pickUpPow;
 
     /**
      * Constractor for enum
-     * @param power The voltage to the motors thst you get
+     * @param movePow The voltage to the motors thst you get
      */
-    NotePosition(double power) {
-      this.power = power;
+    NotePosition(double movePow, double pickUpPow) {
+      this.movePow = movePow;
+      this.pickUpPow = pickUpPow;
     }
   }
 }

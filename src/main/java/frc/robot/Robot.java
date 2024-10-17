@@ -95,9 +95,10 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-
     }
-    m_robotContainer.calibration();
+    
+    // m_robotContainer.calibration().schedule();
+    // m_robotContainer.setAngleChangeCmd();
   }
 
   /** This function is called periodically during operator control. */

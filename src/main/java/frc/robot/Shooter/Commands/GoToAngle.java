@@ -62,7 +62,7 @@ public class GoToAngle extends Command {
     builder.addDoubleProperty("Angle", this::getWantedAngle, this::setWantedAngle);
 
     LogManager.addEntry("Shooter/AngleChanging/Wanted angle", ()-> wantedAngle);
-    LogManager.addEntry("Shooter/AngleChanging/distence from speaker", ()-> speaker.minus(chassis.getPose().getTranslation()).getNorm());
+    LogManager.addEntry("Shooter/AngleChanging/distence from speaker", ()-> speaker.minus(chassis.getPose().getTranslation()).getNorm()+0.35);
   }
 
   public double getWantedAngle() {
@@ -115,7 +115,7 @@ public class GoToAngle extends Command {
         break;
 
       case SPEAKER:
-        distence = speaker.minus(chassis.getPose().getTranslation()).getNorm();
+        distence = speaker.minus(chassis.getPose().getTranslation()).getNorm()+0.35;
         double[] speakerLookUpTableData = lookupTable.get(distence);
         wantedAngle = speakerLookUpTableData[0];
         break;
@@ -141,20 +141,10 @@ public class GoToAngle extends Command {
         break;
     }
 
-    while (state != STATE.IDLE) {
+    isAngleReady = Ready.isAngleReady(wantedAngle);
 
-      while (angleChanger.getAngle() <= ANGLE_CHANGING_VAR.MIN_ANGLE) {
-        angleChanger.setMotorPower(-ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
-      }
-      while (angleChanger.getAngle() >= ANGLE_CHANGING_VAR.TOP_ANGLE) {
-        angleChanger.setMotorPower(ANGLE_CHANGING_POW.ANGLE_MOTOR_POWER);
-      }
-
-      isAngleReady = Ready.isAngleReady(wantedAngle);
-
-      // angleChanger.goToAngle(wantedAngle);
-      angleChanger.goToAnglePositionVol(wantedAngle);
-    }
+    // angleChanger.goToAngle(wantedAngle);
+    angleChanger.goToAnglePositionVol(wantedAngle);
   }
 
   // Called once the command ends or is interrupted.
