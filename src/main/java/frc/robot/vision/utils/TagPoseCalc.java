@@ -65,9 +65,10 @@ public class TagPoseCalc {
     public Translation2d getTagToRobot() {
 
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), 
-            Rotation2d.fromDegrees(tagYaw)).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
-        Translation2d robotToTag = cameraToTag.plus(robotToCamera);
+            Rotation2d.fromDegrees(tagYaw)).rotateBy(gyroYaw);
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(gyroYaw);
+        Translation2d robotToTag = robotToCamera.plus(cameraToTag);
+
         return robotToTag;
     }
 

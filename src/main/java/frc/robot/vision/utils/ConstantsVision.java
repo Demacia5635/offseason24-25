@@ -94,7 +94,7 @@ public class ConstantsVision {
 
     // also the AprilTag heights is from the middle to floor of the AprilTag.
     double mid_Height = 1.355852;//group 1   *
-    double hight_Height = 1.451102;// gorup 2   #
+    double high_Height = 1.451102;// gorup 2   #
     double Low_Height =1.3208;// group 3 !
     
     HashMap<Double,Double> idToHeights = new HashMap<>();
@@ -102,15 +102,15 @@ public class ConstantsVision {
     idToHeights.put(1.0,mid_Height);//   *
     idToHeights.put(2.0,mid_Height);//   *
 
-    idToHeights.put(3.0,hight_Height);//  #
-    idToHeights.put(4.0,hight_Height);//  #
+    idToHeights.put(3.0,high_Height);//  #
+    idToHeights.put(4.0,high_Height);//  #
 
     idToHeights.put(5.0,mid_Height);
     idToHeights.put(6.0,mid_Height);
 
 
-    idToHeights.put(7.0,hight_Height);
-    idToHeights.put(8.0,hight_Height);
+    idToHeights.put(7.0,high_Height);
+    idToHeights.put(8.0,high_Height);
 
     idToHeights.put(9.0,mid_Height);
     idToHeights.put(10.0,mid_Height);
@@ -128,12 +128,12 @@ public class ConstantsVision {
     HEIGHT_MAP = Collections.unmodifiableMap(idToHeights);
   }
   // APRIL TAG CODE ROBOT
-  public static final double TagLimelightHeight = 0.23;
-  public static final double TagLimelightAngle = 43.55;
+  public static final double TagLimelightHeight = 0.225;
+  public static final double TagLimelightAngle = 46.434;
 
   public static final double TagLimelightYaw = 180;
-  public static final double TagLimelightXOfset = -0.15;
-  public static final double TagLimelightYOfset = -0.308;
+  public static final double TagLimelightXOfset = 0.26;
+  public static final double TagLimelightYOfset = -0.16;
 
   public static final String TagTable = "limelight-tag";
 
@@ -149,7 +149,7 @@ public class ConstantsVision {
   public static final double NoteLimelightHight = 0.211;
   public static final double NoteLimelightAngle = 0;
 
-  public static final double NoteLimelightXOfset = 0.39345;
+  public static final double NoteLimelightXOfset = -0.39345;
   public static final double NoteLimelightYOfset = 0.0;
 
   public static final String NoteTable = "limelight-note";

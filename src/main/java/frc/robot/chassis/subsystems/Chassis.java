@@ -78,6 +78,10 @@ public class Chassis extends SubsystemBase {
        new InstantCommand( () -> setGyroAngle(0))
        .ignoringDisable(true));
 
+    ntTab.add("Set gyro to 180 ",
+       new InstantCommand( () -> setGyroAngle(180))
+       .ignoringDisable(true));
+
 
     ntTab.add("run command", 
       new RunCommand(()->{setModulesPower(1); setModulesAngleFromSB(0);}, this));

@@ -52,7 +52,7 @@ public class NotePoseCalc {
     public Translation2d getRobotToNote() {
         Translation2d cameraToNote = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx)).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
         Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
-        Translation2d robotToNote = cameraToNote.plus(robotToCamera);
+        Translation2d robotToNote = isRed ? cameraToNote.plus(robotToCamera) : cameraToNote.minus(robotToCamera);
         return robotToNote;
     }
 

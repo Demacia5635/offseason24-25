@@ -15,6 +15,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.vision.utils.ConstantsVision;
 import frc.robot.vision.utils.TagPoseCalc;
@@ -59,7 +60,7 @@ public class VisionByTag extends SubsystemBase {
     tyEntry = table.getEntry("ty");
     tidEntry = table.getEntry("tid");
 
-    Pose = new TagPoseCalc(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), false);
+    Pose = new TagPoseCalc(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), RobotContainer.isRed);
 
     field = new Field2d();
     
@@ -75,7 +76,7 @@ public class VisionByTag extends SubsystemBase {
       tagYaw = -txEntry.getDouble(0);
       tagPitch = tyEntry.getDouble(0);
       id = tidEntry.getDouble(0);
-      Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), false);
+      Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), RobotContainer.isRed);
       Pose2d pose = getRobotPose();
       field.setRobotPose(pose);
       RobotContainer.chassis.updateVisionPose(pose);

@@ -168,7 +168,7 @@ public class ShooterConstants {
    */
   public static class LOOKUP_TABLE_DATA {
     public static final double[][] DATA = {
-      {0, 45, 60, 60}
+      {1.5, 52, 50, 50}, {2.5, 42, 55, 55}
     };
   }
 
