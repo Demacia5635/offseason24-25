@@ -165,33 +165,5 @@ public class Shooter extends SubsystemBase {
     LogManager.addEntry("Shooter/FeedingMotor/Velocity", ()-> motorFeeding.getSelectedSensorVelocity()*10);
     LogManager.addEntry("Shooter/FeedingMotor/Voltage", ()-> motorFeeding.getMotorOutputVoltage());
     LogManager.addEntry("Shooter/FeedingMotor/Current", ()-> motorFeeding.getSupplyCurrent());
-
-    // builder.addDoubleProperty("Shooter/UpMotor/Velocity", this::getUpMotorVel, null);
-    // builder.addDoubleProperty("Shooter/UpMotor/Acceleration", ()-> motorUp.getAcceleration().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/Voltage", ()-> motorUp.getMotorVoltage().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/Current", ()-> motorUp.getSupplyCurrent().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopError", ()-> motorUp.getClosedLoopError().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopOutput", ()-> motorUp.getClosedLoopOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopP", ()-> motorUp.getClosedLoopProportionalOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopI", ()-> motorUp.getClosedLoopIntegratedOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopD", ()-> motorUp.getClosedLoopDerivativeOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopFF", ()-> motorUp.getClosedLoopFeedForward().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/UpMotor/CloseLoopSP", ()-> motorUp.getClosedLoopReference().getValueAsDouble(), null);
-
-    // builder.addDoubleProperty("Shooter/DownMotor/Velocity", this::getDownMotorVel, null);
-    // builder.addDoubleProperty("Shooter/DownMotor/Acceleration", ()-> motorDown.getAcceleration().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/Voltage", ()-> motorDown.getMotorVoltage().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/Current", ()-> motorDown.getSupplyCurrent().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopError", ()-> motorDown.getClosedLoopError().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopOutput", ()-> motorDown.getClosedLoopOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopP", ()-> motorDown.getClosedLoopProportionalOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopI", ()-> motorDown.getClosedLoopIntegratedOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopD", ()-> motorDown.getClosedLoopDerivativeOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopFF", ()-> motorDown.getClosedLoopFeedForward().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/DownMotor/CloseLoopSP", ()-> motorDown.getClosedLoopReference().getValueAsDouble(), null);
-    
-    // builder.addDoubleProperty("Shooter/FeedingMotor/Velocity", ()-> motorFeeding.getSelectedSensorVelocity()*10, null);
-    // builder.addDoubleProperty("Shooter/FeedingMotor/Voltage", ()-> motorFeeding.getMotorOutputVoltage(), null);
-    // builder.addDoubleProperty("Shooter/FeedingMotor/Current", ()-> motorFeeding.getSupplyCurrent(), null);
   }
 }

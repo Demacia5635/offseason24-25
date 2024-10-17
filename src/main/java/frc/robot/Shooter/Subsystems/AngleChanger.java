@@ -178,20 +178,5 @@ public class AngleChanger extends SubsystemBase {
     LogManager.addEntry("Shooter/AngleChanging/CloseLoopD", () -> angleChangingMotor.getClosedLoopDerivativeOutput().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/CloseLoopFF", () -> angleChangingMotor.getClosedLoopFeedForward().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/CloseLoopSP", () -> angleChangingMotor.getClosedLoopReference().getValueAsDouble());
-
-    // builder.addDoubleProperty("Shooter/AngleChanging/Angle", this::getAngle, null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/LimitSwitch", ()-> isMaxAngle() ? 1 : 0, null);
-
-    // builder.addDoubleProperty("Shooter/AngleChanging/Velocity", this::getAngleMotorVel, null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/Acceleration", () -> angleChangingMotor.getAcceleration().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/Voltage", () -> angleChangingMotor.getMotorVoltage().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/Current", () -> angleChangingMotor.getSupplyCurrent().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopError", () -> angleChangingMotor.getClosedLoopError().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopOutput", () -> angleChangingMotor.getClosedLoopOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopP", () -> angleChangingMotor.getClosedLoopProportionalOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopI", () -> angleChangingMotor.getClosedLoopIntegratedOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopD", () -> angleChangingMotor.getClosedLoopDerivativeOutput().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopFF", () -> angleChangingMotor.getClosedLoopFeedForward().getValueAsDouble(), null);
-    // builder.addDoubleProperty("Shooter/AngleChanging/CloseLoopSP", () -> angleChangingMotor.getClosedLoopReference().getValueAsDouble(), null);
   }
 }

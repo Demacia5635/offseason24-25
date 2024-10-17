@@ -1,7 +1,5 @@
 package frc.robot.Intake;
 
-import frc.robot.Constants;
-
 /**
  * The intake constants
  */
