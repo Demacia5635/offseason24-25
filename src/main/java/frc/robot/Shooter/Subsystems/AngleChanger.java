@@ -114,7 +114,7 @@ public class AngleChanger extends SubsystemBase {
   }
 
   public void setBaseAngle() {
-    angleChangingMotor.setPosition(ShooterUtils.angleToDistance(ANGLE_CHANGING_VAR.BASE_ANGLE));
+    angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_DIS);
   }
 
   public void setAngleNeutralMode(boolean isBrake) {
@@ -154,6 +154,7 @@ public class AngleChanger extends SubsystemBase {
     builder.addStringProperty("Angle changing state", ()-> angleState.toString(), null);
 
     LogManager.addEntry("Shooter/AngleChanging/Angle", this::getAngle);
+    LogManager.addEntry("Shooter/AngleChanging/Distance", ()-> angleChangingMotor.getPosition().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/LimitSwitch", ()-> isMaxAngle() ? 1 : 0);
 
     LogManager.addEntry("Shooter/AngleChanging/Velocity", this::getAngleMotorVel);

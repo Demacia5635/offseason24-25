@@ -4,8 +4,6 @@
 
 package frc.robot.Shooter;
 
-import frc.robot.Constants;
-
 /** Add your docs here. */
 public class ShooterConstants {
 
@@ -21,16 +19,15 @@ public class ShooterConstants {
     public static final String CANBUS = "rio";
   }
 
-
   public static class SHOOTER_PID_FF{
     
     public static final double UP_MOTOR_KP = 0.0;
     public static final double UP_MOTOR_KI = 0.0;
     public static final double UP_MOTOR_KD = 0.0;
-    public static final double UP_MOTOR_KS = 1.052;
-    public static final double UP_MOTOR_KV = 0.187;
-    public static final double UP_MOTOR_KA = 0.0;
-    public static final double UP_MOTOR_KV2 = 0.00131;
+    public static final double UP_MOTOR_KS = 0.06576789961667519;
+    public static final double UP_MOTOR_KV = 0.11715135567075642;
+    public static final double UP_MOTOR_KA = 0.0044124397972312365;
+    public static final double UP_MOTOR_KV2 = 7.229070730748346E-5;
 
     public static final double DOWN_MOTOR_KP = UP_MOTOR_KP;
     public static final double DOWN_MOTOR_KI = UP_MOTOR_KI;
@@ -50,7 +47,7 @@ public class ShooterConstants {
 
   public static class SHOOTER_CONFIGS{
     public static final boolean IS_UP_MOTOR_INVERT = true;
-    public static final boolean IS_DOWN_MOTOR_INVERT = true;
+    public static final boolean IS_DOWN_MOTOR_INVERT = false;
     public static final boolean IS_FEEDING_MOTOR_INVERT = false;
 
     public static final boolean IS_SHOOTING_MOTORS_BRAKE = false;
@@ -62,9 +59,9 @@ public class ShooterConstants {
 
   public static class AMP_VAR{
     
-      public static final double AMP_ANGLE = 0;
-      public static final double MOTOR_UP_AMP_VELOCITY = 0;
-      public static final double MOTOR_DOWN_AMP_VELOCITY = 0;
+      public static final double AMP_ANGLE = 46;
+      public static final double MOTOR_UP_AMP_VELOCITY = 15;
+      public static final double MOTOR_DOWN_AMP_VELOCITY = 25;
     
   }
 
@@ -83,12 +80,6 @@ public class ShooterConstants {
       public static final double MOTOR_DOWN_SUBWOFFER_VELOCITY = 0; 
   }
 
-  public static class IDLE_VAR {
-    public static final double IDLE_ANGLE = 35;
-    public static final double MOTOR_UP_IDLE_VELOCITY = 0;
-    public static final double MOTOR_DOWN_IDLE_VELOCITY = 0;
-  }
-
   public static class MAX_ERRORS{
     
       public static final double ANGLE_MAX_ERRORS = 0.5;
@@ -99,28 +90,28 @@ public class ShooterConstants {
 
   public static class ANGLE_CHANGING_PID_FF{
     
-    public static final double KP = 0.01;
+    public static final double KP = 0.21;
     public static final double KI = 0.0;
     public static final double KD = 0.0;
-    public static final double KS = 0.0;
-    public static final double KV = 0.0;
-    public static final double KA = 0.0;
+    public static final double KS = 0;
+    public static final double KV = 0;
+    public static final double KA = 0;
     
   }
 
   public static class ANGLE_CHANGING_CONFIGS{
 
-    public static final double ANGLE_CHANGING_MAX_VELOCITY = 10;
-    public static final double ANGLE_CHANGING_MAX_Acceleration  = 15;
-    public static final double ANGLE_CHANGING_MAX_JERK = 20;
+    public static final double ANGLE_CHANGING_MAX_VELOCITY = 25;
+    public static final double ANGLE_CHANGING_MAX_Acceleration  = 30;
+    public static final double ANGLE_CHANGING_MAX_JERK = 0;
 
-    public static final boolean IS_ANGLE_MOTOR_INVERT = false;
+    public static final boolean IS_ANGLE_MOTOR_INVERT = true;
     
-    public static final boolean IS_ANGLE_MOTORS_BRAKE = false;
+    public static final boolean IS_ANGLE_MOTORS_BRAKE = true;
 
     public static final double ANGLE_CHANGING_FREQHZ = 200;
     
-    public static final double ANGLE_CHANGING_GEAR_RATIO = 1/4;
+    public static final double ANGLE_CHANGING_GEAR_RATIO = 1/2.0;
 
   }
 
@@ -134,11 +125,11 @@ public class ShooterConstants {
 
       public static final double A = 128;
       public static final double B = 128;
-      public static final double C = 0;
+      public static final double C = 80;
 
-      public static final double BASE_ANGLE = 70;//no
-      public static final double TOP_ANGLE = 70;
-      public static final double MIN_ANGLE = 30;
+      public static final double BASE_DIS = 25.12;
+      public static final double TOP_ANGLE = 65;
+      public static final double MIN_ANGLE = 35;
 
   }
 
@@ -158,7 +149,7 @@ public class ShooterConstants {
   public static class SHOOTER_ATRIBUTES {
     public static final double RADIOS = 0.36;
     public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
-    public static final double MIL_SEC_TO_SHOOT = 1000;
+    public static final double MIL_SEC_TO_SHOOT = 2000;
 
   }  
 
