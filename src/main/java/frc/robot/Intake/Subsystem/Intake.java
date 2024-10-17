@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase {
    * @return if the voltage that the sensor gave was high than NOTE_VOLTEGE
    */
   public boolean isNote(){
-    return analogIRSenor.getVoltage() > NOTE_VOLTEGE;
+    return analogIRSenor.getVoltage() < NOTE_VOLTEGE;
   }
 
   

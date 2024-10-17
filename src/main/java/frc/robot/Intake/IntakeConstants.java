@@ -29,7 +29,7 @@ public class IntakeConstants {
   }
 
   /**The voltege of the sensor when he detects the note */
-  public static final double NOTE_VOLTEGE = 4.0;
+  public static final double NOTE_VOLTEGE = 3.0;
 
   //The amper of when the not is fed to the intake
   public static final double NOTE_AMPER = 25.0;
