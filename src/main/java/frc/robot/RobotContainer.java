@@ -74,6 +74,7 @@ public class RobotContainer implements Sendable{
     angleChanging = new AngleChanger();
     intake = new Intake();
 
+    calibration = new Calibration(angleChanging);
     shootCommand = new Shoot(shooter, intake, chassis);
     intakeCommand = new IntakeCommand(intake);
     resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward())
@@ -82,7 +83,6 @@ public class RobotContainer implements Sendable{
     gotoAngleCommand = new GoToAngle(angleChanging, chassis);
     
     chassis.setDefaultCommand(driveCommand);
-    angleChanging.setDefaultCommand(gotoAngleCommand);
     
     gyro = chassis.gyro;
     pose = new visionByTag(gyro);
@@ -171,7 +171,7 @@ public class RobotContainer implements Sendable{
   }
 
   public Command calibration() {
-    return calibration;
+    return calibration.andThen(new InstantCommand(()->angleChanging.setDefaultCommand(gotoAngleCommand)));
   }
 
   public Command stopAll() {
