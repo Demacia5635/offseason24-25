@@ -17,7 +17,7 @@ import frc.robot.Constants;
 import frc.robot.vision.utils.ConstantsVision;
 import frc.robot.vision.utils.NotePoseCalc;
 
-public class visionByNote extends SubsystemBase {
+public class VisionByNote extends SubsystemBase {
   /** Creates a new vision. */
    // NetworkTable for Limelight communication
   private NetworkTable table;
@@ -35,7 +35,7 @@ public class visionByNote extends SubsystemBase {
   //pose of robot in field 
   Field2d field;
 
-  public visionByNote(Pose2d robotPose) {
+  public VisionByNote(Pose2d robotPose) {
     this.robotPose = robotPose;
 
     // Initialize Field2d for visualization

@@ -29,8 +29,7 @@ public final class ChassisConstants {
   public static final double WHEEL_DIAMETER = 4 * 0.0254; // 4 inch
   public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   public static final double MOVE_GEAR_RATIO = 8.14;
-  public static final double MOTOR_PULSES_PER_ROTATION = 2048;
-  public static final double PULSES_PER_METER = MOTOR_PULSES_PER_ROTATION * MOVE_GEAR_RATIO / WHEEL_CIRCUMFERENCE;
+  public static final double MOTOR_ROTATION_PER_METER = WHEEL_CIRCUMFERENCE;
 
   public static final double STEER_RATIO = 12.8;
 
@@ -56,7 +55,8 @@ public static final double COLLECT_OFFSET_METERS = 0.7;
 
 public static final double SICLE_CAUNT = 50.0;
 
-  public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants(
+
+public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants(
       "FrontLeft",
       new TalonConfig(4,CANBAS, "FrontLeft/Drive")
         .withPID(MOVE_PID.KP, MOVE_PID.KI, MOVE_PID.KD,MOVE_FF_MORE.KS,MOVE_FF_MORE.KV,MOVE_FF_MORE.KA,0)
@@ -65,7 +65,7 @@ public static final double SICLE_CAUNT = 50.0;
         .withPID(STEER_PID.KP, STEER_PID.KI, STEER_PID.KD, STEER_FF.KS,STEER_FF.KV,STEER_FF.KA,0)
         .withInvert(true).withMotorRatio(STEER_RATIO),
       6,
-      new Translation2d(0.173, 0.277),
+      new Translation2d(0.266, 0.249),
       0.395263671875);
 
   public final static SwerveModuleConstants FRONT_RIGHT = new SwerveModuleConstants(
@@ -79,7 +79,7 @@ public static final double SICLE_CAUNT = 50.0;
         .withInvert(true).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       3,
-      new Translation2d(0.173, -0.277),
+      new Translation2d(0.266, -0.249),
       0.351806640625);
 
   public final static SwerveModuleConstants BACK_LEFT = new SwerveModuleConstants(
@@ -93,7 +93,7 @@ public static final double SICLE_CAUNT = 50.0;
         .withInvert(true).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       9,
-      new Translation2d(-0.313, 0.277),
+      new Translation2d(-0.266, 0.249),
       0.399658203125);
 
   public final static SwerveModuleConstants BACK_RIGHT = new SwerveModuleConstants(
@@ -107,7 +107,7 @@ public static final double SICLE_CAUNT = 50.0;
         .withInvert(true).withMotorRatio(STEER_RATIO)
         .withMotionMagic(720, 1440, 3000),
       12,
-      new Translation2d(-0.332, -0.277),
+      new Translation2d(-0.266, -0.249),
       0.45361328125);
 
       

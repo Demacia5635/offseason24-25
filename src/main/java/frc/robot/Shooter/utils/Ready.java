@@ -24,10 +24,10 @@ public class Ready {
         return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.SUBWOFFER || state == STATE.DELIVERY_MID || state == STATE.DELIVERY_RIVAL);
     }
     public static boolean isSeeAprilTag(){
-        return true;
+        return false;
     }
     public static boolean isNearAmp(){
-        return true;
+        return false;
     }
     public static boolean isReady(double upMotorVel, double downMotorVel, STATE state){
         return GoToAngle.isAngleReady
@@ -37,6 +37,7 @@ public class Ready {
           && ((state == STATE.AMP && isNearAmp()) 
             || state != STATE.AMP)
           && (((state == STATE.SPEAKER) && isSeeAprilTag()) 
-            || state != STATE.SPEAKER);
+            || state != STATE.SPEAKER)
+          && false;
     }
 }

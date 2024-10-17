@@ -22,11 +22,11 @@ import frc.robot.chassis.ChassisConstants;
 import frc.robot.chassis.subsystems.Chassis;
 
 public class DemaciaOdometry {
-    private final double DISTANCE_OFFSET = -1; //meters
-    private final double ANGLE_OFFSET = -1; //degers
-    private final double MAX_X_CRASH = -1;
-    private final double MAX_Y_CRASH = -1;
-    private final double MAX_Z_CRASH = -1;
+    private final double DISTANCE_OFFSET = 100; //meters
+    private final double ANGLE_OFFSET = 90; //degers
+    private final double MAX_X_CRASH = 3;
+    private final double MAX_Y_CRASH = 3;
+    private final double MAX_Z_CRASH = -3;
     
 
 
@@ -64,13 +64,7 @@ public class DemaciaOdometry {
     }
 
 
-    /**
-     * @param gyroAngle
-     * @param wheelPositions
-     * @return 
-     */
-
-    public Pose2d update(Rotation2d gyroAngle, SwerveModulePosition[] wheelPositions) {
+/*  public Pose2d update(Rotation2d gyroAngle, SwerveModulePosition[] wheelPositions) {
         if(hasCrashed()){
             return pose;
         }
@@ -104,13 +98,56 @@ public class DemaciaOdometry {
         
         Twist2d twist = kinematics.toTwist2d(prevModulesAfterCheck, curModulesAfterCheck);
         twist.dtheta = angle.minus(m_previousAngle).getRadians();
+
+
         Pose2d newPose = pose.exp(twist);
         m_previousWheelPositions = cur;
         m_previousAngle = angle;
         pose = new Pose2d(newPose.getTranslation(), angle);
+        
 
         return pose;
     }
+*/
+
+
+    public Pose2d update(Rotation2d gyroAngle, SwerveModulePosition[] wheelPositions) {
+        var angle = gyroAngle.plus(m_gyroOffset);
+        SwerveDriveWheelPositions cur = new SwerveDriveWheelPositions(wheelPositions);
+        
+
+
+       
+        Twist2d twist = kinematics.toTwist2d(m_previousWheelPositions, cur);
+        twist.dtheta = angle.minus(m_previousAngle).getRadians();
+
+
+        Pose2d newPose = pose.exp(twist);
+        
+        m_previousWheelPositions = cur;
+        m_previousAngle = angle;
+        pose = new Pose2d(newPose.getTranslation(), angle);
+        return pose;
+  }
+
+    public Pose2d updateWithVision(Pose2d mergedPose, Rotation2d gyroAngle, SwerveModulePosition[] wheelPositions){
+        var angle = gyroAngle.plus(m_gyroOffset);
+
+        SwerveDriveWheelPositions cur = new SwerveDriveWheelPositions(wheelPositions);
+            
+        Twist2d twist = kinematics.toTwist2d(m_previousWheelPositions, cur);
+        twist.dtheta = angle.minus(m_previousAngle).getRadians();
+
+
+        Pose2d newPose = mergedPose.exp(twist);
+        m_previousWheelPositions = cur;
+        m_previousAngle = angle;
+        
+        return new Pose2d(newPose.getTranslation(), angle);
+        
+    }
+
+
 
     private boolean isSlipped(SwerveModulePosition modulePos){
         double maxDistance = Chassis.targetVelocity * 0.02;

@@ -12,6 +12,7 @@ import frc.robot.Constants;
 import frc.robot.chassis.ChassisConstants.SwerveModuleConstants;
 import frc.robot.utils.TalonMotor;
 
+import static frc.robot.chassis.ChassisConstants.MOTOR_ROTATION_PER_METER;
 import static frc.robot.chassis.ChassisConstants.WHEEL_DIAMETER;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -53,7 +54,7 @@ public class SwerveModule extends SubsystemBase {
         name = (constants.moduleTranslationOffset.getX()>0?"Front":"Back") + 
                (constants.moduleTranslationOffset.getY()>0?"Left":"Right");
         debug = constants.moduleTranslationOffset.getX()>0
-             //&& constants.moduleTranslationOffset.getY()<0
+             && constants.moduleTranslationOffset.getY()<0
              ; 
 
         moveMotor = new TalonMotor(constants.driveConfig);
@@ -241,12 +242,23 @@ public class SwerveModule extends SubsystemBase {
         setVelocity(v);
     }
 
+    public Rotation2d getModuleAngle(){
+        return Rotation2d.fromRotations(steerMotor.getPosition().getValue());
+    }
+
     /**
      * Returns the module position
      * @return Position relative to the field
      */
+    double lastPos = 0;
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(moveMotor.getCurrentPosition().getDegrees(), getAbsDegrees());
+        double pos = moveMotor.getPosition().getValue()*MOTOR_ROTATION_PER_METER;
+        Rotation2d rot = getModuleAngle();
+        if(debug && lastPos != pos) {
+            System.out.println(name + " pos=" + pos + " angle="  + rot.getDegrees());
+            lastPos = pos;
+        } 
+        return new SwerveModulePosition(pos,rot);
     }
 
    

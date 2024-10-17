@@ -49,9 +49,8 @@ public class TagPoseCalc {
     public double GetDistFromCamera() {
         sumdegry = tagPitch + ConstantsVision.TagLimelightAngle;
         
-        double dist = (Math.abs(height - ConstantsVision.TagLimelightHight)) / (Math.tan(Math.toRadians(sumdegry)));
-        System.out.println(dist);
-        System.out.println("dist" + dist);
+        double dist = (Math.abs(height - ConstantsVision.TagLimelightHeight)) / (Math.tan(Math.toRadians(sumdegry)));
+       
 
         return (dist);
     }

@@ -1,7 +1,6 @@
 package frc.robot.chassis.subsystems;
 
 
-import static frc.robot.RobotContainer.chassis;
 import static frc.robot.chassis.ChassisConstants.*;
 
 import java.util.Arrays;
@@ -19,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -29,7 +29,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Field;
 import frc.robot.RobotContainer;
+import frc.robot.chassis.utils.DemaciaOdometry;
 import frc.robot.utils.LogManager;
+import frc.robot.vision.subsystem.VisionByTag;
 
 
 
@@ -37,11 +39,17 @@ public class Chassis extends SubsystemBase {
   private final SwerveModule[] modules;
   public final Pigeon2 gyro;
   private SwerveDrivePoseEstimator poseEstimator;
+  private DemaciaOdometry demaciaOdometry;
   private final Field2d field;
+  private Pose2d mergedPose;
 
   public static double targetVelocity = 0;
   public static double currentVelocity = 0;
+
+  private VisionByTag visionByTag;
   private PIDController rotationPID = new PIDController(0.05,0.0, 0.002);
+
+  private boolean hasCalibratedPose = false;
 
   public Chassis() {
     modules = new SwerveModule[] {
@@ -52,9 +60,12 @@ public class Chassis extends SubsystemBase {
     };    
     gyro = new Pigeon2(GYRO_ID, Constants.CANBUS);
     gyro.setYaw(0);
+
+    this.visionByTag = new VisionByTag(gyro);
     
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
-    
+    mergedPose = new Pose2d();
+    demaciaOdometry = new DemaciaOdometry(getRawAngle(), getModulePositions(), getPose());
     setBrake(true);
     field = new Field2d();
     SmartDashboard.putData(field);
@@ -350,9 +361,34 @@ public class Chassis extends SubsystemBase {
     return gyro.getRate();
   }
 
+  /*private Pose2d mergeVisionOdometry(Pose2d odometry, Pose2d vision){
+    odometry = odometry.times(0.7);
+    vision = vision.times(0.3);
+    
+   
+    Pose2d result = new Pose2d(odometry.getX() + vision.getX(),
+      odometry.getY() + vision.getY(),
+      odometry.getRotation().plus(vision.getRotation()));
+
+    return result;
+  }*/
+
+
+  public void updateVisionPose(Pose2d pose) {
+    poseEstimator.addVisionMeasurement(pose, Timer.getFPGATimestamp() - 0.05);
+  }
+  /*private Pose2d filterVisionWithOdometry(Pose2d vision, Pose2d odometry){
+    double maxAngleDiff = 50;
+    double maxDistanceDiff = 2;
+    Pose2d diff = vision;
+    if(vision.minus(odometry).getT >= )
+  }*/
+
   @Override
   public void periodic() {
+
     poseEstimator.update(getRawAngle(), getModulePositions());
+   
     field.setRobotPose(getPose().plus(new Transform2d(0, 0, new Rotation2d())));
  }
 }
