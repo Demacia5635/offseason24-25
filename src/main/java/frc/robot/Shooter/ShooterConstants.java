@@ -105,6 +105,8 @@ public class ShooterConstants {
     public static final double ANGLE_CHANGING_MAX_Acceleration  = 30;
     public static final double ANGLE_CHANGING_MAX_JERK = 0;
 
+    public static final double ANGLE_VOLTAGE_RAMP = 0.7;
+
     public static final boolean IS_ANGLE_MOTOR_INVERT = true;
     
     public static final boolean IS_ANGLE_MOTORS_BRAKE = true;

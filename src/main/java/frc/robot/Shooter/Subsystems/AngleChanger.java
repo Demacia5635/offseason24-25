@@ -68,6 +68,8 @@ public class AngleChanger extends SubsystemBase {
     config.MotionMagic.MotionMagicAcceleration = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_Acceleration;
     config.MotionMagic.MotionMagicJerk = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_MAX_JERK;
 
+    config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = ANGLE_CHANGING_CONFIGS.ANGLE_VOLTAGE_RAMP;
+
     config.Feedback.SensorToMechanismRatio = ANGLE_CHANGING_CONFIGS.ANGLE_CHANGING_GEAR_RATIO;
     config.MotorOutput.Inverted = ANGLE_CHANGING_CONFIGS.IS_ANGLE_MOTOR_INVERT
         ? InvertedValue.Clockwise_Positive
@@ -91,11 +93,12 @@ public class AngleChanger extends SubsystemBase {
 
   public void goToAngle(double wantedAngle) {
     if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE) {
-      wantedAngle = ANGLE_CHANGING_VAR.MIN_ANGLE;
+      return ;
     }
-    if (wantedAngle < ANGLE_CHANGING_VAR.TOP_ANGLE) {
-      wantedAngle = ANGLE_CHANGING_VAR.TOP_ANGLE;
+    if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
+      return ;
     }
+
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
   }
@@ -105,6 +108,13 @@ public class AngleChanger extends SubsystemBase {
   }
 
   public void goToAnglePositionVol(double wantedAngle) {
+    if (wantedAngle < ANGLE_CHANGING_VAR.MIN_ANGLE) {
+      return ;
+    }
+    if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
+      return ;
+    }
+
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(positionVoltage.withPosition(distance));
   }
