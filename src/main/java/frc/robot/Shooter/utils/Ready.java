@@ -21,7 +21,7 @@ public class Ready {
         return Math.abs(wantedDownMotorVel - RobotContainer.shooter.getDownMotorVel()) <= MAX_ERRORS.DOWN_MOTOR_VEL_MAX_ERRORS;
     }
     public static boolean isGoodState(STATE state){
-        return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.SUBWOFFER);
+        return (state == STATE.SPEAKER || state == STATE.AMP || state == STATE.STAGE || state == STATE.SUBWOFFER || state == STATE.DELIVERY_MID || state == STATE.DELIVERY_RIVAL);
     }
     public static boolean isSeeAprilTag(){
         return true;
