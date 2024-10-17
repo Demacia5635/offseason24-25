@@ -1,6 +1,7 @@
 package frc.robot.chassis.subsystems;
 
 
+import static frc.robot.RobotContainer.chassis;
 import static frc.robot.chassis.ChassisConstants.*;
 
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Field;
 import frc.robot.RobotContainer;
 import frc.robot.utils.LogManager;
 
@@ -206,6 +208,10 @@ public class Chassis extends SubsystemBase {
     setModuleStates(states);
   }
 
+  public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds) {
+    Translation2d speaker = isRed() ? Field.RedSpeaker : Field.Speaker;
+    setVelocitiesRotateToAngle(speeds, speaker.minus(getPose().getTranslation()).getAngle().unaryMinus());
+  }
   
   public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
     speeds.omegaRadiansPerSecond = getRadPerSecToAngle(angle);
