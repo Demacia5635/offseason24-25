@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Shooter.utils.LookUpTable;
-import frc.robot.Shooter.utils.ShooterUtils;
 import frc.robot.utils.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -30,7 +29,6 @@ public class Shooter extends SubsystemBase {
   private TalonFX motorDown;
   private TalonSRX motorFeeding;
 
-  private TalonFXConfiguration configShooting;
   private TalonFXConfiguration configUp;
   private TalonFXConfiguration configDown;
 
@@ -50,15 +48,17 @@ public class Shooter extends SubsystemBase {
 
     m_request = new DutyCycleOut(0.0).withUpdateFreqHz(SHOOTER_CONFIGS.FREQHZ);
     velocityVoltage = new VelocityVoltage(0).withSlot(0).withUpdateFreqHz(SHOOTER_CONFIGS.FREQHZ);
-    configShooting = new TalonFXConfiguration();
+
+    configUp = new TalonFXConfiguration();
+    configDown = new TalonFXConfiguration();
     
-    configShooting.Feedback.SensorToMechanismRatio = SHOOTER_ATRIBUTES.SHOOTING_MOTORS_ROTATION_TO_METER;
-    configShooting.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
+    configUp.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
     ? NeutralModeValue.Brake
     : NeutralModeValue.Coast;
 
-    configDown = configShooting;
-    configUp = configShooting;    
+    configDown.MotorOutput.NeutralMode = SHOOTER_CONFIGS.IS_SHOOTING_MOTORS_BRAKE
+    ? NeutralModeValue.Brake
+    : NeutralModeValue.Coast;
 
     configUp.Slot0.kP = SHOOTER_PID_FF.UP_MOTOR_KP;
     configUp.Slot0.kI = SHOOTER_PID_FF.UP_MOTOR_KI;
@@ -72,8 +72,8 @@ public class Shooter extends SubsystemBase {
     configDown.Slot0.kS = SHOOTER_PID_FF.DOWN_MOTOR_KS;
     configDown.Slot0.kV = SHOOTER_PID_FF.DOWN_MOTOR_KV;
 
-    configUp.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_UP_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-    configDown.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_DOWN_MOTOR_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+    configUp.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_UP_MOTOR_INVERT ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
+    configDown.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_DOWN_MOTOR_INVERT ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
 
     motorUp.getConfigurator().apply(configUp);
     motorDown.getConfigurator().apply(configDown);
@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setMotorPower(double upPower, double downPower){
-    motorUp.setControl(m_request.withOutput(-upPower));
+    motorUp.setControl(m_request.withOutput(upPower));
     motorDown.setControl(m_request.withOutput(downPower));
   }
   
@@ -107,8 +107,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void pidMotorVelocity(double upVel, double downVel){
-    motorUp.setControl(velocityVoltage.withVelocity(upVel).withFeedForward(ShooterUtils.getUpMotorFF(getUpMotorVel())));
-    motorDown.setControl(velocityVoltage.withVelocity(downVel).withFeedForward(ShooterUtils.getDownMotorFF(getDownMotorVel())));
+    motorUp.setControl(velocityVoltage.withVelocity(upVel)); // .withFeedForward(ShooterUtils.getUpMotorFF(getUpMotorVel())));
+    motorDown.setControl(velocityVoltage.withVelocity(downVel)); // .withFeedForward(ShooterUtils.getDownMotorFF(getDownMotorVel())));
   }
 
   public void setShootingNeutralMode(boolean isBrake){
