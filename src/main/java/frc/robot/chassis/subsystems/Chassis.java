@@ -39,6 +39,8 @@ public class Chassis extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field;
 
+  public static double targetVelocity = 0;
+  public static double currentVelocity = 0;
   private PIDController rotationPID = new PIDController(0.05,0.0, 0.002);
 
   public Chassis() {
@@ -202,8 +204,11 @@ public class Chassis extends SubsystemBase {
   public void setVelocities(ChassisSpeeds speeds) {
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
 
-    SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
+    //SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
+    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relativeSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+    targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm() ;
+    currentVelocity = getVelocity().getNorm();
     
     setModuleStates(states);
   }

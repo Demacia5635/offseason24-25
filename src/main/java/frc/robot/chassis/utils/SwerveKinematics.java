@@ -3,8 +3,11 @@ package frc.robot.chassis.utils;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /**
@@ -75,4 +78,25 @@ public class SwerveKinematics extends SwerveDriveKinematics {
         }
         return s;
     }
+    
+    @Override
+    public Twist2d toTwist2d(SwerveDriveWheelPositions start, SwerveDriveWheelPositions end) {
+        if (start.positions.length != end.positions.length) {
+            throw new IllegalArgumentException("Inconsistent number of modules!");
+        }
+        
+
+        SwerveModulePosition[] newPositions = new SwerveModulePosition[start.positions.length];
+        for (int i = 0; i < start.positions.length; i++) {
+            var startModule = start.positions[i];
+            var endModule = end.positions[i];
+            newPositions[i] =
+            new SwerveModulePosition(
+                endModule.distanceMeters - startModule.distanceMeters,
+                endModule.angle.plus(startModule.angle).div(2));
+        };
+
+        return toTwist2d(newPositions);
+    }
+
 }
