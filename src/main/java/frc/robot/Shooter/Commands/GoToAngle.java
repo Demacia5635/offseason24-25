@@ -62,7 +62,7 @@ public class GoToAngle extends Command {
     builder.addDoubleProperty("Angle", this::getWantedAngle, this::setWantedAngle);
 
     LogManager.addEntry("Shooter/AngleChanging/Wanted angle", ()-> wantedAngle);
-    LogManager.addEntry("Shooter/AngleChanging/distence from speaker", ()-> speaker.minus(chassis.getPose().getTranslation()).getNorm()+0.35);
+    LogManager.addEntry("Shooter/AngleChanging/distence from speaker", ()-> speaker.minus(chassis.getPose().getTranslation()).getNorm());
   }
 
   public double getWantedAngle() {

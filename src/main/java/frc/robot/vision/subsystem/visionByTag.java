@@ -116,6 +116,7 @@ public class VisionByTag extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     SmartDashboard.putData("field-tag", field);
+    builder.addDoubleProperty("dist from cam", ()->Pose.GetDistFromCamera(), null);
   }
 
 }
