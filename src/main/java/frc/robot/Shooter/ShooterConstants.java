@@ -145,7 +145,7 @@ public class ShooterConstants {
   public static class ANGLE_CHANGING_CALIBRATION{
 
       public static final double UP_SPEED_CALIBRATION = 0.3;
-      public static final double DOWN_SPEED_CALIBRATION = -0.1;
+      public static final double DOWN_SPEED_CALIBRATION = -0.3;
 
   }
 
