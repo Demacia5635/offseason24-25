@@ -99,7 +99,7 @@ public class RobotContainer implements Sendable{
 
     controller.back().onTrue(resetOdometry);
     
-    controller.y().onTrue(new RunCommand(()-> {
+    controller.rightStick().onTrue(new RunCommand(()-> {
       intake.setPowerToMotors(-1);
     }, intake));
     controller.a().onTrue(intakeCommand);
@@ -137,11 +137,11 @@ public class RobotContainer implements Sendable{
       shooter.shooterState = STATE.TESTING;
       angleChanging.angleState = STATE.TESTING;
     }));
-    controller.povDown().onTrue(new InstantCommand(()-> {
+    controller.povRight().onTrue(new InstantCommand(()-> {
       shooter.shooterState = STATE.SUBWOFFER;
       angleChanging.angleState = STATE.SUBWOFFER;
     }));
-    controller.povUp().onTrue(new InstantCommand(()-> {
+    controller.povDown().onTrue(new InstantCommand(()-> {
       shooter.shooterState = STATE.SPEAKER;
       angleChanging.angleState = STATE.SPEAKER;
     }));
