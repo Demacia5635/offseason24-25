@@ -29,6 +29,9 @@ public class VisionByNote extends SubsystemBase {
   private double notePitch;
   private Pose2d robotPose;
 
+  private double[] corners = new double[8];
+  private double[] array = new double[8];
+
   // Pose and distance calculation utilities
   private NotePoseCalc notePose;
 
@@ -59,7 +62,7 @@ public class VisionByNote extends SubsystemBase {
     // Fetch Limelight data
     noteYaw = table.getEntry("tx").getDouble(0);
     notePitch = table.getEntry("ty").getDouble(0);
-    noteYaw *=-1;
+    corners = table.getEntry("tcornxy").getDoubleArray(array);
     //update Pose
     notePose.update(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
 
@@ -94,6 +97,8 @@ public class VisionByNote extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
       SmartDashboard.putData("field-note", field);
+      // builder.addDoubleProperty("corners0", ()->corners[0], null);
+      // builder.addDoubleProperty("corners2", ()->corners[2], null); }
   }
 
 }

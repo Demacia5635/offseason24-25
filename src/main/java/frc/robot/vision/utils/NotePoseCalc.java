@@ -10,7 +10,7 @@ public class NotePoseCalc {
     private double tx;
     private double ty;
     private double id;
-    private double sumdegry;
+    private double anglePitch;
     private Pose2d pose;
     private Rotation2d gyroYaw;
     private boolean isRed;
@@ -39,9 +39,10 @@ public class NotePoseCalc {
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = Math.abs(ty - ConstantsVision.NoteLimelightAngle);
-        sumdegry = Math.toRadians(sumdegry);
-        return ((Math.abs(ConstantsVision.NoteLimelightHight)) / (Math.tan(sumdegry)));
+        anglePitch = (ConstantsVision.NoteLimelightAngle-ty );
+        // System.out.println("ang"+ty);
+        // System.out.println((ConstantsVision.NoteLimelightHight) * (Math.tan(anglePitch)));
+        return ((ConstantsVision.NoteLimelightHight) * (Math.tan(anglePitch)));
 
     }
 
@@ -52,7 +53,7 @@ public class NotePoseCalc {
     public Translation2d getRobotToNote() {
         Translation2d cameraToNote = new Translation2d(GetDistFromCamera(), Rotation2d.fromDegrees(tx)).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
         Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(isRed ? gyroYaw : gyroYaw.unaryMinus());
-        Translation2d robotToNote = isRed ? cameraToNote.plus(robotToCamera) : cameraToNote.minus(robotToCamera);
+        Translation2d robotToNote = cameraToNote.plus(robotToCamera);
         return robotToNote;
     }
 

@@ -32,6 +32,7 @@ import frc.robot.Field;
 import frc.robot.RobotContainer;
 import frc.robot.chassis.utils.DemaciaOdometry;
 import frc.robot.utils.LogManager;
+import frc.robot.vision.subsystem.VisionByNote;
 import frc.robot.vision.subsystem.VisionByTag;
 
 
@@ -43,13 +44,14 @@ public class Chassis extends SubsystemBase {
   private DemaciaOdometry demaciaOdometry;
   private final Field2d field;
   private Pose2d mergedPose;
+  private VisionByNote visionByNote;
+ 
 
   public static double targetVelocity = 0;
   public static double currentVelocity = 0;
 
   private VisionByTag visionByTag;
-  private PIDController rotationPID = new PIDController(0.05,0.0, 0.002);
-
+  private PIDController rotationPID = new PIDController(0.3,0.0, 0.00);
   private boolean hasCalibratedPose = false;
 
   public Chassis() {
@@ -65,13 +67,13 @@ public class Chassis extends SubsystemBase {
     this.visionByTag = new VisionByTag(gyro);
     
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
-    mergedPose = new Pose2d();
+    visionByNote = new VisionByNote(poseEstimator.getEstimatedPosition());
     demaciaOdometry = new DemaciaOdometry(getRawAngle(), getModulePositions(), getPose());
     setBrake(true);
     field = new Field2d();
     SmartDashboard.putData(field);
 //    SmartDashboard.putData(this);
-    modules[0].debug = true;
+    
 
     ShuffleboardTab ntTab = Shuffleboard.getTab("Chassis");
     //var setGyroEntry = ntTab.add("Set Gyro Angle", 0).getEntry();
@@ -231,19 +233,51 @@ public class Chassis extends SubsystemBase {
     setModuleStates(states);
   }
 
-  public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds) {
+
+  public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds){
     Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
+    Rotation2d toSpeakerAngle = speaker.minus(getPose().getTranslation()).rotateBy(Rotation2d.fromDegrees(180)).getAngle();
+    speeds.omegaRadiansPerSecond = getOmegaToAngle(toSpeakerAngle);
+    setVelocities(speeds);
+    
+  }
+
+  public double getOmegaToAngle(Rotation2d fieldAngle){
+    double kP = 0.3;
+    double diffAngle = fieldAngle.minus(getAngle()).getDegrees();
+    System.out.println(diffAngle);
+    return Math.toRadians(-diffAngle * kP);
+
+  }
+
+
+
+
+
+
+
+  /*public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds) {
+    Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
+
     setVelocitiesRotateToAngle(speeds, speaker.minus(getPose().getTranslation()).getAngle());
   }
   
   public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
     speeds.omegaRadiansPerSecond = getRadPerSecToAngle(angle);
+    System.out.println("DIFF ANGLE NO FUNC: " + angle.minus(getAngle()));
+    // System.out.println("ANGLE: " + angle);
+    System.out.println("speeds omega  NO FUNC" + speeds.omegaRadiansPerSecond);
     setVelocities(speeds);
   }
 
   public double getRadPerSecToAngle(Rotation2d fieldRelativeAngle){
-    return rotationPID.calculate(MathUtil.angleModulus(getAngle().getRadians()), MathUtil.angleModulus(fieldRelativeAngle.getRadians()));
-  }
+
+    // System.out.println(fieldRelativeAngle.minus(getAngle()));
+    System.out.println("DIFF ANGLE---: " + fieldRelativeAngle.minus(getAngle()).getRadians());
+    System.out.println("SPEEDS OMEGA---: " +  rotationPID.calculate(getAngle().getRadians(), fieldRelativeAngle.getRadians()));
+    return rotationPID.calculate(getAngle().getRadians(), fieldRelativeAngle.getRadians());
+
+  }*/
 
   public Translation2d getVelocity() {
     ChassisSpeeds speeds = getChassisSpeeds();

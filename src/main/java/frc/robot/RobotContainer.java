@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.vision.subsystem.VisionByNote;
 import frc.robot.vision.subsystem.VisionByTag;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Intake.Command.IntakeCommand;
@@ -59,7 +58,6 @@ public class RobotContainer implements Sendable{
   Pigeon2 gyro;
 
   VisionByTag pose;
-  VisionByNote note;
   Field2d field;
 
   public RobotContainer() {
@@ -87,7 +85,6 @@ public class RobotContainer implements Sendable{
     
     gyro = chassis.gyro;
     pose = new VisionByTag(gyro);
-    note = new VisionByNote(pose.getRobotPose());
 
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));

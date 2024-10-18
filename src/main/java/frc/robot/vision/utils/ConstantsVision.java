@@ -140,8 +140,6 @@ public class ConstantsVision {
   public static final double NoteLimelightHight = 0.211;
   public static final double NoteLimelightAngle = 0;
 
-  public static final double NoteLimelightYaw = 180;
-
   public static final double NoteLimelightXOfset = -0.39345;
   public static final double NoteLimelightYOfset = 0.0;
 
