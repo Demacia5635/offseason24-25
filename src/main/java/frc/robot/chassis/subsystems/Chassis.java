@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,6 +78,8 @@ public class Chassis extends SubsystemBase {
     ntTab.add("Set gyro to 0 ",
        new InstantCommand( () -> setGyroAngle(0))
        .ignoringDisable(true));
+
+    ntTab.add("gyro",gyro.getAngle());
 
     ntTab.add("Set gyro to 180 ",
        new InstantCommand( () -> setGyroAngle(180))
@@ -222,15 +225,15 @@ public class Chassis extends SubsystemBase {
     //SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
     SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relativeSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
-    targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm() ;
+    targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm();
     currentVelocity = getVelocity().getNorm();
     
     setModuleStates(states);
   }
 
   public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds) {
-    Translation2d speaker = isRed() ? Field.RedSpeaker : Field.Speaker;
-    setVelocitiesRotateToAngle(speeds, speaker.minus(getPose().getTranslation()).getAngle().unaryMinus());
+    Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
+    setVelocitiesRotateToAngle(speeds, speaker.minus(getPose().getTranslation()).getAngle());
   }
   
   public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
@@ -239,7 +242,7 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getRadPerSecToAngle(Rotation2d fieldRelativeAngle){
-    return rotationPID.calculate(-fieldRelativeAngle.getRadians(), 0);
+    return rotationPID.calculate(MathUtil.angleModulus(getAngle().getRadians()), MathUtil.angleModulus(fieldRelativeAngle.getRadians()));
   }
 
   public Translation2d getVelocity() {

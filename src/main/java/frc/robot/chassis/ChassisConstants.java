@@ -17,13 +17,13 @@ public final class ChassisConstants {
   
   public static final double MAX_DRIVE_VELOCITY = 4.1;
   public static final double DRIVE_ACCELERATION = 50;
-  public static final double MAX_STEER_VELOCITY = 1.5; //in 
+  public static final double MAX_STEER_VELOCITY = 3.8; //in 
   public static final double MAX_STEER_POWER = 0.7;
   public static final double MAX_STEER_ACCELERATION = 3; // in RPS Squared
   public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
-  public static final double MAX_OMEGA_VELOCITY = Math.toRadians(360);
+  public static final double MAX_OMEGA_VELOCITY = Math.toRadians(270);
 
-  public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(720);
+  public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(540);
 
   // Pulse per meter/degrees
   public static final double WHEEL_DIAMETER = 4 * 0.0254; // 4 inch

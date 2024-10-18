@@ -105,13 +105,17 @@ public class Utils {
     return RobotContainer.robotContainer.isRed()? Field.RedSubShootPosition: Field.SubShootPosition;
   }
 
-  public static double angelErrorInDegrees(Rotation2d r1, Rotation2d r2, double deadband) {
+  public static double angleErrorInDegrees(Rotation2d r1, Rotation2d r2, double deadband) {
     
     return deadband(MathUtil.inputModulus(r1.minus(r2).getDegrees(), -180, 180),deadband);
   }
-  public static double angelErrorInRadians(Rotation2d r1, Rotation2d r2, double deadband) {
+  public static double angleErrorInRadians(Rotation2d r1, Rotation2d r2, double deadband) {
     return deadband(MathUtil.angleModulus(r1.minus(r2).getRadians()),deadband);
   }
+
+  
+
+ // public static double 
   public static double getDouble(StatusSignal<Double> st) {
     if(st.getStatus() == StatusCode.OK) {
       return st.getValue();

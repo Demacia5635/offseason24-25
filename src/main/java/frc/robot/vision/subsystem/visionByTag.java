@@ -73,7 +73,7 @@ public class VisionByTag extends SubsystemBase {
 
     // Fetch Limelight data
     if(tvEntry.getDouble(0) != 0) {
-      tagYaw = -txEntry.getDouble(0);
+      tagYaw = txEntry.getDouble(0);
       tagPitch = tyEntry.getDouble(0);
       id = tidEntry.getDouble(0);
       Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()), RobotContainer.isRed);

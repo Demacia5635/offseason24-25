@@ -6,6 +6,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 import static frc.robot.chassis.ChassisConstants.MAX_OMEGA_VELOCITY;
+
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.Shooter.Commands.Shoot;
+import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.chassis.subsystems.Chassis;
 
 import static frc.robot.utils.Utils.deadband;
@@ -55,9 +60,14 @@ public class DriveCommand extends Command {
       velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
-    if(velX != 0 || velY != 0 || velRot != 0)
-      System.out.println("Chassis speeds: " + speeds);
-    chassis.setVelocities(speeds);
+
+    Command c = RobotContainer.shooter.getCurrentCommand();
+    if (c != null && c instanceof Shoot && RobotContainer.shooter.shooterState == STATE.SPEAKER) {
+      chassis.setVelocitiesRotateToSpeaker(speeds);
+    }
+    else{
+      chassis.setVelocities(speeds);
+    }
     }
 
     @Override

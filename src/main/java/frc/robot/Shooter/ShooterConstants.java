@@ -130,8 +130,8 @@ public class ShooterConstants {
       public static final double C = 80;
 
       public static final double BASE_DIS = 25.12;
-      public static final double TOP_ANGLE = 65;
-      public static final double MIN_ANGLE = 35;
+      public static final double TOP_ANGLE = 70;
+      public static final double MIN_ANGLE = 33;
 
   }
 
@@ -168,7 +168,7 @@ public class ShooterConstants {
    */
   public static class LOOKUP_TABLE_DATA {
     public static final double[][] DATA = {
-      {1.5, 52, 50, 50}, {2.5, 42, 55, 55}
+      {1.5, 52, 50, 50}, {2.5, 42, 55, 55}, {3.55, 34, 65, 63}
     };
   }
 

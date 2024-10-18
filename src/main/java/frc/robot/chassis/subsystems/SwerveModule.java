@@ -53,9 +53,7 @@ public class SwerveModule extends SubsystemBase {
         // define motors and encoder
         name = (constants.moduleTranslationOffset.getX()>0?"Front":"Back") + 
                (constants.moduleTranslationOffset.getY()>0?"Left":"Right");
-        debug = constants.moduleTranslationOffset.getX()>0
-             && constants.moduleTranslationOffset.getY()<0
-             ; 
+        //debug = constants.moduleTranslationOffset.getX()>0&& constants.moduleTranslationOffset.getY()<0; 
 
         moveMotor = new TalonMotor(constants.driveConfig);
         steerMotor = new TalonMotor(constants.steerConfig);
