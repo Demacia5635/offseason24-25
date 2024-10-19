@@ -22,6 +22,7 @@ public final class ChassisConstants {
   public static final double MAX_STEER_ACCELERATION = 3; // in RPS Squared
   public static final Rotation2d MAX_STEER_ERROR = Rotation2d.fromDegrees(1);
   public static final double MAX_OMEGA_VELOCITY = Math.toRadians(270);
+  public static final double DRIVE_BASE_RADIUS = 0.3643658;
 
   public static final double MAX_OMEGA_ACCELERATION = Math.toRadians(540);
 

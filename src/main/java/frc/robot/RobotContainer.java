@@ -6,11 +6,13 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +62,8 @@ public class RobotContainer implements Sendable{
   VisionByTag pose;
   Field2d field;
 
+  private final SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
 
     robotContainer = this;
@@ -86,8 +90,17 @@ public class RobotContainer implements Sendable{
     gyro = chassis.gyro;
     pose = new VisionByTag(gyro);
 
+    NamedCommands.registerCommand("shoot", shootCommand);
+    NamedCommands.registerCommand("intake", intakeCommand);
+    NamedCommands.registerCommand("goToAngle", gotoAngleCommand);
+    NamedCommands.registerCommand("calibration", calibration);
+    NamedCommands.registerCommand("shooterReady", new InstantCommand(()-> isDriverOverwriteShooter = true));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     configureBindings();
   }
@@ -168,7 +181,7 @@ public class RobotContainer implements Sendable{
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return calibration;
+    return autoChooser.getSelected();
   }
 
   // public Command calibration() {
