@@ -27,9 +27,12 @@ import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.Commands.Calibration;
 import frc.robot.Shooter.Commands.GoToAngle;
 import frc.robot.Shooter.Commands.Shoot;
+import frc.robot.Shooter.Commands.WaitUntilShooterReady;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
+import frc.robot.Shooter.utils.Ready;
 import frc.robot.chassis.commands.DriveCommand;
+import frc.robot.chassis.commands.DriveToNote;
 import frc.robot.chassis.subsystems.Chassis;
 import frc.robot.utils.LogManager;
 
@@ -48,12 +51,14 @@ public class RobotContainer implements Sendable{
   public static AngleChanger angleChanging;
   public static Intake intake;
 
-  private IntakeCommand intakeCommand;
-  private Shoot shootCommand;
-  private Command resetOdometry;
-  private DriveCommand driveCommand;
-  private GoToAngle gotoAngleCommand;
-  private Calibration calibration;
+  public IntakeCommand intakeCommand;
+  public Shoot shootCommand;
+  public Command resetOdometry;
+  public DriveCommand driveCommand;
+  public GoToAngle gotoAngleCommand;
+  public Calibration calibration;
+  public Command driveToNote;
+  public WaitUntilShooterReady waitUntilShooterReady;
 
   public static boolean isDriverOverwriteShooter = false;
 
@@ -83,18 +88,18 @@ public class RobotContainer implements Sendable{
                         .ignoringDisable(true);
     driveCommand = new DriveCommand(chassis, controller);
     gotoAngleCommand = new GoToAngle(angleChanging, chassis);
-    
+    waitUntilShooterReady = new WaitUntilShooterReady(shooter);
+   // driveToNote = new DriveToNote(chassis, 1.6, true).raceWith(intakeCommand); 
+
     chassis.setDefaultCommand(driveCommand);
     angleChanging.setDefaultCommand(gotoAngleCommand);
     
-    gyro = chassis.gyro;
-    pose = new VisionByTag(gyro);
 
     NamedCommands.registerCommand("shoot", shootCommand);
     NamedCommands.registerCommand("intake", intakeCommand);
     NamedCommands.registerCommand("goToAngle", gotoAngleCommand);
     NamedCommands.registerCommand("calibration", calibration);
-    NamedCommands.registerCommand("shooterReady", new InstantCommand(()-> isDriverOverwriteShooter = true));
+    NamedCommands.registerCommand("shooterReady", waitUntilShooterReady);
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -119,6 +124,7 @@ public class RobotContainer implements Sendable{
     
     controller.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
     controller.x().onTrue(shootCommand);
+  //  controller.b().onTrue(driveToNote);
     
     controller.start().onTrue(calibration);
     controller.povRight().onTrue(new InstantCommand(()-> {

@@ -40,7 +40,7 @@ public class Shooter extends SubsystemBase {
   
   /** Creates a new Shooter. */
   public Shooter() {
-    shooterState = STATE.TESTING;
+    shooterState = STATE.SPEAKER;
 
     motorFeeding = new TalonSRX(MOTOR_IDS.MOTOR_FEEDING_ID);
     motorDown = new TalonFX(MOTOR_IDS.MOTOR_DOWN_ID, MOTOR_IDS.CANBUS);

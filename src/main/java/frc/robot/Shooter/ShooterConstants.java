@@ -151,9 +151,21 @@ public class ShooterConstants {
   public static class SHOOTER_ATRIBUTES {
     public static final double RADIOS = 0.36;
     public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
-    public static final double MIL_SEC_TO_SHOOT = 2000;
+    public static final double MIL_SEC_TO_SHOOT = 500;
 
   }  
+
+  public static class DELIVERY_RIVAL_VAR {
+    public static final double DELIVERY_RIVAL_ANGLE = 45;
+    public static final double MOTOR_UP_DELIVERY_RIVAL_VEL = 60;
+    public static final double MOTOR_DOWN_DELIVERY_RIVAL_VEL = 60;
+  }
+
+  public static class DELIVERY_MID_VAR {
+    public static final double DELIVERY_MID_ANGLE = 38;
+    public static final double MOTOR_UP_DELIVERY_MID_VEL = 50;
+    public static final double MOTOR_DOWN_DELIVERY_MID_VEL = 50;
+  }
 
   /**
    * Lookup table in the format of: <br> </br>

@@ -173,21 +173,19 @@ public class Shoot extends Command {
 
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
-    isReady = (Ready.isReady(upMotorVelocity, downMotorVelocity, state) && state != STATE.TESTING)
-        || isDriverOverwriteShooter;
+    isReady = isDriverOverwriteShooter;
     if (isReady) {
       shooter.setFeedingPower(SHOOTER_POW.FEEDING_MOTOR_POWER);
       intake.setPowerToMotors(SHOOTER_POW.INTAKE_MOTOR_POWER);
       // intake.motorPickUpSetPower(0.5);
-      isReady = false;
-      isDriverOverwriteShooter = false;
 
-      if (intake.isNote() && !isTimerRunning) {
+      System.out.println(shooterTimer.get());
+      if (!isTimerRunning) {
         shooterTimer.start();
         isTimerRunning = true;
       }
 
-      if (shooterTimer.get() * 1000 >= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT) {
+      if (shooterTimer.get()*1000 >= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT) {
         shooterTimer.stop();
         shooterTimer.reset();
         isTimerRunning = false;
@@ -199,9 +197,9 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (state != STATE.TESTING) {
-      angleChanging.angleState = STATE.SPEAKER;
-    }
+    // if (state != STATE.TESTING) {
+    //   angleChanging.angleState = STATE.SPEAKER;
+    // }
 
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
@@ -210,6 +208,8 @@ public class Shoot extends Command {
     shooterTimer.reset();
     isTimerRunning = false;
     isfinished = false;
+    isReady = false;
+    isDriverOverwriteShooter = false;
 
     if (!interrupted) {
       intake.isNoteInIntake = false;

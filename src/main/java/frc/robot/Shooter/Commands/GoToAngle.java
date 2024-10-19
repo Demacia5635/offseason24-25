@@ -90,6 +90,7 @@ public class GoToAngle extends Command {
    */
   @Override
   public void execute() {
+    state = angleChanger.angleState;
     // distenceX = chassis.getPose().getX();
     // if (distenceX >= DISTANCES.WING_DISTANCE && distenceX < DISTANCES.RIVAL_WING_DISTANCE && state != STATE.AMP
     //     && state != STATE.STAGE && state != STATE.SUBWOFFER && state != STATE.TESTING) {

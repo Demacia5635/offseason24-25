@@ -13,8 +13,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.vision.utils.ConstantsVision;
+import static frc.robot.vision.utils.ConstantsVision.*;
 import frc.robot.vision.utils.NotePoseCalc;
 
 public class VisionByNote extends SubsystemBase {
@@ -26,11 +25,13 @@ public class VisionByNote extends SubsystemBase {
   private double x_offset;
   private double y_offset;
   private double noteYaw;
-  private double notePitch;
   private Pose2d robotPose;
 
   private double[] corners = new double[8];
   private double[] array = new double[8];
+
+  private double widthInAngle = 0;
+  private double widthInPix = 0;
 
   // Pose and distance calculation utilities
   private NotePoseCalc notePose;
@@ -43,12 +44,12 @@ public class VisionByNote extends SubsystemBase {
 
     // Initialize Field2d for visualization
 
-    this.x_offset = ConstantsVision.NoteLimelightXOfset;
-    this.y_offset = ConstantsVision.NoteLimelightYOfset;    
+    this.x_offset = NoteLimelightXOfset;
+    this.y_offset = NoteLimelightYOfset;    
 
     // Get the Limelight NetworkTable
-    table = NetworkTableInstance.getDefault().getTable(ConstantsVision.NoteTable);
-    notePose = new NotePoseCalc(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
+    table = NetworkTableInstance.getDefault().getTable(NoteTable);
+    notePose = new NotePoseCalc(widthInAngle, widthInPix,noteYaw, x_offset, y_offset, robotPose);
     
     field = new Field2d();
 
@@ -60,11 +61,13 @@ public class VisionByNote extends SubsystemBase {
     // This method will be called once per scheduler run
 
     // Fetch Limelight data
-    noteYaw = table.getEntry("tx").getDouble(0);
-    notePitch = table.getEntry("ty").getDouble(0);
+    noteYaw = table.getEntry("ty").getDouble(0);
     corners = table.getEntry("tcornxy").getDoubleArray(array);
+
+    //widthInPix = Math.abs(corners[0]-corners[2]);
+    //widthInAngle = Math.abs((corners[0]*ANGLE_PER_PIX_X)-(corners[2]*ANGLE_PER_PIX_X));
     //update Pose
-    notePose.update(noteYaw, notePitch, x_offset, y_offset, robotPose, false);
+    notePose.update(widthInAngle, widthInPix,noteYaw, x_offset, y_offset, robotPose);
 
     field.setRobotPose(getNotePose());;
   }
@@ -91,14 +94,16 @@ public class VisionByNote extends SubsystemBase {
    * 
    * @return the angle from robot to note(getAngle);
    */
-  public Rotation2d getAngleTag(){
-    return notePose.getRobotToNote().getAngle();
+  public Rotation2d getAngleNote(){
+    return Rotation2d.fromDegrees(noteYaw);
   }
+
+
   @Override
   public void initSendable(SendableBuilder builder) {
       SmartDashboard.putData("field-note", field);
-      // builder.addDoubleProperty("corners0", ()->corners[0], null);
-      // builder.addDoubleProperty("corners2", ()->corners[2], null); }
+      builder.addDoubleProperty("widthInAngle", ()->widthInAngle, null);
+      builder.addDoubleProperty("Note - dist", ()->notePose.GetDistFromCamera(), null); 
   }
 
 }

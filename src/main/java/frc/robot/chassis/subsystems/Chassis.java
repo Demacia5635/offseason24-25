@@ -47,13 +47,14 @@ public class Chassis extends SubsystemBase {
   private DemaciaOdometry demaciaOdometry;
   private final Field2d field;
   private Pose2d mergedPose;
-  private VisionByNote visionByNote;
+ 
  
 
   public static double targetVelocity = 0;
   public static double currentVelocity = 0;
 
-  private VisionByTag visionByTag;
+  public VisionByTag visionByTag;
+  public VisionByNote visionByNote;
   private PIDController rotationPID = new PIDController(0.3,0.0, 0.00);
   private boolean hasCalibratedPose = false;
 
@@ -68,6 +69,7 @@ public class Chassis extends SubsystemBase {
     gyro.setYaw(0);
 
     this.visionByTag = new VisionByTag(gyro);
+    this.visionByNote = new VisionByNote(new Pose2d());
     
     poseEstimator = new SwerveDrivePoseEstimator(KINEMATICS, getRawAngle(), getModulePositions(), new Pose2d());
     visionByNote = new VisionByNote(poseEstimator.getEstimatedPosition());
@@ -246,6 +248,12 @@ public class Chassis extends SubsystemBase {
   }
 
 
+  public void setVelocitiesRobotRel(ChassisSpeeds speeds){
+    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds);
+
+    setModuleStates(states);
+  }
+
   /**
    * Sets the velocity of the chassis
    * 
@@ -268,46 +276,27 @@ public class Chassis extends SubsystemBase {
     Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
     Rotation2d toSpeakerAngle = speaker.minus(getPose().getTranslation()).rotateBy(Rotation2d.fromDegrees(180)).getAngle();
     speeds.omegaRadiansPerSecond = getOmegaToAngle(toSpeakerAngle);
+    
+    // System.out.println("WANTED ANGLE: " + toSpeakerAngle);
+    // System.out.println("CUR ANGLE: " + getAngle());
     setVelocities(speeds);
     
   }
 
-  public double getOmegaToAngle(Rotation2d fieldAngle){
-    double kP = 0.3;
-    double diffAngle = fieldAngle.minus(getAngle()).getDegrees();
-    System.out.println(diffAngle);
-    return Math.toRadians(-diffAngle * kP);
-
-  }
-
-
-
-
-
-
-
-  /*public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds) {
-    Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
-
-    setVelocitiesRotateToAngle(speeds, speaker.minus(getPose().getTranslation()).getAngle());
-  }
-  
-  public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle) {
-    speeds.omegaRadiansPerSecond = getRadPerSecToAngle(angle);
-    System.out.println("DIFF ANGLE NO FUNC: " + angle.minus(getAngle()));
-    // System.out.println("ANGLE: " + angle);
-    System.out.println("speeds omega  NO FUNC" + speeds.omegaRadiansPerSecond);
+  public void setVelocitiesRotateToAngle(ChassisSpeeds speeds, Rotation2d angle){
+    speeds.omegaRadiansPerSecond = getOmegaToAngle(angle);
     setVelocities(speeds);
   }
 
-  public double getRadPerSecToAngle(Rotation2d fieldRelativeAngle){
+  public double getOmegaToAngle(Rotation2d fieldAngle){
+    double kP = 0.4;
+    double diffAngle = fieldAngle.minus(getAngle()).getDegrees();
+    // System.out.println("WANTED ANGLE: " + fieldAngle);
+    // System.out.println("CURRENT ANGLE: " + getAngle());
+    return Math.abs(diffAngle) <= 1 ? 0: -Math.toRadians(diffAngle * kP);
 
-    // System.out.println(fieldRelativeAngle.minus(getAngle()));
-    System.out.println("DIFF ANGLE---: " + fieldRelativeAngle.minus(getAngle()).getRadians());
-    System.out.println("SPEEDS OMEGA---: " +  rotationPID.calculate(getAngle().getRadians(), fieldRelativeAngle.getRadians()));
-    return rotationPID.calculate(getAngle().getRadians(), fieldRelativeAngle.getRadians());
+  }
 
-  }*/
 
   public Translation2d getVelocity() {
     ChassisSpeeds speeds = getChassisSpeeds();

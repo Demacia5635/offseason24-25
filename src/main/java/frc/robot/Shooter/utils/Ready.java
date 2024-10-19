@@ -32,12 +32,12 @@ public class Ready {
     public static boolean isReady(double upMotorVel, double downMotorVel, STATE state){
         return GoToAngle.isAngleReady
           && isUpMotorReady(upMotorVel)
-          && isUpMotorReady(downMotorVel)
-          && isGoodState(state)
-          && ((state == STATE.AMP && isNearAmp()) 
-            || state != STATE.AMP)
-          && (((state == STATE.SPEAKER) && isSeeAprilTag()) 
-            || state != STATE.SPEAKER)
-          && false;
+          && isUpMotorReady(downMotorVel);
+        //   && isGoodState(state)
+        //   && ((state == STATE.AMP && isNearAmp()) 
+        //     || state != STATE.AMP)
+        //   && (((state == STATE.SPEAKER) && isSeeAprilTag()) 
+        //     || state != STATE.SPEAKER)
+        //   && false;
     }
 }

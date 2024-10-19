@@ -13,31 +13,27 @@ public class TagPoseCalc {
     private double tagPitch;
     private double id;
     private double sumdegry;
-    private Pose2d point;
     private Rotation2d gyroYaw;
-    private boolean isRed;
     public boolean isIedMostly;
 
 
-    public TagPoseCalc(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw, boolean isRed) {
+    public TagPoseCalc(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
-        this.tagYaw = tagYaw;
+        this.tagYaw = -tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
         this.height = HEIGHT_MAP.get(id);
-        this.isRed = isRed;
     }
-    public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw, boolean isRed) {
+    public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
         this.id = id;
-        this.tagYaw = tagYaw;
+        this.tagYaw = -tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
-        this.height = HEIGHT_MAP.get(id);
-        this.isRed = isRed;
+        this.height = HEIGHT_MAP.get(id) != null ? HEIGHT_MAP.get(id) : 0;
     }
 
 
@@ -62,11 +58,11 @@ public class TagPoseCalc {
         
     }
 
-    public Translation2d getTagToRobot() {
+    public Translation2d getRobotToTag() {
 
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), 
-            Rotation2d.fromDegrees(tagYaw)).rotateBy(gyroYaw);
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(gyroYaw);
+            Rotation2d.fromDegrees(tagYaw)).rotateBy(gyroYaw.unaryMinus());
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(gyroYaw.unaryMinus());
         Translation2d robotToTag = robotToCamera.plus(cameraToTag);
 
         return robotToTag;
@@ -83,13 +79,16 @@ public class TagPoseCalc {
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
         Translation2d originToRobot;
-        Translation2d originToTag = CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
-        if(originToTag != null){
-            Translation2d tagToRobot = getTagToRobot();
-            originToRobot = originToTag.plus(tagToRobot);
+        Translation2d tagToOrigin;
 
-            point = new Pose2d(originToRobot,isRed ? gyroYaw : gyroYaw.unaryMinus());
-            return point;
+        tagToOrigin = CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
+
+        if(tagToOrigin != null){
+            tagToOrigin.rotateBy(Rotation2d.fromDegrees(180));
+            Translation2d robotToTag = getRobotToTag();
+            originToRobot = tagToOrigin.plus(robotToTag);//.rotateBy(Rotation2d.fromDegrees(180));
+
+            return new Pose2d(originToRobot, gyroYaw.unaryMinus());
         }
         return new Pose2d();
     }

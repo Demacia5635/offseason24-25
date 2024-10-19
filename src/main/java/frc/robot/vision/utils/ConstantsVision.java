@@ -129,13 +129,21 @@ public class ConstantsVision {
   }
   // APRIL TAG CODE ROBOT
   public static final double TagLimelightHeight = 0.220;
-  public static final double TagLimelightAngle = 54.06;
+  public static final double TagLimelightAngle = 34;
 
   
   public static final double TagLimelightXOfset = 0.23;
   public static final double TagLimelightYOfset = -0.14;
 
   public static final String TagTable = "limelight-tag";
+
+  public static final double NOTE_LIMELIGHT_RES_X = 320;
+
+  public static final double NOTE_LIMELIGHT_POV_X = 63.3;
+
+  public static final double ANGLE_PER_PIX_X = (NOTE_LIMELIGHT_POV_X/NOTE_LIMELIGHT_RES_X);
+
+  public static final double NOTE_RIDIUS = 0.175;
 
   public static final double NoteLimelightHight = 0.211;
   public static final double NoteLimelightAngle = 0;
