@@ -171,6 +171,8 @@ public class Shoot extends Command {
         break;
     }
 
+    shooter.isShotoerReady = Ready.isUpMotorReady(upMotorVelocity) && Ready.isDownMotorReady(downMotorVelocity);
+
     shooter.pidMotorVelocity(upMotorVelocity, downMotorVelocity);
 
     isReady = isDriverOverwriteShooter;
@@ -210,6 +212,7 @@ public class Shoot extends Command {
     isfinished = false;
     isReady = false;
     isDriverOverwriteShooter = false;
+    shooter.isShotoerReady = false;
 
     if (!interrupted) {
       intake.isNoteInIntake = false;

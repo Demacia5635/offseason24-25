@@ -11,6 +11,26 @@ public class LedConstants {
   /**the port of the leds */
   public static final int PORT = 3;
 
+  public static class INTAKE_LEDS {
+    public static final int SIZE = 0;
+    public static final int OFFSET = 0;
+  }
+
+  public static class SHOOTER_LEDS {
+    public static final int SIZE = 0;
+    public static final int OFFSET = 0;
+  }
+
+  public static class ANGLE_CHANGER_LEDS {
+    public static final int SIZE = 0;
+    public static final int OFFSET = 0;
+  }
+
+  public static class RSL_LEDS {
+    public static final int SIZE = 0;
+    public static final int OFFSET = 0;
+  }
+
   /**
    * the blink time between what is color and what is off <br></br>
    * {@code Timer.getFPGATimestamp() % BLINK_TIME != 0 ? color : Color.kBlack}

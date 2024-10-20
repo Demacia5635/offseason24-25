@@ -38,6 +38,8 @@ public class Shooter extends SubsystemBase {
   
   public LookUpTable lookUpTable;
   
+  public boolean isShotoerReady;
+
   /** Creates a new Shooter. */
   public Shooter() {
     shooterState = STATE.SPEAKER;
@@ -84,6 +86,8 @@ public class Shooter extends SubsystemBase {
 
     lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
 
+    isShotoerReady = false;
+
     SmartDashboard.putData("Shooter", this);
   }
 
@@ -122,7 +126,6 @@ public class Shooter extends SubsystemBase {
   public void setFeedingNeutralMode(boolean isBrake){
     motorFeeding.setNeutralMode(isBrake ? NeutralMode.Brake : NeutralMode.Coast);
   }
-
 
   @Override
   public void initSendable(SendableBuilder builder) {

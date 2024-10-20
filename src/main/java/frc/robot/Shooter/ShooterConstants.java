@@ -83,8 +83,8 @@ public class ShooterConstants {
   public static class MAX_ERRORS{
     
       public static final double ANGLE_MAX_ERRORS = 0.5;
-      public static final double UP_MOTOR_VEL_MAX_ERRORS = 0.5;
-      public static final double DOWN_MOTOR_VEL_MAX_ERRORS = 0.5;
+      public static final double UP_MOTOR_VEL_MAX_ERRORS = 1;
+      public static final double DOWN_MOTOR_VEL_MAX_ERRORS = 1;
     
   }
 
