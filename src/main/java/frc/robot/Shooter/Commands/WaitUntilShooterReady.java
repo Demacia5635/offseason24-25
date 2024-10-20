@@ -35,6 +35,6 @@ public class WaitUntilShooterReady extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Ready.isReady(shooter.getUpMotorVel(), shooter.getDownMotorVel(), STATE.SPEAKER);
+    return shooter.isShotoerReady;
   }
 }
