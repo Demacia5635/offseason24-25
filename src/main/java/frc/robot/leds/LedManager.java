@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.Arrays;
 
 /**Manager of the LedStrip */
-public class LedManager{
+public class LedManager extends SubsystemBase{
 
   /**all the colors for every led */
   Color[] ledColors;
@@ -50,7 +51,6 @@ public class LedManager{
       this.ledColors[i] = color;
     }
 
-    update();
   }
   
   /**
@@ -63,7 +63,6 @@ public class LedManager{
       this.ledColors[i] = colors[i - strip.offset];
     }
 
-    update();
   }
     
   /**
@@ -78,7 +77,6 @@ public class LedManager{
       : Color.kBlack;
     }
 
-    update();
   }
 
   /**
@@ -93,7 +91,6 @@ public class LedManager{
       : Color.kBlack;
     }
 
-    update();
   }
   
   /**
@@ -105,7 +102,6 @@ public class LedManager{
         ledColors[i] = Color.fromHSV((int) (currentH + i * 3), 255, 255);
       }
 
-      update();
       currentH += 3;
       currentH %= 180;
   }
@@ -121,7 +117,6 @@ public class LedManager{
       : Color.kBlack;
     }
 
-    update();
     currentH += 3;
     currentH %= 180;
   }
@@ -154,5 +149,10 @@ public class LedManager{
     }
 
     led.setData(buffer);
+  }
+
+  @Override
+  public void periodic() {
+    update();
   }
 }
