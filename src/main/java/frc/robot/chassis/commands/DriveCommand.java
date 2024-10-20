@@ -72,7 +72,7 @@ public class DriveCommand extends Command {
     double velRot = Math.pow(rot, 2) * MAX_OMEGA_VELOCITY * Math.signum(rot);
 
     hasVx = ChassisSpeeds.fromFieldRelativeSpeeds(chassis.getChassisSpeeds(), chassis.getAngle()).vxMetersPerSecond < 0;
-    isSeeNote = chassis.visionByNote.getAngleNote().getDegrees() != 0;
+    isSeeNote = chassis.visionByNote.getAngleToNote().getDegrees() != 0;
     hasNote = RobotContainer.intake.isNoteInIntake;
    
     if (precisionDrive) {
@@ -90,8 +90,8 @@ public class DriveCommand extends Command {
       //if(!RobotContainer.robotContainer.intakeCommand.isScheduled() && isAutoIntake) RobotContainer.robotContainer.intakeCommand.schedule();
       
     
-      double angle = chassis.visionByNote.getAngleNote().getDegrees();
-      double vectorAngle = angle * 2;
+      double angle = chassis.visionByNote.getAngleToNote().getDegrees();
+      double vectorAngle = (angle - chassis.getAngle().getDegrees())*2;
       Translation2d robotToNote = new Translation2d(getV(), Rotation2d.fromDegrees(vectorAngle));
       chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0)); 
     } 

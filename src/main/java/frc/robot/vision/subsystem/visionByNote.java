@@ -49,7 +49,7 @@ public class VisionByNote extends SubsystemBase {
 
     // Get the Limelight NetworkTable
     table = NetworkTableInstance.getDefault().getTable(NoteTable);
-    notePose = new NotePoseCalc(widthInAngle, widthInPix,noteYaw, x_offset, y_offset, robotPose);
+    notePose = new NotePoseCalc(noteYaw, x_offset, y_offset, robotPose);
     
     field = new Field2d();
 
@@ -67,7 +67,7 @@ public class VisionByNote extends SubsystemBase {
     //widthInPix = Math.abs(corners[0]-corners[2]);
     //widthInAngle = Math.abs((corners[0]*ANGLE_PER_PIX_X)-(corners[2]*ANGLE_PER_PIX_X));
     //update Pose
-    notePose.update(widthInAngle, widthInPix,noteYaw, x_offset, y_offset, robotPose);
+    notePose.update(noteYaw, x_offset, y_offset, robotPose);
 
     field.setRobotPose(getNotePose());;
   }
@@ -87,15 +87,15 @@ public class VisionByNote extends SubsystemBase {
    * 
    * @return the distens from robot to not(getNoorm);
    */
-  public double getDistToTag(){
+  public double getDistToNote(){
     return notePose.getRobotToNote().getNorm();
   }
   /**
    * 
    * @return the angle from robot to note(getAngle);
    */
-  public Rotation2d getAngleNote(){
-    return Rotation2d.fromDegrees(noteYaw);
+  public Rotation2d getAngleToNote(){
+    return notePose.getRobotToNote().getAngle();
   }
 
 
