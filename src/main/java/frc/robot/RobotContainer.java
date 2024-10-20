@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.leds.LedManager;
+import frc.robot.leds.LedStrip;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -50,6 +53,7 @@ public class RobotContainer implements Sendable{
   public static Shooter shooter;
   public static AngleChanger angleChanging;
   public static Intake intake;
+  private static LedManager ledManager;
 
   public IntakeCommand intakeCommand;
   public Shoot shootCommand;
@@ -69,6 +73,7 @@ public class RobotContainer implements Sendable{
 
   private final SendableChooser<Command> autoChooser;
 
+
   public RobotContainer() {
 
     robotContainer = this;
@@ -80,6 +85,7 @@ public class RobotContainer implements Sendable{
     shooter = new Shooter();
     angleChanging = new AngleChanger();
     intake = new Intake();
+    ledManager= new LedManager();
 
     calibration = new Calibration(angleChanging);
     shootCommand = new Shoot(shooter, intake, chassis);
