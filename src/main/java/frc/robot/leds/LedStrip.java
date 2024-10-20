@@ -20,7 +20,6 @@ public class LedStrip extends SubsystemBase{
   /**
    * creates a new strip
    * @param name the name of the strip (for network table)
-   * @param port the port of the strip
    * @param size the size of the strip
    * @param ledManager the led manager 
    * @param offset the offset of the strip in the port
@@ -39,7 +38,6 @@ public class LedStrip extends SubsystemBase{
   /**
    * creates a new strip
    * @param name the name of the strip (for network table)
-   * @param port the port of the strip
    * @param size the size of the strip
    * @param ledManager the led manager 
    */
