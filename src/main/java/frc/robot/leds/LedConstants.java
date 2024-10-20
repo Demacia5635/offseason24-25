@@ -7,28 +7,18 @@ package frc.robot.leds;
 /**constants for leds */
 public class LedConstants {
   /**the size of every strip for every port */
-  public static final int LENGTH = 10;
+  public static final int LENGTH = 500;
   /**the port of the leds */
   public static final int PORT = 3;
 
-  public static class INTAKE_LEDS {
-    public static final int SIZE = 0;
-    public static final int OFFSET = 0;
-  }
-
-  public static class SHOOTER_LEDS {
-    public static final int SIZE = 0;
-    public static final int OFFSET = 0;
-  }
-
   public static class ANGLE_CHANGER_LEDS {
-    public static final int SIZE = 0;
+    public static final int SIZE = 400;
     public static final int OFFSET = 0;
   }
 
   public static class RSL_LEDS {
-    public static final int SIZE = 0;
-    public static final int OFFSET = 0;
+    public static final int SIZE = 100;
+    public static final int OFFSET = 400;
   }
 
   /**

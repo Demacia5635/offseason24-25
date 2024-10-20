@@ -4,6 +4,7 @@ package frc.robot.vision.utils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+
 import static frc.robot.vision.utils.ConstantsVision.*;
 public class TagPoseCalc {
     private double height;
@@ -61,12 +62,14 @@ public class TagPoseCalc {
     public Translation2d getRobotToTag() {
 
         Translation2d cameraToTag = new Translation2d(GetDistFromCamera(), 
-            Rotation2d.fromDegrees(tagYaw)).rotateBy(gyroYaw.unaryMinus());
-        Translation2d robotToCamera = new Translation2d(x_offset, y_offset).rotateBy(gyroYaw.unaryMinus());
+            Rotation2d.fromDegrees(tagYaw));
+        Translation2d robotToCamera = new Translation2d(x_offset, y_offset);//.rotateBy(gyroYaw.unaryMinus());
         Translation2d robotToTag = robotToCamera.plus(cameraToTag);
 
         return robotToTag;
     }
+
+
 
     // public Translation2d getTagToRobot() {
     //     Translation2d robotToCamera = new Translation2d(x_offset, y_offset);
@@ -79,16 +82,24 @@ public class TagPoseCalc {
     //get position of robot on the field origin is the point (0,0)!!!!
     public Pose2d calculatePose() {
         Translation2d originToRobot;
-        Translation2d tagToOrigin;
+        Translation2d toTag;
+        Rotation2d tagA;
 
-        tagToOrigin = CARTESIANVECTORS_MAP.get(this.translateIdToHashmap());
+        toTag = origonToTag[(int)this.id];
+        tagA = Rotation2d.fromDegrees(tagAngle[(int)this.id]);
 
-        if(tagToOrigin != null){
-            tagToOrigin.rotateBy(Rotation2d.fromDegrees(180));
+        if(toTag != null){
             Translation2d robotToTag = getRobotToTag();
-            originToRobot = tagToOrigin.plus(robotToTag);//.rotateBy(Rotation2d.fromDegrees(180));
-
-            return new Pose2d(originToRobot, gyroYaw.unaryMinus());
+            Rotation2d rot = robotToTag.getAngle();
+            Rotation2d rot1 = rot.plus(gyroYaw);
+            Rotation2d rot2 = tagA.minus(rot1).rotateBy(Rotation2d.fromDegrees(180)).unaryMinus();
+            double norm = robotToTag.getNorm();
+//            System.out.println("-------------------------------");
+//            System.out.println("toTag = " + rot.getDegrees() + " gyro=" + 
+//                    gyroYaw.getDegrees() + " fldToTag=" + rot1.getDegrees() + " tagTo = " + rot2.getDegrees());
+//            System.out.println("-------------------------------");
+            originToRobot = toTag.plus(new Translation2d(norm, rot2));
+            return new Pose2d(originToRobot, gyroYaw);
         }
         return new Pose2d();
     }

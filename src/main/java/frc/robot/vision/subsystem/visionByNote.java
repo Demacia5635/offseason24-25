@@ -6,8 +6,9 @@ package frc.robot.vision.subsystem;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+//import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -20,18 +21,22 @@ public class VisionByNote extends SubsystemBase {
   /** Creates a new vision. */
    // NetworkTable for Limelight communication
   private NetworkTable table;
+  private NetworkTableEntry tx;
+  private NetworkTableEntry tv;
+  
   
   // Limelight data
-  private double x_offset;
-  private double y_offset;
+  //private double x_offset;
+  //private double y_offset;
   private double noteYaw;
-  private Pose2d robotPose;
+  private boolean seeNote = false;
+  //private Pose2d robotPose;
 
-  private double[] corners = new double[8];
-  private double[] array = new double[8];
+//  private double[] corners = new double[8];
+//  private double[] array = new double[8];
 
-  private double widthInAngle = 0;
-  private double widthInPix = 0;
+//  private double widthInAngle = 0;
+//  private double widthInPix = 0;
 
   // Pose and distance calculation utilities
   private NotePoseCalc notePose;
@@ -40,18 +45,20 @@ public class VisionByNote extends SubsystemBase {
   Field2d field;
 
   public VisionByNote(Pose2d robotPose) {
-    this.robotPose = robotPose;
+    //this.robotPose = robotPose;
 
     // Initialize Field2d for visualization
 
-    this.x_offset = NoteLimelightXOfset;
-    this.y_offset = NoteLimelightYOfset;    
+    //this.x_offset = NoteLimelightXOfset;
+    //this.y_offset = NoteLimelightYOfset;    
 
     // Get the Limelight NetworkTable
     table = NetworkTableInstance.getDefault().getTable(NoteTable);
-    notePose = new NotePoseCalc(noteYaw, x_offset, y_offset, robotPose);
+    tv = table.getEntry("tv");
+    tx = table.getEntry("tx");
+  //  notePose = new NotePoseCalc(noteYaw, x_offset, y_offset, robotPose);
     
-    field = new Field2d();
+  //  field = new Field2d();
 
     SmartDashboard.putData(this);
   }
@@ -61,49 +68,57 @@ public class VisionByNote extends SubsystemBase {
     // This method will be called once per scheduler run
 
     // Fetch Limelight data
-    noteYaw = table.getEntry("ty").getDouble(0);
-    corners = table.getEntry("tcornxy").getDoubleArray(array);
+    seeNote = tv.getDouble(0) != 0;
+   
+    noteYaw =  -tx.getDouble(0);
+    
 
     //widthInPix = Math.abs(corners[0]-corners[2]);
     //widthInAngle = Math.abs((corners[0]*ANGLE_PER_PIX_X)-(corners[2]*ANGLE_PER_PIX_X));
     //update Pose
-    notePose.update(noteYaw, x_offset, y_offset, robotPose);
+    //notePose.update(noteYaw, x_offset, y_offset, robotPose);''
 
-    field.setRobotPose(getNotePose());;
+    //field.setRobotPose(getNotePose());;
   }
   /**
    * returns the position of the note
    * @return pose of note
    */
-  public Pose2d getNotePose(){
-    Pose2d NotePose = notePose.calculatePose();
-    if (NotePose != null) {
-      return NotePose;
-    }
-    return new Pose2d();
-  }
+  // public Pose2d getNotePose(){
+  //   Pose2d NotePose = notePose.calculatePose();
+  //   if (NotePose != null) {
+  //     return NotePose;
+  //   }
+  //   return new Pose2d();
+  // }
 
   /**
    * 
    * @return the distens from robot to not(getNoorm);
    */
-  public double getDistToNote(){
-    return notePose.getRobotToNote().getNorm();
-  }
+  // public double getDistToNote(){
+  //   return notePose.getRobotToNote().getNorm();
+  // }
   /**
    * 
    * @return the angle from robot to note(getAngle);
    */
-  public Rotation2d getAngleToNote(){
-    return notePose.getRobotToNote().getAngle();
+  // public Rotation2d getAngleToNote(){
+  //   return notePose.getRobotToNote().getAngle();
+  // }
+
+  public double getNoteYaw(){
+    return noteYaw;
+  }
+  public boolean seeNote() {
+    return seeNote;
   }
 
 
   @Override
   public void initSendable(SendableBuilder builder) {
-      SmartDashboard.putData("field-note", field);
-      builder.addDoubleProperty("widthInAngle", ()->widthInAngle, null);
-      builder.addDoubleProperty("Note - dist", ()->notePose.GetDistFromCamera(), null); 
+      //SmartDashboard.putData("field-note", field);
+      //builder.addDoubleProperty("Note - dist", ()->notePose.GetDistFromCamera(), null); 
   }
 
 }

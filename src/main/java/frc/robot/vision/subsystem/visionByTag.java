@@ -4,6 +4,8 @@
 
 package frc.robot.vision.subsystem;
 
+import static frc.robot.vision.utils.ConstantsVision.tagAngle;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -75,10 +77,13 @@ public class VisionByTag extends SubsystemBase {
       tagYaw = txEntry.getDouble(0);
       tagPitch = tyEntry.getDouble(0);
       id = tidEntry.getDouble(0);
-      Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()));
-      Pose2d pose = getRobotPose();
-      field.setRobotPose(pose);
-      RobotContainer.chassis.updateVisionPose(pose);
+      if(id > 0 && id < tagAngle.length) {
+        Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,
+          RobotContainer.chassis.getAngle());
+        Pose2d pose = getRobotPose();
+        field.setRobotPose(pose);
+        RobotContainer.chassis.updateVisionPose(pose);
+      }
     }
   }
   /**

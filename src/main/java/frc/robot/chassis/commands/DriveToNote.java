@@ -55,7 +55,7 @@ public class DriveToNote extends Command {
       return;
     }
   
-    angle = chassis.visionByNote.getAngleToNote().getDegrees();
+    angle = chassis.visionByNote.getNoteYaw();
     fieldRelativeAngle = angle + chassis.getAngle().getDegrees();
     
 

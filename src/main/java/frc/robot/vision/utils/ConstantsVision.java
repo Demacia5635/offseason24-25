@@ -18,6 +18,43 @@ import edu.wpi.first.math.geometry.Translation2d;
  * constants are needed, to reduce verbosity.
  */
 public class ConstantsVision {
+
+  public static Translation2d[] origonToTag = {null,
+      new Translation2d(inchToMeter(593.68), inchToMeter(9.68)),
+      new Translation2d(inchToMeter(637.21), inchToMeter(34.79)),
+      new Translation2d(inchToMeter(652.73), inchToMeter(196.17)),
+      new Translation2d(inchToMeter(652.73), inchToMeter(218.42)),
+      new Translation2d(inchToMeter(578.77), inchToMeter(323.00)),
+      new Translation2d(inchToMeter(72.5), inchToMeter(323.00)),
+      new Translation2d(inchToMeter(-1.50), inchToMeter(218.42)),
+      new Translation2d(inchToMeter(-1.50), inchToMeter(196.17)),
+      new Translation2d(inchToMeter(14.02), inchToMeter(34.79)),
+      new Translation2d(inchToMeter(57.54), inchToMeter(9.68)),
+      new Translation2d(inchToMeter(468.69), inchToMeter(146.19)),
+      new Translation2d(inchToMeter(468.69), inchToMeter(177.10)),
+      new Translation2d(inchToMeter(441.74), inchToMeter(161.62)),
+      new Translation2d(inchToMeter(209.48), inchToMeter(161.62)),
+      new Translation2d(inchToMeter(182.73), inchToMeter(177.10)),
+      new Translation2d(inchToMeter(182.73),inchToMeter(146.19))
+  };
+public static double[] tagAngle = {0,
+      120.0,
+      120.0,
+      180.0,
+      180.0,
+      270.0,
+      270.0,
+      0.0,
+      0.0,
+      90.0,
+      60.0,
+      300.0,
+      60.0,
+      180.0,
+      0.0,
+      120.0,
+      240.0
+  };
   public static final Map<String,Translation2d> CARTESIANVECTORS_MAP;
   static{
       Hashtable<String,Translation2d> vector = new Hashtable<String,Translation2d>();

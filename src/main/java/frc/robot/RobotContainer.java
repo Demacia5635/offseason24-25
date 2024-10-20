@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.leds.LedManager;
 import frc.robot.leds.LedStrip;
+import frc.robot.leds.strips.RSLStrip;
+import frc.robot.leds.strips.MainLeds;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -46,6 +48,7 @@ public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
   public static Boolean isRed = false;
   CommandXboxController controller;
+  CommandXboxController controller2;
 
   public LogManager logManager = new LogManager();
 
@@ -53,7 +56,10 @@ public class RobotContainer implements Sendable{
   public static Shooter shooter;
   public static AngleChanger angleChanging;
   public static Intake intake;
+
   private static LedManager ledManager;
+  private MainLeds mainLeds;
+  private RSLStrip rslStrip;
 
   public IntakeCommand intakeCommand;
   public Shoot shootCommand;
@@ -80,12 +86,17 @@ public class RobotContainer implements Sendable{
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
     controller = new CommandXboxController(CONTROLLER_PORT);
+    controller2 = new CommandXboxController(1);
 
     chassis = new Chassis();
     shooter = new Shooter();
     angleChanging = new AngleChanger();
     intake = new Intake();
-    ledManager= new LedManager();
+    ledManager = new LedManager();
+    
+    mainLeds = new MainLeds("main leds", ledManager, intake, chassis, shooter);
+    rslStrip = new RSLStrip("rsl leds", ledManager, chassis);
+    
 
     calibration = new Calibration(angleChanging);
     shootCommand = new Shoot(shooter, intake, chassis);
@@ -98,13 +109,14 @@ public class RobotContainer implements Sendable{
    // driveToNote = new DriveToNote(chassis, 1.6, true).raceWith(intakeCommand); 
 
     chassis.setDefaultCommand(driveCommand);
+   
     angleChanging.setDefaultCommand(gotoAngleCommand);
     
 
     NamedCommands.registerCommand("shoot", shootCommand);
     NamedCommands.registerCommand("intake", intakeCommand);
-    NamedCommands.registerCommand("goToAngle", gotoAngleCommand);
-    NamedCommands.registerCommand("calibration", calibration);
+//    NamedCommands.registerCommand("goToAngle", gotoAngleCommand);
+//    NamedCommands.registerCommand("calibration", calibration);
     NamedCommands.registerCommand("shooterReady", waitUntilShooterReady);
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -118,62 +130,34 @@ public class RobotContainer implements Sendable{
 
 
   private void configureBindings() {
-
-    controller.back().onTrue(resetOdometry);
+    controller.b().onTrue(new InstantCommand(()->{
+      angleChanging.angleState = STATE.DELIVERY_MID;
+      shooter.shooterState = STATE.DELIVERY_MID;
+    }));
     
-    controller.rightStick().onTrue(new RunCommand(()-> {
-      intake.setPowerToMotors(-1);
-    }, intake));
-    controller.a().onTrue(intakeCommand);
-
-    controller.y().onTrue(calibration);
-    
-    controller.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
+    controller.y().onTrue(new InstantCommand(()->driveCommand.setAutoIntake()));
+    controller.a().onTrue(new IntakeCommand(intake, shooter));
     controller.x().onTrue(shootCommand);
-  //  controller.b().onTrue(driveToNote);
-    
-    controller.start().onTrue(calibration);
-    controller.povRight().onTrue(new InstantCommand(()-> {
-      if (shooter.shooterState == STATE.AMP
-          || shooter.shooterState == STATE.IDLE) {
-        shooter.shooterState = STATE.TESTING;
-
-      } else if (shooter.shooterState == STATE.SPEAKER 
-                || shooter.shooterState == STATE.SUBWOFFER 
-                || shooter.shooterState == STATE.STAGE 
-                || shooter.shooterState == STATE.DELIVERY_MID 
-                || shooter.shooterState == STATE.DELIVERY_RIVAL) {
-        shooter.shooterState = STATE.AMP;
-      }
-
-
-      if (angleChanging.angleState == STATE.AMP
-          || angleChanging.angleState == STATE.IDLE) {
-        angleChanging.angleState = STATE.TESTING;
-
-      } else if (angleChanging.angleState == STATE.SPEAKER 
-                || angleChanging.angleState == STATE.SUBWOFFER 
-                || angleChanging.angleState == STATE.STAGE 
-                || angleChanging.angleState == STATE.DELIVERY_MID 
-                || angleChanging.angleState == STATE.DELIVERY_RIVAL) {
-        angleChanging.angleState = STATE.AMP;
-      }
-    }));
-    controller.povLeft().onTrue(new InstantCommand(()-> {
-      shooter.shooterState = STATE.TESTING;
-      angleChanging.angleState = STATE.TESTING;
-    }));
-    controller.povUp().onTrue(new InstantCommand(()-> {
-      shooter.shooterState = STATE.SUBWOFFER;
-      angleChanging.angleState = STATE.SUBWOFFER;
-    }));
-    controller.povDown().onTrue(new InstantCommand(()-> {
-      shooter.shooterState = STATE.SPEAKER;
+    controller.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
+    controller.rightStick().onTrue(new InstantCommand(()->{
       angleChanging.angleState = STATE.SPEAKER;
+      shooter.shooterState = STATE.SPEAKER;
+    }));
+    
+    controller.back().onTrue(new InstantCommand(()-> {
+      angleChanging.angleState = STATE.AMP;
+      shooter.shooterState = STATE.AMP;
     }));
 
-    controller.leftBumper().onTrue(stopAll());
+    controller.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
+    controller.povUp().onTrue(new InstantCommand(()->{
+      angleChanging.angleState = STATE.SUBWOFFER;
+      shooter.shooterState = STATE.SUBWOFFER;
+    }));
+
+   controller.leftBumper().onTrue(stopAll());
   }
+    
    
   public void isRed(boolean isRed) {
     RobotContainer.isRed = isRed;
@@ -193,7 +177,7 @@ public class RobotContainer implements Sendable{
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return calibration;
   }
 
   // public Command calibration() {

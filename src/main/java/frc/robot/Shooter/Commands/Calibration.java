@@ -42,6 +42,7 @@ public class Calibration extends Command {
   @Override
   public void end(boolean interrupted) {
     angleChanger.setMotorPower(0);
+    angleChanger.angleState = STATE.SPEAKER;
   }
 
   // Returns true when the command should end.

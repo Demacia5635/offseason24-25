@@ -58,6 +58,8 @@ public class Chassis extends SubsystemBase {
   private PIDController rotationPID = new PIDController(0.3,0.0, 0.00);
   private boolean hasCalibratedPose = false;
 
+  private boolean isAutoIntake = false;
+
   public Chassis() {
     modules = new SwerveModule[] {
         new SwerveModule(FRONT_LEFT, this),
@@ -96,7 +98,7 @@ public class Chassis extends SubsystemBase {
     ntTab.add("run command", 
       new RunCommand(()->{setModulesPower(1); setModulesAngleFromSB(0);}, this));
 
-    ntTab.add("reset gyro", new InstantCommand(()-> gyro.setYaw(0)));
+    ntTab.add("reset gyro", new InstantCommand(()-> setGyroAngle(0)));
     ntTab.add("set coast",
         new InstantCommand(() -> setBrake(false)).ignoringDisable(true));
     ntTab.add("set brake",
@@ -163,7 +165,8 @@ public class Chassis extends SubsystemBase {
   }
 
   public void setGyroAngle(double angle){
-    gyro.setYaw(angle);
+    Pose2d newPose = new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(angle));
+    poseEstimator.resetPosition(getRawAngle(), getModulePositions(), newPose);
   }
 
   public SwerveModule getModule(int i) {
@@ -274,7 +277,7 @@ public class Chassis extends SubsystemBase {
 
   public void setVelocitiesRotateToSpeaker(ChassisSpeeds speeds){
     Translation2d speaker = isRed() ? Field.RedSpeakerTarget : Field.SpeakerTarget;
-    Rotation2d toSpeakerAngle = speaker.minus(getPose().getTranslation()).rotateBy(Rotation2d.fromDegrees(180)).getAngle();
+    Rotation2d toSpeakerAngle = speaker.minus(getPose().getTranslation()).getAngle();
     speeds.omegaRadiansPerSecond = getOmegaToAngle(toSpeakerAngle);
     
     // System.out.println("WANTED ANGLE: " + toSpeakerAngle);
@@ -290,11 +293,12 @@ public class Chassis extends SubsystemBase {
 
   public double getOmegaToAngle(Rotation2d fieldAngle){
     double kP = 0.4;
-    double diffAngle = fieldAngle.minus(getAngle()).getDegrees();
-    // System.out.println("WANTED ANGLE: " + fieldAngle);
-    // System.out.println("CURRENT ANGLE: " + getAngle());
-    return Math.abs(diffAngle) <= 1 ? 0: -Math.toRadians(diffAngle * kP);
-
+    double diffAngle = MathUtil.inputModulus(fieldAngle.minus(getAngle()).getDegrees(), -180,180);
+    System.out.println("-------------------------------");
+            System.out.println("wanted= " + fieldAngle.getDegrees() + " gyro=" + 
+                    getAngle().getDegrees() + " diff=" + diffAngle);
+    System.out.println("-------------------------------");
+    return Math.abs(diffAngle) <= 1 ? 0: Math.toRadians(diffAngle * kP);
   }
 
 
@@ -433,6 +437,13 @@ public class Chassis extends SubsystemBase {
     return result;
   }*/
 
+
+  public void setAutoIntake(boolean isAutoIntake) {
+    this.isAutoIntake = isAutoIntake;  
+  }
+  public boolean isAutoIntake() {
+    return isAutoIntake;
+  }
 
   public void updateVisionPose(Pose2d pose) {
     poseEstimator.addVisionMeasurement(pose, Timer.getFPGATimestamp() - 0.05);

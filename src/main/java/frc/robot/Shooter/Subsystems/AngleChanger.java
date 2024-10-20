@@ -41,12 +41,14 @@ public class AngleChanger extends SubsystemBase {
 
   public LookUpTable lookUpTable;
 
+  private boolean isCalibrated;
+
   /** Creates a new AngleChanging. */
   public AngleChanger() {
 
     angleChangingMotor = new TalonFX(MOTOR_IDS.ANGLE_CHANGING_ID, MOTOR_IDS.CANBUS);
     config = new TalonFXConfiguration();
-    angleState = STATE.SPEAKER;
+    angleState = STATE.IDLE;
 
     config.Slot0.kP = ANGLE_CHANGING_PID_FF.KP;
     config.Slot0.kI = ANGLE_CHANGING_PID_FF.KI;
@@ -81,10 +83,12 @@ public class AngleChanger extends SubsystemBase {
     angleChangingMotor.getConfigurator().apply(config);
 
     lookUpTable = new LookUpTable(LOOKUP_TABLE_DATA.DATA);
+    
+    limitSwitch = new DigitalInput(MOTOR_IDS.LIMIT_SWITCH_ID);
+    
+    isCalibrated = false;
 
     SmartDashboard.putData(this);
-
-    limitSwitch = new DigitalInput(MOTOR_IDS.LIMIT_SWITCH_ID);
   }
 
   public void setMotorPower(double power) {
@@ -98,12 +102,16 @@ public class AngleChanger extends SubsystemBase {
     if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
       return ;
     }
+    if (!isCalibrated) {
+      return ;
+    }
 
     double distance = ShooterUtils.angleToDistance(wantedAngle);
     angleChangingMotor.setControl(motionMagicVoltage.withPosition(distance));
   }
 
   public void angleChangingPID(double vel) {
+    if (!isCalibrated) return ;
     angleChangingMotor.setControl(velocityVoltage.withVelocity(vel));
   }
 
@@ -112,6 +120,10 @@ public class AngleChanger extends SubsystemBase {
       return ;
     }
     if (wantedAngle > ANGLE_CHANGING_VAR.TOP_ANGLE) {
+      return ;
+    }
+
+    if (!isCalibrated) {
       return ;
     }
 
@@ -125,6 +137,7 @@ public class AngleChanger extends SubsystemBase {
 
   public void setBaseAngle() {
     angleChangingMotor.setPosition(ANGLE_CHANGING_VAR.BASE_DIS);
+    isCalibrated = true;
   }
 
   public void setAngleNeutralMode(boolean isBrake) {
@@ -166,6 +179,7 @@ public class AngleChanger extends SubsystemBase {
     LogManager.addEntry("Shooter/AngleChanging/Angle", this::getAngle);
     LogManager.addEntry("Shooter/AngleChanging/Distance", ()-> angleChangingMotor.getPosition().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/LimitSwitch", ()-> isMaxAngle() ? 1 : 0);
+    LogManager.addEntry("Shooter/AngleChanging/isCalibrated", ()-> isCalibrated ? 1 : 0);
 
     LogManager.addEntry("Shooter/AngleChanging/Velocity", this::getAngleMotorVel);
     LogManager.addEntry("Shooter/AngleChanging/Acceleration", () -> angleChangingMotor.getAcceleration().getValueAsDouble());

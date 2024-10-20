@@ -36,7 +36,7 @@ public class IntakeConstants {
   public static final double STOP_COMMAND_TIME = 20000;
 
   /**The amount of time the intake command will stop after takinng note */
-  public static final double STOP_AFTER_NOTE = 550;
+  public static final double STOP_AFTER_NOTE = 650;
 
   /**
    * The current position of the note to power fo the motors
