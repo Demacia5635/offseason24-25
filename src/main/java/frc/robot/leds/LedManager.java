@@ -14,15 +14,12 @@ import java.util.Arrays;
 /**Manager of the LedStrip */
 public class LedManager{
 
-  /**all the colors for every port and every led */
-  Color[][] ledColors;
-  /**all the leds for every port */
-  AddressableLED[] leds;
-  /**all the buffer for every led for every port */
-  AddressableLEDBuffer[] buffers;
-  
-  /**timer for blink */
-  Timer timer;
+  /**all the colors for every led */
+  Color[] ledColors;
+  /**the led */
+  AddressableLED led;
+  /**the buffer */
+  AddressableLEDBuffer buffer;
   
   /**currentH for gay */
   double currentH;
@@ -31,28 +28,15 @@ public class LedManager{
    * creates Led Manager make sure to make only one and give it all to the led strip
    */
   public LedManager() {
-    /*initialize all the arr of the leds */
-    ledColors = new Color[STRIPS.length][];
-    leds = new AddressableLED[STRIPS.length];
-    buffers = new AddressableLEDBuffer[STRIPS.length];
-
-    /*initalize all the leds for every port */
-    for (int i = 0; i < STRIPS.length; i++) {
-      if (STRIPS[i] != 0) {
-        ledColors[i] = new Color[STRIPS[i]];
-        for (int j = 0; j < STRIPS[i]; j++) {
-          ledColors[i][j] = Color.kBlack;
-        }
-        leds[i] = new AddressableLED(i);
-        buffers[i] = new AddressableLEDBuffer(STRIPS[i]);
-        leds[i].setLength(STRIPS[i]);
-        leds[i].start();
-      }
+    ledColors = new Color[LENGTH];
+    for (int i = 0; i < LENGTH; i++) {
+      ledColors[i] = Color.kBlack;
     }
 
-    /*initialize timer for blink */
-    timer = new Timer();
-    timer.start();
+    led = new AddressableLED(PORT);
+    buffer = new AddressableLEDBuffer(LENGTH);
+    led.setLength(LENGTH);
+    led.start();
 
     /*initialize currentH for gay */
     currentH = 0;
@@ -67,10 +51,10 @@ public class LedManager{
   public Command setColor(LedStrip strip, Color color) {
     return new RunCommand(()-> {
       for(int i = strip.offset; i < strip.size + strip.offset; i++) {
-        this.ledColors[strip.port][i] = color;
+        this.ledColors[i] = color;
       }
 
-      update(strip.port);
+      update();
     }, strip)
     .ignoringDisable(true);
   }
@@ -84,10 +68,10 @@ public class LedManager{
   public Command setColor(LedStrip strip, Color[] colors) {
     return new RunCommand(()-> {
       for(int i = strip.offset; i < colors.length + strip.offset; i++) {
-        this.ledColors[strip.port][i] = colors[i - strip.offset];
+        this.ledColors[i] = colors[i - strip.offset];
       }
 
-      update(strip.port);
+      update();
     }, strip)
     .ignoringDisable(true);
   }
@@ -101,12 +85,12 @@ public class LedManager{
   public Command setBlink(LedStrip strip, Color color) {
     return new RunCommand(()-> {
       for(int i = strip.offset; i < strip.size + strip.offset; i++) {
-        this.ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0
+        this.ledColors[i] = Timer.getFPGATimestamp() % BLINK_TIME != 0
         ? color
         : Color.kBlack;
       }
 
-      update(strip.port);
+      update();
     }, strip)
     .ignoringDisable(true);
   }
@@ -120,12 +104,12 @@ public class LedManager{
   public Command setBlink(LedStrip strip, Color[] colors) {
     return new RunCommand(()-> {
       for(int i = strip.offset; i < colors.length + strip.offset; i++) {
-        this.ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0 
+        this.ledColors[i] = Timer.getFPGATimestamp() % BLINK_TIME != 0 
         ? colors[i - strip.offset]
         : Color.kBlack;
       }
 
-      update(strip.port);
+      update();
     }, strip)
     .ignoringDisable(true);
   }
@@ -138,10 +122,10 @@ public class LedManager{
   public Command setSolidGay(LedStrip strip) {
     return new RunCommand(()-> {
       for (int i = strip.offset; i < strip.size + strip.offset; i++) {
-        ledColors[strip.port][i] = Color.fromHSV((int) (currentH + i * 3), 255, 255);
+        ledColors[i] = Color.fromHSV((int) (currentH + i * 3), 255, 255);
       }
 
-      update(strip.port);
+      update();
       currentH += 3;
       currentH %= 180;
 
@@ -157,12 +141,12 @@ public class LedManager{
   public Command setBlinkGay(LedStrip strip) {
     return new RunCommand(()-> {
       for (int i = strip.offset; i < strip.size + strip.offset; i++) {
-        ledColors[strip.port][i] = timer.get() % BLINK_TIME != 0
+        ledColors[i] = Timer.getFPGATimestamp() % BLINK_TIME != 0
         ? Color.fromHSV((int) (currentH + i * 3), 255, 255)
         : Color.kBlack;
       }
 
-      update(strip.port);
+      update();
       currentH += 3;
       currentH %= 180;
 
@@ -172,13 +156,12 @@ public class LedManager{
 
   /**
    * get the colors of a strip
-   * @param port the port of the strip
    * @param offset the offset of the strip
    * @param size the size of the strip
    * @return the currnet colors of the strip
    */
-  public Color[] getColors(int port, int offset, int size) {
-    return Arrays.copyOfRange(ledColors[port], offset, offset + size);
+  public Color[] getColors(int offset, int size) {
+    return Arrays.copyOfRange(ledColors, offset, offset + size);
   }
   
   /**
@@ -187,21 +170,19 @@ public class LedManager{
    * @return the current colors of the strip
    */
   public Color[] getColors(LedStrip ledStrip) {
-    return getColors(ledStrip.port, ledStrip.offset, ledStrip.size);
+    return getColors(ledStrip.offset, ledStrip.size);
   }
   
   /**
-   * updated the certain port of leds
-   * @param port the port that the leds update
-   * @apiNote updated only one port at the time so the code will be faster at most cases
+   * updated the leds
    */
-  public void update(int port) {
-    if (ledColors[port] != null) {
-      for (int j = 0; j < ledColors[port].length; j++) {
-        buffers[port].setLED(j, ledColors[port][j]);
+  public void update() {
+    if (ledColors != null) {
+      for (int i = 0; i < ledColors.length; i++) {
+        buffer.setLED(i, ledColors[i]);
       }
 
-      leds[port].setData(buffers[port]);
+      led.setData(buffer);
     }
   }
 }

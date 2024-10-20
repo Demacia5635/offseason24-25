@@ -29,7 +29,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     manager = new LedManager();
-    led = new LedStrip("null", 0, 10, manager);
+    led = new LedStrip("null", 10, manager);
     led.setDefaultCommand(led.setColor(Color.kYellow));
     configureBindings();
   }

@@ -8,10 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**Strip of led */
 public class LedStrip extends SubsystemBase{
-  
-  /**the port of the strip */
-  public int port;
-
   /**the size of the strip */
   public int size;
 
@@ -29,9 +25,8 @@ public class LedStrip extends SubsystemBase{
    * @param ledManager the led manager 
    * @param offset the offset of the strip in the port
    */
-  public LedStrip(String name, int port, int size, LedManager ledManager, int offset) {
+  public LedStrip(String name, int size, LedManager ledManager, int offset) {
     /*initialize pera */
-    this.port = port;
     this.size = size;
     this.offset = offset;
     this.manager = ledManager;
@@ -48,12 +43,11 @@ public class LedStrip extends SubsystemBase{
    * @param size the size of the strip
    * @param ledManager the led manager 
    */
-  public LedStrip(String name, int port, int size, LedManager ledManager) {
+  public LedStrip(String name, int size, LedManager ledManager) {
     /*set offset to 0 */
     this.offset = 0;
 
     /*initialize pera */
-    this.port = port;
     this.size = size;
     this.manager = ledManager;
     
