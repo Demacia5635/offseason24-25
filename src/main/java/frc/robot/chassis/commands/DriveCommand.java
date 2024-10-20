@@ -91,7 +91,7 @@ public class DriveCommand extends Command {
       
     
       double angle = chassis.visionByNote.getAngleToNote().getDegrees();
-      double vectorAngle = (angle - chassis.getAngle().getDegrees())*2;
+      double vectorAngle = angle*2;
       Translation2d robotToNote = new Translation2d(getV(), Rotation2d.fromDegrees(vectorAngle));
       chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0)); 
     } 
