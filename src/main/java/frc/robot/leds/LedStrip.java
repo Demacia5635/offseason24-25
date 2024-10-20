@@ -3,7 +3,6 @@ package frc.robot.leds;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**Strip of led */
@@ -57,61 +56,54 @@ public class LedStrip extends SubsystemBase{
   /**
    * set the strip to one color
    * @param color the wanted color
-   * @return command that makes the strip one solid color
    */
-  public Command setColor(Color color) {
-    return manager.setColor(this, color);
+  public void setColor(Color color) {
+    manager.setColor(this, color);
   }
   
   /**
    * set the strip to solid colors
    * @param colors the wanted colors
-   * @return command that makes the strip solid colors
    */
-  public Command setColor(Color[] colors) {
-    return manager.setColor(this, colors);
+  public void setColor(Color[] colors) {
+    manager.setColor(this, colors);
   }
 
   /**
    * set blink to strip
    * @param color the wanted color
-   * @return command that makes the strip blink with one color
    */
-  public Command setBlink(Color color) {
-    return manager.setBlink(this, color);
+  public void setBlink(Color color) {
+    manager.setBlink(this, color);
   }
 
   /**
    * set blink to strip
    * @param colors the wanted colors
-   * @return command that makes the strip blink with diffrent colors
    */
-  public Command setBlink(Color[] colors) {
-    return manager.setBlink(this, colors);
+  public void setBlink(Color[] colors) {
+    manager.setBlink(this, colors);
   }
 
   /**
    * turn the strip off
-   * @return command that turn off the leds
    */
-  public Command turnoff() {
-    return setColor(Color.kBlack);
+  public void turnoff() {
+    setColor(Color.kBlack);
   }
   
   /**
    * set the strip solid gay
-   * @return command that make the strip gay
    */
-  public Command setSolidGay() {
-    return manager.setSolidGay(this);
+  public void setSolidGay() {
+    manager.setSolidGay(this);
   }
 
   /**
    * set the strip blink gay
-   * @return command that make the strip gay blink
    */
-  public Command setBlinkGay() {
-    return manager.setBlinkGay(this);
+  public void setBlinkGay() {
+    manager.setBlinkGay(this);
   }
 
   /**
