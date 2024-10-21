@@ -209,7 +209,8 @@ public class RobotContainer implements Sendable{
     operatorController.leftStick().onTrue(new InstantCommand(()-> 
     isTurningToSpeaker = !isTurningToSpeaker));
 
-    operatorController.rightStick().onTrue(new InstantCommand(()-> mainLeds.operatorNote()));
+    operatorController.rightStick().onTrue(new InstantCommand(()-> intake.isNoteInIntake = !intake.isNoteInIntake).ignoringDisable(true));
+    // operatorController.rightStick().onTrue(new InstantCommand(()-> mainLeds.operatorNote()));
   }
     
    

@@ -47,8 +47,8 @@ public class MainLeds extends LedStrip {
 
     if (shooter.isShotoerReady && GoToAngle.isAngleReady) {
       setColor(Color.kWhite);
-    } else if (isNoteOperator) { 
-      setColor(Color.kPurple);
+    // } else if (isNoteOperator) { 
+    //   setColor(Color.kPurple);
     } else if (intake.isNoteInIntake) {
       setColor(Color.kPurple);
     } else if (chassis.visionByNote.seeNote()) {
