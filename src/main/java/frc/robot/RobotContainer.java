@@ -36,6 +36,7 @@ import frc.robot.Shooter.Commands.WaitUntilShooterReady;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
 import frc.robot.Shooter.utils.Ready;
+import frc.robot.auto.ShootAndLeave;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.commands.DriveToNote;
 import frc.robot.chassis.subsystems.Chassis;
@@ -60,7 +61,6 @@ public class RobotContainer implements Sendable{
 
   private static LedManager ledManager;
   private MainLeds mainLeds;
-  private RSLStrip rslStrip;
 
   public IntakeCommand intakeCommand;
   public Shoot shootCommand;
@@ -72,6 +72,7 @@ public class RobotContainer implements Sendable{
   public WaitUntilShooterReady waitUntilShooterReady;
 
   public static boolean isDriverOverwriteShooter = false;
+  public static boolean isTurningToSpeaker = true;
 
   Pigeon2 gyro;
 
@@ -97,7 +98,6 @@ public class RobotContainer implements Sendable{
     ledManager = new LedManager();
     
     mainLeds = new MainLeds("main leds", ledManager, intake, chassis, shooter);
-    rslStrip = new RSLStrip("rsl leds", ledManager, chassis);
     
 
     calibration = new Calibration(angleChanging);
@@ -133,26 +133,33 @@ public class RobotContainer implements Sendable{
 
   private void configureBindings() {
     driverController.b().onTrue(new InstantCommand(()->{
+      mainLeds.amp();
       angleChanging.angleState = STATE.DELIVERY;
       shooter.shooterState = STATE.DELIVERY;
     }));
     
-    driverController.y().onTrue(new InstantCommand(()->driveCommand.setAutoIntake()));
+    driverController.y().onTrue(new InstantCommand(()-> {
+      mainLeds.autoIntake();
+      driveCommand.setAutoIntake();
+    }));
     driverController.a().onTrue(new IntakeCommand(intake, shooter));
     driverController.x().onTrue(shootCommand);
     driverController.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
     driverController.rightStick().onTrue(new InstantCommand(()->{
+      mainLeds.amp();
       angleChanging.angleState = STATE.SPEAKER;
       shooter.shooterState = STATE.SPEAKER;
     }));
     
-    driverController.back().onTrue(new InstantCommand(()-> {
+    driverController.start().onTrue(new InstantCommand(()-> {
+      mainLeds.amp();
       angleChanging.angleState = STATE.AMP;
       shooter.shooterState = STATE.AMP;
-    }));
+    }).ignoringDisable(true));
 
     driverController.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
     driverController.povUp().onTrue(new InstantCommand(()->{
+      mainLeds.amp();
       angleChanging.angleState = STATE.SUBWOFFER;
       shooter.shooterState = STATE.SUBWOFFER;
     }));
@@ -161,6 +168,7 @@ public class RobotContainer implements Sendable{
     
     operatorController.a().onTrue(new RunCommand(()-> {
       intake.setPowerToMotors(-1);
+      intake.isNoteInIntake = false;
     }, intake));
 
     operatorController.x().onTrue(new InstantCommand(()-> {
@@ -190,6 +198,18 @@ public class RobotContainer implements Sendable{
     operatorController.povLeft().onTrue(new InstantCommand(()-> {
       angleChanging.setMotorPower(0);
     }, angleChanging));
+
+    operatorController.rightBumper().onTrue(new InstantCommand(()-> {
+      shooter.shooterState = STATE.TESTING;
+      angleChanging.angleState = STATE.TESTING;
+    }));
+
+    operatorController.leftBumper().onTrue(stopAll());
+
+    operatorController.leftStick().onTrue(new InstantCommand(()-> 
+    isTurningToSpeaker = !isTurningToSpeaker));
+
+    operatorController.rightStick().onTrue(new InstantCommand(()-> mainLeds.operatorNote()));
   }
     
    
@@ -212,6 +232,7 @@ public class RobotContainer implements Sendable{
    */
   public Command getAutonomousCommand() {
     return calibration;
+    // return new ShootAndLeave(chassis, shooter, angleChanging, intake);
   }
 
   // public Command calibration() {
@@ -224,7 +245,6 @@ public class RobotContainer implements Sendable{
 
   public Command stopAll() {
     return new InstantCommand(()-> {
-      chassis.stop();
       shooter.setMotorPower(0, 0);;
       shooter.setFeedingPower(0);
       angleChanging.setMotorPower(0);
@@ -232,6 +252,6 @@ public class RobotContainer implements Sendable{
       
       // shooter.shooterState = STATE.IDLE;
       // angleChanging.angleState = STATE.IDLE;
-    }, chassis, shooter, angleChanging, intake);
+    }, shooter, angleChanging, intake);
   }
 }

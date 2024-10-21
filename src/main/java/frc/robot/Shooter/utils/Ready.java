@@ -5,7 +5,6 @@
 package frc.robot.Shooter.utils;
 
 import frc.robot.RobotContainer;
-import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.Shooter.ShooterConstants.MAX_ERRORS;
 import frc.robot.Shooter.Commands.GoToAngle;
 

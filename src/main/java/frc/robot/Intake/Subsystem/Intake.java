@@ -109,6 +109,9 @@ public class Intake extends SubsystemBase {
   public boolean AmperHighMotorPickUp(){
     return motorPickUp.getSupplyCurrent().getValue() >= NOTE_AMPER;
   }
+  public boolean AmperHighMotorPickUp2(){
+    return motorPickUp.getSupplyCurrent().getValue() <= NOTE_AMPER2;
+  }
 
   /**
    * Changese the configurations of the motors to coast 

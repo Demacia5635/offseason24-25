@@ -23,6 +23,7 @@ public class VisionByNote extends SubsystemBase {
   private NetworkTable table;
   private NetworkTableEntry tx;
   private NetworkTableEntry tv;
+  //private NetworkTableEntry tcorn;
   
   
   // Limelight data
@@ -30,6 +31,9 @@ public class VisionByNote extends SubsystemBase {
   //private double y_offset;
   private double noteYaw;
   private boolean seeNote = false;
+  //private boolean isClose = false;
+
+  //private double[] corners;
   //private Pose2d robotPose;
 
 //  private double[] corners = new double[8];
@@ -39,7 +43,7 @@ public class VisionByNote extends SubsystemBase {
 //  private double widthInPix = 0;
 
   // Pose and distance calculation utilities
-  private NotePoseCalc notePose;
+  // private NotePoseCalc notePose;
 
   //pose of robot in field 
   Field2d field;
@@ -56,6 +60,8 @@ public class VisionByNote extends SubsystemBase {
     table = NetworkTableInstance.getDefault().getTable(NoteTable);
     tv = table.getEntry("tv");
     tx = table.getEntry("tx");
+    //tcorn = table.getEntry("tcornxy");
+    //corners = new double[]{0,0,0,0,0,0,0,0};
   //  notePose = new NotePoseCalc(noteYaw, x_offset, y_offset, robotPose);
     
   //  field = new Field2d();
@@ -71,6 +77,10 @@ public class VisionByNote extends SubsystemBase {
     seeNote = tv.getDouble(0) != 0;
    
     noteYaw =  -tx.getDouble(0);
+
+    //corners = tcorn.getDoubleArray(new double[]{0,0,0,0,0,0,0,0});
+    //isClose = Math.abs(corners[0]-corners[2]) < 120;
+    
     
 
     //widthInPix = Math.abs(corners[0]-corners[2]);
@@ -113,12 +123,15 @@ public class VisionByNote extends SubsystemBase {
   public boolean seeNote() {
     return seeNote;
   }
+  // public boolean isNoteClose(){
+  //   return isClose;
+  // }
 
 
   @Override
   public void initSendable(SendableBuilder builder) {
       //SmartDashboard.putData("field-note", field);
-      //builder.addDoubleProperty("Note - dist", ()->notePose.GetDistFromCamera(), null); 
+      //builder.addDoubleProperty("pix", ()->Math.abs(corners[0]-corners[2]), null); 
   }
 
 }

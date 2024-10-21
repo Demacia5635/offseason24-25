@@ -81,6 +81,7 @@ public class VisionByTag extends SubsystemBase {
         Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,
           RobotContainer.chassis.getAngle());
         Pose2d pose = getRobotPose();
+        // System.out.println(pose.getRotation().getDegrees());
         field.setRobotPose(pose);
         RobotContainer.chassis.updateVisionPose(pose);
       }

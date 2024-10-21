@@ -16,6 +16,8 @@ public class MainLeds extends LedStrip {
   private final Chassis chassis;
   private final Shooter shooter;
   private Timer timer;
+  private Timer autoIntakeTimer;
+  private boolean isNoteOperator;
 
   public MainLeds(String name, LedManager manager, Intake intake, Chassis chassis, Shooter shooter) {
     super(name, ANGLE_CHANGER_LEDS.SIZE, manager, ANGLE_CHANGER_LEDS.OFFSET);
@@ -23,10 +25,20 @@ public class MainLeds extends LedStrip {
     this.chassis = chassis;
     this.shooter = shooter;
     timer = new Timer();
+    autoIntakeTimer = new Timer();
+    isNoteOperator = false;
   }
 
   public void amp() {
     timer.start();
+  }
+
+  public void autoIntake() {
+    autoIntakeTimer.start();
+  }
+
+  public void operatorNote() {
+    isNoteOperator = !isNoteOperator;
   }
 
   @Override
@@ -35,7 +47,9 @@ public class MainLeds extends LedStrip {
 
     if (shooter.isShotoerReady && GoToAngle.isAngleReady) {
       setColor(Color.kWhite);
-    } else if (intake.isNote()) {
+    } else if (isNoteOperator) { 
+      setColor(Color.kPurple);
+    } else if (intake.isNoteInIntake) {
       setColor(Color.kPurple);
     } else if (chassis.visionByNote.seeNote()) {
       setColor(Color.kGreen);
@@ -43,12 +57,19 @@ public class MainLeds extends LedStrip {
       setColor(Color.kBlue);
     }
 
-    if (!timer.hasElapsed(5) && timer.get() != 0) {
+    if (!timer.hasElapsed(3) && timer.get() != 0) {
       setBlink(Color.kYellow);
-    } else if (timer.hasElapsed(5)) {
+    } else if (timer.hasElapsed(3)) {
       timer.stop();
       timer.reset();
     } 
+
+    if (!autoIntakeTimer.hasElapsed(1.5) && autoIntakeTimer.get() != 0) {
+      setBlink(Color.kRed);
+    } else if (autoIntakeTimer.hasElapsed(1.5)) {
+      autoIntakeTimer.stop();
+      autoIntakeTimer.reset();
+    }
 
     // switch (angleChanger.angleState) {
     //   case SPEAKER:

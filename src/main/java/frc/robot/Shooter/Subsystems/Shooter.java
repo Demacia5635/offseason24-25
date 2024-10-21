@@ -67,12 +67,14 @@ public class Shooter extends SubsystemBase {
     configUp.Slot0.kD = SHOOTER_PID_FF.UP_MOTOR_KD;
     configUp.Slot0.kS = SHOOTER_PID_FF.UP_MOTOR_KS;
     configUp.Slot0.kV = SHOOTER_PID_FF.UP_MOTOR_KV;
+    configUp.Slot0.kA = SHOOTER_PID_FF.UP_MOTOR_KA;
 
-    configDown.Slot0.kP = SHOOTER_PID_FF.DOWN_MOTOR_KA;
+    configDown.Slot0.kP = SHOOTER_PID_FF.DOWN_MOTOR_KP;
     configDown.Slot0.kI = SHOOTER_PID_FF.DOWN_MOTOR_KI;
     configDown.Slot0.kD = SHOOTER_PID_FF.DOWN_MOTOR_KD;
     configDown.Slot0.kS = SHOOTER_PID_FF.DOWN_MOTOR_KS;
     configDown.Slot0.kV = SHOOTER_PID_FF.DOWN_MOTOR_KV;
+    configDown.Slot0.kA = SHOOTER_PID_FF.DOWN_MOTOR_KA;
 
     configUp.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_UP_MOTOR_INVERT ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
     configDown.MotorOutput.Inverted = SHOOTER_CONFIGS.IS_DOWN_MOTOR_INVERT ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
@@ -94,6 +96,8 @@ public class Shooter extends SubsystemBase {
   public void setMotorPower(double upPower, double downPower){
     motorUp.setControl(m_request.withOutput(upPower));
     motorDown.setControl(m_request.withOutput(downPower));
+//    System.out.println("-----------------------------\n" +
+//    " p = " + upPower + "/" + downPower + "\n---------------------------");
   }
   
 
@@ -111,8 +115,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public void pidMotorVelocity(double upVel, double downVel){
-    motorUp.setControl(velocityVoltage.withVelocity(upVel)); // .withFeedForward(ShooterUtils.getUpMotorFF(getUpMotorVel())));
-    motorDown.setControl(velocityVoltage.withVelocity(downVel)); // .withFeedForward(ShooterUtils.getDownMotorFF(getDownMotorVel())));
+    double upVolt = upVel* SHOOTER_PID_FF.UP_MOTOR_KV + SHOOTER_PID_FF.UP_MOTOR_KS 
+        ;//upVel*upVel*SHOOTER_PID_FF.UP_MOTOR_KV2; 
+    double downVolt = downVel* SHOOTER_PID_FF.DOWN_MOTOR_KV + SHOOTER_PID_FF.DOWN_MOTOR_KS
+        ;//downVel*downVel*SHOOTER_PID_FF.DOWN_MOTOR_KV2; 
+    setMotorPower(upVolt/12.0, downVolt/12.0);
+//    motorUp.setControl(velocityVoltage.withVelocity(upVel)); // .withFeedForward(ShooterUtils.getUpMotorFF(getUpMotorVel())));
+//    motorDown.setControl(velocityVoltage.withVelocity(downVel)); // .withFeedForward(ShooterUtils.getDownMotorFF(getDownMotorVel())));
   }
 
   public void setShootingNeutralMode(boolean isBrake){

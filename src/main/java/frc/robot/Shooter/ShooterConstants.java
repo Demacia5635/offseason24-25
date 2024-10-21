@@ -26,7 +26,7 @@ public class ShooterConstants {
     public static final double UP_MOTOR_KD = 0.0;
     public static final double UP_MOTOR_KS = 0.0576789961667519;
     public static final double UP_MOTOR_KV = 0.11715135567075642;
-    public static final double UP_MOTOR_KA = 0.0044124397972312365;
+    public static final double UP_MOTOR_KA = 0; //0.0024124397972312365;
     public static final double UP_MOTOR_KV2 = 7.229070730748346E-5;
 
     public static final double DOWN_MOTOR_KP = UP_MOTOR_KP;
@@ -151,7 +151,7 @@ public class ShooterConstants {
   public static class SHOOTER_ATRIBUTES {
     public static final double RADIOS = 0.36;
     public static final double SHOOTING_MOTORS_ROTATION_TO_METER = 2 * RADIOS * Math.PI;
-    public static final double MIL_SEC_TO_SHOOT = 500;
+    public static final double MIL_SEC_TO_SHOOT = 1000;
 
   }  
 
@@ -174,7 +174,7 @@ public class ShooterConstants {
    */
   public static class LOOKUP_TABLE_DATA {
     public static final double[][] DATA = {
-      {1.5, 52, 50, 50}, {2.5, 42, 55, 55}, {3.55, 36, 65, 63}
+      {1.5, 52, 50, 50}, {2.5, 42, 55, 53}, {3.48, 36, 58, 55}
     };
   }
 

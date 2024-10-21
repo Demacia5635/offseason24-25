@@ -253,7 +253,10 @@ public class Chassis extends SubsystemBase {
 
   public void setVelocitiesRobotRel(ChassisSpeeds speeds){
     SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds);
-
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+    targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm();
+    currentVelocity = getVelocity().getNorm();
+    
     setModuleStates(states);
   }
 
@@ -264,14 +267,7 @@ public class Chassis extends SubsystemBase {
    */
   public void setVelocities(ChassisSpeeds speeds) {
     ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-
-    //SwerveModuleState[] states = KINEMATICS.toSwerveModuleStates(relativeSpeeds);
-    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relativeSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
-    targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm();
-    currentVelocity = getVelocity().getNorm();
-    
-    setModuleStates(states);
+    setVelocitiesRobotRel(relativeSpeeds);
   }
 
 
@@ -292,7 +288,7 @@ public class Chassis extends SubsystemBase {
   }
 
   public double getOmegaToAngle(Rotation2d fieldAngle){
-    double kP = 0.4;
+    double kP = 0.35;
     double diffAngle = MathUtil.inputModulus(fieldAngle.minus(getAngle()).getDegrees(), -180,180);
     System.out.println("-------------------------------");
             System.out.println("wanted= " + fieldAngle.getDegrees() + " gyro=" + 

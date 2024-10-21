@@ -19,6 +19,7 @@ public class IntakeCommand extends Command {
   Timer timer;
   Timer timerIntake;
   boolean hasTaken;
+  boolean touchedDownWheels = false;
 
   /**
    * Takes the intake subsystem
@@ -41,7 +42,10 @@ public class IntakeCommand extends Command {
   public void initialize(){
     intake.currentPosition = NotePosition.NO_NOTE;
     timer.start();
+    timerIntake.reset();
+    timerIntake.stop();
     hasTaken = false;
+    touchedDownWheels = false;
   }
 
 
@@ -54,13 +58,19 @@ public class IntakeCommand extends Command {
     
     if (intake.AmperHighMotorPickUp()) {
       intake.currentPosition = NotePosition.FIRST_TOUCH;
-      
+      touchedDownWheels = true;
+    }
+    if(touchedDownWheels && intake.AmperHighMotorPickUp2()) {
+      intake.isNoteInIntake = true;
+      timerIntake.reset();
+      timerIntake.start();
+      touchedDownWheels = false;
     }
     
-    if (intake.isNote()) {
-      intake.currentPosition = NotePosition.AFTER_SEEING_NOTE;
-      timerIntake.start();
-    }
+//    if (intake.isNote()) {
+//      intake.currentPosition = NotePosition.AFTER_SEEING_NOTE;
+//      imerIntake.start();
+//    }
 
     intake.motorPickUpSetPower(intake.currentPosition.pickUpPow);
     intake.motorMoveSetPower(intake.currentPosition.movePow);
@@ -72,9 +82,6 @@ public class IntakeCommand extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    // if (!interrupted) {
-    //   intake.isNoteInIntake = true;
-    // }
     intake.setPowerToMotors(0);
     shooter.setFeedingPower(0);
     timer.stop();

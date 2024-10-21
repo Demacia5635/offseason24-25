@@ -27,24 +27,25 @@ public class IntakeConstants {
   }
 
   /**The voltege of the sensor when he detects the note */
-  public static final double NOTE_VOLTEGE = 3.0;
+  public static final double NOTE_VOLTEGE = 3.3;
 
   //The amper of when the not is fed to the intake
   public static final double NOTE_AMPER = 25.0;
+  public static final double NOTE_AMPER2 = 25.0;
 
   /**The amount of time the intake command will auto stop (in miliseconds) */
   public static final double STOP_COMMAND_TIME = 20000;
 
   /**The amount of time the intake command will stop after takinng note */
-  public static final double STOP_AFTER_NOTE = 650;
+  public static final double STOP_AFTER_NOTE = 10;
 
   /**
    * The current position of the note to power fo the motors
    */
   public enum NotePosition{
-    NO_NOTE(1, 1),
-    FIRST_TOUCH(1, 1),
-    AFTER_SEEING_NOTE(1, 1);
+    NO_NOTE(1, 0.5),
+    FIRST_TOUCH(1, 0.4),
+    AFTER_SEEING_NOTE(1, 0.4);
 
     /** The voltage to the motors */
     public final double pickUpPow;

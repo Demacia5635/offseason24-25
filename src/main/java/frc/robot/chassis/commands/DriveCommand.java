@@ -3,6 +3,9 @@ package frc.robot.chassis.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
@@ -13,11 +16,12 @@ import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.Commands.Shoot;
 import frc.robot.Shooter.ShooterConstants.STATE;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.utils.LogManager;
 import frc.robot.vision.subsystem.VisionByNote;
 
 import static frc.robot.utils.Utils.deadband;
 
-public class DriveCommand extends Command {
+public class DriveCommand extends Command  implements Sendable{
   private final Chassis chassis;
   VisionByNote note;
   Intake intake;
@@ -30,6 +34,7 @@ public class DriveCommand extends Command {
 
   private double continu = -1;
   private boolean isAutoIntake = false;
+  private boolean isNoteInIntake = false;
 
   // Rotation2d wantedAngleApriltag = new Rotation2d();
   // boolean rotateToApriltag = false;
@@ -45,6 +50,7 @@ public class DriveCommand extends Command {
     // !precisionDrive));
     // commandXboxController.b().onTrue(new InstantCommand(()-> isAutoIntake =
     // !isAutoIntake));
+    SmartDashboard.putData(this);
   }
 
   public void setAutoIntake() {
@@ -57,7 +63,7 @@ public class DriveCommand extends Command {
 
   @Override
   public void initialize() {
-
+    isNoteInIntake = false;
   }
 
   @Override
@@ -92,21 +98,27 @@ public class DriveCommand extends Command {
     if ((robotSpeed.vxMetersPerSecond < 0 &&
         !intake.isNote() &&
         note.seeNote() &&
-        isAutoIntake)) {
+        isAutoIntake &&
+        !isNoteInIntake)) {
       
       chassis.setAutoIntake(true);
       double angle = note.getNoteYaw();
-      double vectorAngle = angle * 2;
+      double vectorAngle = angle * 2 + 180;
       double v = Math.hypot(velX, velY);
+      if(v > 3) {
+        v = 3;
+      }
       Translation2d robotToNote = new Translation2d(v, Rotation2d.fromDegrees(vectorAngle));
       chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0));
-        
+      
       RobotContainer.robotContainer.intakeCommand.schedule();
-      continu = 50;
-    } 
-    else if(continu>0 && !note.seeNote()){
+      isNoteInIntake = true;
+      continu = 10;
+    }
+    else if(continu>0 && !intake.isNote()){
       chassis.setAutoIntake(true);
-      double vectorAngle = 0;
+      isNoteInIntake = false;
+      double vectorAngle = 180;
       double v = Math.hypot(velX, velY);
       Translation2d robotToNote = new Translation2d(v, Rotation2d.fromDegrees(vectorAngle));
       chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0));
@@ -115,12 +127,17 @@ public class DriveCommand extends Command {
     else {
       chassis.setAutoIntake(false);
       Command c = RobotContainer.shooter.getCurrentCommand();
-      if (c != null && c instanceof Shoot && RobotContainer.shooter.shooterState == STATE.SPEAKER) {
+      if (c != null && c instanceof Shoot && RobotContainer.shooter.shooterState == STATE.SPEAKER && RobotContainer.isTurningToSpeaker) {
         chassis.setVelocitiesRotateToSpeaker(speeds);
       } else {
         chassis.setVelocities(speeds);
       }
     }
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addBooleanProperty("is auto intake", ()-> isAutoIntake, null);
   }
 
   @Override

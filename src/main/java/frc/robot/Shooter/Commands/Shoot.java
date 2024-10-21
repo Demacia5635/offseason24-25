@@ -179,9 +179,6 @@ public class Shoot extends Command {
       }
 
       if (shooterTimer.get()*1000 >= SHOOTER_ATRIBUTES.MIL_SEC_TO_SHOOT) {
-        shooterTimer.stop();
-        shooterTimer.reset();
-        isTimerRunning = false;
         isfinished = true;
       }
     }
@@ -205,10 +202,11 @@ public class Shoot extends Command {
     isReady = false;
     isDriverOverwriteShooter = false;
     shooter.isShotoerReady = false;
+    shooterTimer.stop();
+    shooterTimer.reset();
+    isTimerRunning = false;
 
-    if (!interrupted) {
-      intake.isNoteInIntake = false;
-    }
+    intake.isNoteInIntake = false;
   }
 
   // Returns true when the command should end.
