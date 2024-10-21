@@ -100,12 +100,8 @@ public class DriveCommand extends Command {
       double v = Math.hypot(velX, velY);
       Translation2d robotToNote = new Translation2d(v, Rotation2d.fromDegrees(vectorAngle));
       chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0));
-      if(!RobotContainer.robotContainer.intakeCommand.isScheduled()){
         
-        RobotContainer.robotContainer.intakeCommand.schedule();
-      } else {
-        RobotContainer.robotContainer.intakeCommand.schedule();
-      }
+      RobotContainer.robotContainer.intakeCommand.schedule();
       continu = 50;
     } 
     else if(continu>0 && !note.seeNote()){
