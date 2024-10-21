@@ -155,16 +155,10 @@ public class ShooterConstants {
 
   }  
 
-  public static class DELIVERY_RIVAL_VAR {
-    public static final double DELIVERY_RIVAL_ANGLE = 45;
-    public static final double MOTOR_UP_DELIVERY_RIVAL_VEL = 60;
-    public static final double MOTOR_DOWN_DELIVERY_RIVAL_VEL = 60;
-  }
-
-  public static class DELIVERY_MID_VAR {
-    public static final double DELIVERY_MID_ANGLE = 38;
-    public static final double MOTOR_UP_DELIVERY_MID_VEL = 50;
-    public static final double MOTOR_DOWN_DELIVERY_MID_VEL = 50;
+  public static class DELIVERY_VAR {
+    public static final double DELIVERY_ANGLE = 38;
+    public static final double MOTOR_UP_DELIVERY_VEL = 50;
+    public static final double MOTOR_DOWN_DELIVERY_VEL = 50;
   }
 
   /**
@@ -185,6 +179,6 @@ public class ShooterConstants {
   }
 
   public enum STATE{
-    AMP, STAGE, SUBWOFFER, DELIVERY_MID, DELIVERY_RIVAL, SPEAKER, IDLE, TESTING;
+    AMP, STAGE, SUBWOFFER, DELIVERY, SPEAKER, IDLE, TESTING;
   }
 }

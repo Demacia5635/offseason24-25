@@ -121,18 +121,9 @@ public class GoToAngle extends Command {
         wantedAngle = speakerLookUpTableData[0];
         break;
 
-      case DELIVERY_MID:
-        distence = -1;
-        double[] deliveryMisLookUpTableData = lookupTable.get(distence);
-        wantedAngle = deliveryMisLookUpTableData[0];
-        break;
-
-      case DELIVERY_RIVAL:
-        distence = -1;
-        double[] deliveryRivalLookUpTableData = lookupTable.get(distence);
-        wantedAngle = deliveryRivalLookUpTableData[0];
-        break;
-
+      case DELIVERY:
+        wantedAngle = DELIVERY_VAR.DELIVERY_ANGLE;
+      
       case TESTING:
         wantedAngle = testingAngle;
         break;

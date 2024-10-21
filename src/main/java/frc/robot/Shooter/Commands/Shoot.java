@@ -151,18 +151,9 @@ public class Shoot extends Command {
         downMotorVelocity = testingDownMotorVelocity;
         break;
 
-      case DELIVERY_MID:
-        distence = -1;
-        double[] deliveryMisLookUpTableData = lookupTable.get(distence);
-        upMotorVelocity = deliveryMisLookUpTableData[1];
-        downMotorVelocity = deliveryMisLookUpTableData[2];
-        break;
-
-      case DELIVERY_RIVAL:
-        distence = -1;
-        double[] deliveryRivalLookUpTableData = lookupTable.get(distence);
-        upMotorVelocity = deliveryRivalLookUpTableData[1];
-        downMotorVelocity = deliveryRivalLookUpTableData[2];
+      case DELIVERY:
+        upMotorVelocity = DELIVERY_VAR.MOTOR_UP_DELIVERY_VEL;
+        downMotorVelocity = DELIVERY_VAR.MOTOR_DOWN_DELIVERY_VEL;
         break;
 
       case IDLE:
