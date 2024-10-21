@@ -40,6 +40,7 @@ import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.commands.DriveToNote;
 import frc.robot.chassis.subsystems.Chassis;
 import frc.robot.utils.LogManager;
+import frc.robot.utils.Utils;
 
 import static frc.robot.Constants.*;
 
@@ -47,8 +48,8 @@ import static frc.robot.Constants.*;
 public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
   public static Boolean isRed = false;
-  CommandXboxController controller;
-  CommandXboxController controller2;
+  CommandXboxController driverController;
+  CommandXboxController operatorController;
 
   public LogManager logManager = new LogManager();
 
@@ -85,8 +86,9 @@ public class RobotContainer implements Sendable{
     robotContainer = this;
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-    controller = new CommandXboxController(CONTROLLER_PORT);
-    controller2 = new CommandXboxController(1);
+    driverController = new CommandXboxController(DRIVER_CONTROLLER_PORT);
+    operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
+    operatorController = new CommandXboxController(1);
 
     chassis = new Chassis();
     shooter = new Shooter();
@@ -103,7 +105,7 @@ public class RobotContainer implements Sendable{
     intakeCommand = new IntakeCommand(intake, shooter);
     resetOdometry = new InstantCommand(()-> chassis.setOdometryToForward())
                         .ignoringDisable(true);
-    driveCommand = new DriveCommand(chassis, controller);
+    driveCommand = new DriveCommand(chassis, driverController);
     gotoAngleCommand = new GoToAngle(angleChanging, chassis);
     waitUntilShooterReady = new WaitUntilShooterReady(shooter);
    // driveToNote = new DriveToNote(chassis, 1.6, true).raceWith(intakeCommand); 
@@ -130,32 +132,64 @@ public class RobotContainer implements Sendable{
 
 
   private void configureBindings() {
-    controller.b().onTrue(new InstantCommand(()->{
-      angleChanging.angleState = STATE.DELIVERY_MID;
-      shooter.shooterState = STATE.DELIVERY_MID;
+    driverController.b().onTrue(new InstantCommand(()->{
+      angleChanging.angleState = STATE.DELIVERY;
+      shooter.shooterState = STATE.DELIVERY;
     }));
     
-    controller.y().onTrue(new InstantCommand(()->driveCommand.setAutoIntake()));
-    controller.a().onTrue(new IntakeCommand(intake, shooter));
-    controller.x().onTrue(shootCommand);
-    controller.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
-    controller.rightStick().onTrue(new InstantCommand(()->{
+    driverController.y().onTrue(new InstantCommand(()->driveCommand.setAutoIntake()));
+    driverController.a().onTrue(new IntakeCommand(intake, shooter));
+    driverController.x().onTrue(shootCommand);
+    driverController.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
+    driverController.rightStick().onTrue(new InstantCommand(()->{
       angleChanging.angleState = STATE.SPEAKER;
       shooter.shooterState = STATE.SPEAKER;
     }));
     
-    controller.back().onTrue(new InstantCommand(()-> {
+    driverController.back().onTrue(new InstantCommand(()-> {
       angleChanging.angleState = STATE.AMP;
       shooter.shooterState = STATE.AMP;
     }));
 
-    controller.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
-    controller.povUp().onTrue(new InstantCommand(()->{
+    driverController.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
+    driverController.povUp().onTrue(new InstantCommand(()->{
       angleChanging.angleState = STATE.SUBWOFFER;
       shooter.shooterState = STATE.SUBWOFFER;
     }));
 
-   controller.leftBumper().onTrue(stopAll());
+    driverController.leftBumper().onTrue(stopAll());
+    
+    operatorController.a().onTrue(new RunCommand(()-> {
+      intake.setPowerToMotors(-1);
+    }, intake));
+
+    operatorController.x().onTrue(new InstantCommand(()-> {
+      shooter.setMotorPower(0.5, 0.5);
+      shooter.setFeedingPower(1);
+    }, shooter));
+
+    operatorController.y().onTrue(new InstantCommand(()-> 
+      Utils.setPipeline(Utils.getPipeline() == 0 ? 1 : 0))
+      .ignoringDisable(true));
+
+    operatorController.b().onTrue(calibration);
+    
+    operatorController.povUp().onTrue(new InstantCommand(()-> {
+      intake.setPowerToMotors(0);
+    }, intake));
+    
+    operatorController.povRight().onTrue(new InstantCommand(()-> {
+      chassis.stop();
+    }, chassis));
+
+    operatorController.povDown().onTrue(new InstantCommand(()-> {
+      shooter.setMotorPower(0, 0);
+      shooter.setFeedingPower(0);
+    }, shooter));
+
+    operatorController.povLeft().onTrue(new InstantCommand(()-> {
+      angleChanging.setMotorPower(0);
+    }, angleChanging));
   }
     
    

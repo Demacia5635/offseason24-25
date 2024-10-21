@@ -49,11 +49,11 @@ public class Utils {
   }
 
   public static int getPipeline() {
-    return (int) NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0);
+    return (int) NetworkTableInstance.getDefault().getTable("limelight-tag").getEntry("getpipe").getDouble(0);
   }
 
   public static void setPipeline(int pipeline) {
-     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+     NetworkTableInstance.getDefault().getTable("limelight-tag").getEntry("pipeline").setNumber(pipeline);
 }
   //usful : https://github.com/NAHSRobotics-Team5667/2020-FRC/blob/master/src/main/java/frc/robot/utils/LimeLight.java
   //need to fix point of 3 meters
