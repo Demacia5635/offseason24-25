@@ -43,9 +43,9 @@ public class IntakeConstants {
    * The current position of the note to power fo the motors
    */
   public enum NotePosition{
-    NO_NOTE(1, 0.5),
-    FIRST_TOUCH(1, 0.4),
-    AFTER_SEEING_NOTE(1, 0.4);
+    NO_NOTE(1, 0.3),
+    FIRST_TOUCH(1, 0.3),
+    AFTER_SEEING_NOTE(1, 0.3);
 
     /** The voltage to the motors */
     public final double pickUpPow;
