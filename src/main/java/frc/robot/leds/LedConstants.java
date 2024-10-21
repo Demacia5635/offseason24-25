@@ -25,5 +25,5 @@ public class LedConstants {
    * the blink time between what is color and what is off <br></br>
    * {@code Timer.getFPGATimestamp() % BLINK_TIME != 0 ? color : Color.kBlack}
    */
-  public static final double BLINK_TIME = 0.3;
+  public static final double BLINK_TIME = 3;
 }

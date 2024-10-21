@@ -23,8 +23,6 @@ public class LedManager extends SubsystemBase{
   /**currentH for gay */
   double currentH;
 
-  Timer timer;
-
   /**
    * creates Led Manager make sure to make only one and give it all to the led strip
    */
@@ -41,9 +39,6 @@ public class LedManager extends SubsystemBase{
 
     /*initialize currentH for gay */
     currentH = 0;
-
-    timer = new Timer();
-    timer.start();
   }
 
   /**
@@ -77,7 +72,7 @@ public class LedManager extends SubsystemBase{
    */
   public void setBlink(LedStrip strip, Color color) {
     for(int i = strip.offset; i < strip.size + strip.offset; i++) {
-      this.ledColors[i] = timer.get() % BLINK_TIME != 0
+      this.ledColors[i] = (int)(Timer.getFPGATimestamp()*10) % BLINK_TIME != 0
       ? color
       : Color.kBlack;
     }
@@ -91,7 +86,7 @@ public class LedManager extends SubsystemBase{
    */
   public void setBlink(LedStrip strip, Color[] colors) {
     for(int i = strip.offset; i < colors.length + strip.offset; i++) {
-      this.ledColors[i] = timer.get() % BLINK_TIME != 0 
+      this.ledColors[i] = (int)(Timer.getFPGATimestamp()*10) % BLINK_TIME != 0 
       ? colors[i - strip.offset]
       : Color.kBlack;
     }
