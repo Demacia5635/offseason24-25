@@ -190,9 +190,10 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // if (state != STATE.TESTING) {
-    //   angleChanging.angleState = STATE.SPEAKER;
-    // }
+    if (state != STATE.TESTING && state != STATE.IDLE && state != STATE.DELIVERY) {
+      angleChanging.angleState = STATE.SPEAKER;
+      shooter.shooterState = STATE.SPEAKER;
+    }
 
     shooter.setMotorPower(0, 0);
     shooter.setFeedingPower(0);
