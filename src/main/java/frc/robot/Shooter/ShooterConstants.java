@@ -25,7 +25,7 @@ public class ShooterConstants {
     public static final double UP_MOTOR_KI = 0.0;
     public static final double UP_MOTOR_KD = 0.0;
     public static final double UP_MOTOR_KS = 0.0576789961667519;
-    public static final double UP_MOTOR_KV = 0.11715135567075642;
+    public static final double UP_MOTOR_KV = 0.11915135567075642;
     public static final double UP_MOTOR_KA = 0; //0.0024124397972312365;
     public static final double UP_MOTOR_KV2 = 7.229070730748346E-5;
 
@@ -75,9 +75,9 @@ public class ShooterConstants {
 
   public static class SUBWOFFER_VAR{
     
-      public static final double SUBWOFFER_ANGLE = 52;
-      public static final double MOTOR_UP_SUBWOFFER_VELOCITY = 50;
-      public static final double MOTOR_DOWN_SUBWOFFER_VELOCITY = 50; 
+      public static final double SUBWOFFER_ANGLE = 53;
+      public static final double MOTOR_UP_SUBWOFFER_VELOCITY = 56;
+      public static final double MOTOR_DOWN_SUBWOFFER_VELOCITY = 53; 
   }
 
   public static class MAX_ERRORS{
@@ -174,7 +174,7 @@ public class ShooterConstants {
    */
   public static class LOOKUP_TABLE_DATA {
     public static final double[][] DATA = {
-      {1.5, 52, 50, 50}, {2.5, 42, 55, 53}, {3.48, 36, 58, 55}
+      {1.3, 53, 56, 53}, {2.5, 42, 58, 58}, {3.48, 38.5, 63, 60}
     };
   }
 
