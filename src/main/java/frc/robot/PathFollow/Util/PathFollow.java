@@ -242,8 +242,8 @@ public class PathFollow extends Command {
   }
 
   public void printSegments() {
-    for (Segment s : segments) {
-     System.out.println(s);
-    }
+    // for (Segment s : segments) {
+    //  System.out.println(s);
+    // }
   }
 }

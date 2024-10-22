@@ -37,23 +37,41 @@ public class ConstantsVision {
       new Translation2d(inchToMeter(182.73), inchToMeter(177.10)),
       new Translation2d(inchToMeter(182.73),inchToMeter(146.19))
   };
-public static double[] tagAngle = {0,
-      120.0,
-      120.0,
-      180.0,
-      180.0,
-      270.0,
-      270.0,
-      0.0,
-      0.0,
-      90.0,
-      60.0,
-      300.0,
-      60.0,
-      180.0,
-      0.0,
-      120.0,
-      240.0
+public static double[] tagAngle = {0,//0
+      60.0,//1
+      60.0,//2
+      0.0,//3
+      0.0,//4
+      270.0,//5
+      270.0,//6
+      0.0,//7
+      0.0,//8
+      60.0,//9
+      60.0,//10
+      300.0,//11
+      60.0,//12
+      0.0,//13
+      0.0,//14
+      300.0,//15
+      60.0//16
+  };
+public static boolean[] isTagRed = {false,//0
+      true,//1
+      true,//2
+      true,//3
+      true,//4
+      true,//5
+      false,//6
+      false,//7
+      false,//8
+      false,//9
+      false,//10
+      false,//11
+      false,//12
+      true,//13
+      false,//14
+      true,//15
+      true//16
   };
   public static final Map<String,Translation2d> CARTESIANVECTORS_MAP;
   static{

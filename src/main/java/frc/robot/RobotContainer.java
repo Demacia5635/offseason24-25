@@ -232,8 +232,8 @@ public class RobotContainer implements Sendable{
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return calibration;
-    // return new ShootAndLeave(chassis, shooter, angleChanging, intake);
+    // return calibration;
+    return new ShootAndLeave(chassis, shooter, angleChanging, intake);
   }
 
   // public Command calibration() {

@@ -82,9 +82,9 @@ public class ShooterConstants {
 
   public static class MAX_ERRORS{
     
-      public static final double ANGLE_MAX_ERRORS = 0.5;
-      public static final double UP_MOTOR_VEL_MAX_ERRORS = 1;
-      public static final double DOWN_MOTOR_VEL_MAX_ERRORS = 1;
+      public static final double ANGLE_MAX_ERRORS = 1;
+      public static final double UP_MOTOR_VEL_MAX_ERRORS = 2;
+      public static final double DOWN_MOTOR_VEL_MAX_ERRORS = 2;
     
   }
 
@@ -131,7 +131,7 @@ public class ShooterConstants {
 
       public static final double BASE_DIS = 25.12;
       public static final double TOP_ANGLE = 70;
-      public static final double MIN_ANGLE = 35;
+      public static final double MIN_ANGLE = 37;
 
   }
 
@@ -156,7 +156,7 @@ public class ShooterConstants {
   }  
 
   public static class DELIVERY_VAR {
-    public static final double DELIVERY_ANGLE = 38;
+    public static final double DELIVERY_ANGLE = 42;
     public static final double MOTOR_UP_DELIVERY_VEL = 50;
     public static final double MOTOR_DOWN_DELIVERY_VEL = 50;
   }

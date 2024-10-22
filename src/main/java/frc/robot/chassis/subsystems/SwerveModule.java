@@ -229,12 +229,12 @@ public class SwerveModule extends SubsystemBase {
         if(v == 0) {
             steerMotor.set(0);
         } else {
-            if(debug) System.out.println("id = " + steerMotor.getDeviceID() + 
-                " v=" + state.speedMetersPerSecond + " / " + v +
-                " state = " + state.angle.getRotations() + 
-                " cur=" + cur +
-                " tgt=" + (cur + dif) + 
-                " dif=" + dif);
+            // if(debug) System.out.println("id = " + steerMotor.getDeviceID() + 
+            //     " v=" + state.speedMetersPerSecond + " / " + v +
+            //     " state = " + state.angle.getRotations() + 
+            //     " cur=" + cur +
+            //     " tgt=" + (cur + dif) + 
+            //     " dif=" + dif);
             setSteerPosition(cur + dif);
         }
         setVelocity(v);

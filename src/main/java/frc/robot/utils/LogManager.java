@@ -209,7 +209,7 @@ public class LogManager extends SubsystemBase {
      * Log text message - also will be sent System.out
      */
     public static void log(String message) {
-        DataLogManager.log(message);
+        // DataLogManager.log(message);
     }
 
     @Override

@@ -290,10 +290,10 @@ public class Chassis extends SubsystemBase {
   public double getOmegaToAngle(Rotation2d fieldAngle){
     double kP = 0.35;
     double diffAngle = MathUtil.inputModulus(fieldAngle.minus(getAngle()).getDegrees(), -180,180);
-    System.out.println("-------------------------------");
-            System.out.println("wanted= " + fieldAngle.getDegrees() + " gyro=" + 
-                    getAngle().getDegrees() + " diff=" + diffAngle);
-    System.out.println("-------------------------------");
+    // System.out.println("-------------------------------");
+    //         System.out.println("wanted= " + fieldAngle.getDegrees() + " gyro=" + 
+    //                 getAngle().getDegrees() + " diff=" + diffAngle);
+    // System.out.println("-------------------------------");
     return Math.abs(diffAngle) <= 1 ? 0: Math.toRadians(diffAngle * kP);
   }
 

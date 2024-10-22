@@ -172,7 +172,7 @@ public class Shoot extends Command {
       intake.setPowerToMotors(SHOOTER_POW.INTAKE_MOTOR_POWER);
       // intake.motorPickUpSetPower(0.5);
 
-      System.out.println(shooterTimer.get());
+      // System.out.println(shooterTimer.get());
       if (!isTimerRunning) {
         shooterTimer.start();
         isTimerRunning = true;

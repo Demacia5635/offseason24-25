@@ -184,13 +184,13 @@ public class AngleChanger extends SubsystemBase {
     LogManager.addEntry("Shooter/AngleChanging/Velocity", this::getAngleMotorVel);
     LogManager.addEntry("Shooter/AngleChanging/Acceleration", () -> angleChangingMotor.getAcceleration().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/Voltage", () -> angleChangingMotor.getMotorVoltage().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/Current", () -> angleChangingMotor.getSupplyCurrent().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopError", () -> angleChangingMotor.getClosedLoopError().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopOutput", () -> angleChangingMotor.getClosedLoopOutput().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopP", () -> angleChangingMotor.getClosedLoopProportionalOutput().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopI", () -> angleChangingMotor.getClosedLoopIntegratedOutput().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopD", () -> angleChangingMotor.getClosedLoopDerivativeOutput().getValueAsDouble());
-    LogManager.addEntry("Shooter/AngleChanging/CloseLoopFF", () -> angleChangingMotor.getClosedLoopFeedForward().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/Current", () -> angleChangingMotor.getSupplyCurrent().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopError", () -> angleChangingMotor.getClosedLoopError().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopOutput", () -> angleChangingMotor.getClosedLoopOutput().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopP", () -> angleChangingMotor.getClosedLoopProportionalOutput().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopI", () -> angleChangingMotor.getClosedLoopIntegratedOutput().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopD", () -> angleChangingMotor.getClosedLoopDerivativeOutput().getValueAsDouble());
+    // LogManager.addEntry("Shooter/AngleChanging/CloseLoopFF", () -> angleChangingMotor.getClosedLoopFeedForward().getValueAsDouble());
     LogManager.addEntry("Shooter/AngleChanging/CloseLoopSP", () -> angleChangingMotor.getClosedLoopReference().getValueAsDouble());
   }
 }

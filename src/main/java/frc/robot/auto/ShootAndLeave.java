@@ -7,11 +7,13 @@ package frc.robot.auto;
 import static frc.robot.chassis.ChassisConstants.MAX_DRIVE_VELOCITY;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.Commands.Calibration;
+import frc.robot.Shooter.Commands.GoToAngle;
 import frc.robot.Shooter.Commands.Shoot;
 import frc.robot.Shooter.Commands.WaitUntilShooterReady;
 import frc.robot.Shooter.Subsystems.AngleChanger;
@@ -37,15 +39,15 @@ public class ShootAndLeave extends SequentialCommandGroup {
     
     addCommands(
       new Calibration(angleChanger),
+      new GoToAngle(angleChanger, chassis).alongWith(
       new SequentialCommandGroup(
-        new Shoot(shooter, intake, chassis),
-        new WaitUntilShooterReady(shooter)
-      ),
-      new RunCommand(()-> {
-        chassis.setVelocities(
-          new ChassisSpeeds(RobotContainer.isRed ? -1 : 1, 0, RobotContainer.isRed ? -0.3 : 0.3)
-        );
-      }, chassis)
+        new Shoot(shooter, intake, chassis).alongWith(new WaitUntilShooterReady(shooter)),
+        new RunCommand(()-> {
+          chassis.setVelocities(
+            new ChassisSpeeds(RobotContainer.isRed ? -1 : 1, 0, RobotContainer.isRed ? -0.3 : 0.3)
+          );
+        }, chassis)
+      ))
     );
   }
 }

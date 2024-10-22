@@ -17,7 +17,6 @@ public class TagPoseCalc {
     private Rotation2d gyroYaw;
     public boolean isIedMostly;
 
-
     public TagPoseCalc(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
@@ -105,3 +104,4 @@ public class TagPoseCalc {
     }
 
 }
+//.rotateBy(Rotation2d.fromDegrees(isTagRed[(int)this.id]? 180:0))
