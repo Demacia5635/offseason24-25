@@ -43,9 +43,7 @@ public class ShootAndLeave extends SequentialCommandGroup {
       new SequentialCommandGroup(
         new Shoot(shooter, intake, chassis).alongWith(new WaitUntilShooterReady(shooter)),
         new RunCommand(()-> {
-          chassis.setVelocities(
-            new ChassisSpeeds(RobotContainer.isRed ? -1 : 1, 0, RobotContainer.isRed ? -0.3 : 0.3)
-          );
+          chassis.setVelocitiesRobotRel(new ChassisSpeeds(0, -1, 0));
         }, chassis)
       ))
     );
