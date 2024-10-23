@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -36,6 +37,9 @@ public class DriveCommand extends Command  implements Sendable{
   private boolean isAutoIntake = false;
   private boolean isNoteInIntake = false;
 
+  public boolean isRotateToMinus90 = false;
+  Timer timerIsRotateToMinus90;
+
   // Rotation2d wantedAngleApriltag = new Rotation2d();
   // boolean rotateToApriltag = false;
   // PIDController rotationPidController = new PIDController(0.03, 0, 0.0008);
@@ -45,12 +49,19 @@ public class DriveCommand extends Command  implements Sendable{
     note = chassis.visionByNote;
     intake = RobotContainer.intake;
     this.commandXboxController = commandXboxController;
+    timerIsRotateToMinus90 = new Timer();
     addRequirements(chassis);
     // commandXboxController.b().onTrue(new InstantCommand(() -> precisionDrive =
     // !precisionDrive));
     // commandXboxController.b().onTrue(new InstantCommand(()-> isAutoIntake =
     // !isAutoIntake));
     SmartDashboard.putData(this);
+  }
+
+  public void rototeToAmp() {
+    isRotateToMinus90 = true;
+    timerIsRotateToMinus90.reset();
+    timerIsRotateToMinus90.start();
   }
 
   public void setAutoIntake() {
@@ -64,6 +75,7 @@ public class DriveCommand extends Command  implements Sendable{
   @Override
   public void initialize() {
     isNoteInIntake = false;
+    isRotateToMinus90 = false;
   }
 
   @Override
@@ -130,7 +142,15 @@ public class DriveCommand extends Command  implements Sendable{
       if (c != null && c instanceof Shoot && RobotContainer.shooter.shooterState == STATE.SPEAKER && RobotContainer.isTurningToSpeaker) {
         chassis.setVelocitiesRotateToSpeaker(speeds);
       } else {
-        chassis.setVelocities(speeds);
+        if (timerIsRotateToMinus90.hasElapsed(2)) {
+          timerIsRotateToMinus90.stop();
+          timerIsRotateToMinus90.reset();
+          isRotateToMinus90 = false;
+        } else if (isRotateToMinus90) {
+          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(-90));
+        } else {
+          chassis.setVelocities(speeds);
+        }
       }
     }
   }

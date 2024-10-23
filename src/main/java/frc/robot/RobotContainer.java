@@ -166,6 +166,8 @@ public class RobotContainer implements Sendable{
 
     driverController.leftBumper().onTrue(stopAll());
     
+    driverController.povDown().onTrue(new InstantCommand(()-> driveCommand.rototeToAmp()));
+    
     operatorController.a().onTrue(new RunCommand(()-> {
       intake.setPowerToMotors(-1);
       intake.isNoteInIntake = false;
