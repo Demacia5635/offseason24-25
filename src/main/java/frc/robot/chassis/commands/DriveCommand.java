@@ -147,7 +147,7 @@ public class DriveCommand extends Command  implements Sendable{
           timerIsRotateToMinus90.reset();
           isRotateToMinus90 = false;
         } else if (isRotateToMinus90) {
-          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(-90));
+          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(90));
         } else {
           chassis.setVelocities(speeds);
         }

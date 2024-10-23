@@ -36,6 +36,7 @@ import frc.robot.Shooter.Commands.WaitUntilShooterReady;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
 import frc.robot.Shooter.utils.Ready;
+import frc.robot.auto.DistroyMid;
 import frc.robot.auto.ShootAndLeave;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.commands.DriveToNote;
@@ -235,6 +236,7 @@ public class RobotContainer implements Sendable{
    */
   public Command getAutonomousCommand() {
     // return calibration;
+    // return new DistroyMid(chassis, angleChanging);
     return new ShootAndLeave(chassis, shooter, angleChanging, intake);
   }
 
