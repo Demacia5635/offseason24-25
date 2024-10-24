@@ -1,11 +1,11 @@
 package frc.robot.vision.utils;
 
 
+import static frc.robot.vision.ConstantsVision.*;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
-import static frc.robot.vision.utils.ConstantsVision.*;
 public class TagPoseCalc {
     private double height;
     private double x_offset;
@@ -24,7 +24,7 @@ public class TagPoseCalc {
         this.tagYaw = -tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
-        this.height = HEIGHT_MAP.get(id);
+        this.height = TAG_HIGHT[(int)id];
     }
     public void updatePosValues(double tagYaw, double tagPitch, double x_offset, double y_offset, double id,Rotation2d gyroYaw) {
         this.x_offset = x_offset;
@@ -33,7 +33,7 @@ public class TagPoseCalc {
         this.tagYaw = -tagYaw;
         this.tagPitch = tagPitch;
         this.gyroYaw = gyroYaw;
-        this.height = HEIGHT_MAP.get(id) != null ? HEIGHT_MAP.get(id) : 0;
+        this.height = TAG_HIGHT[(int)id];
     }
 
 
@@ -41,11 +41,12 @@ public class TagPoseCalc {
 
     // Calculate distance FROM CAMERA TO TAG
     public double GetDistFromCamera() {
-        sumdegry = tagPitch + TagLimelightAngle;
+        sumdegry = tagPitch + TAG_LIMELIGHT_ANGLE;
         
-        double dist = (Math.abs(height - TagLimelightHeight)) / (Math.tan(Math.toRadians(sumdegry)));
+        double robotRelativDist = (Math.abs(height - TAG_LIMELIGHT_HEIGHT)) / (Math.tan(Math.toRadians(sumdegry)));
        
-
+        double dist = robotRelativDist*Math.cos(tagYaw);
+        
         return (dist);
     }
 
@@ -84,8 +85,8 @@ public class TagPoseCalc {
         Translation2d toTag;
         Rotation2d tagA;
 
-        toTag = origonToTag[(int)this.id];
-        tagA = Rotation2d.fromDegrees(tagAngle[(int)this.id]);
+        toTag = ORIGON_TO_TAG[(int)this.id];
+        tagA = Rotation2d.fromDegrees(TAG_ANGLE[(int)this.id]);
 
         if(toTag != null){
             Translation2d robotToTag = getRobotToTag();

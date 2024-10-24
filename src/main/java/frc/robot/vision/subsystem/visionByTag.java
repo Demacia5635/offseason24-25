@@ -4,7 +4,7 @@
 
 package frc.robot.vision.subsystem;
 
-import static frc.robot.vision.utils.ConstantsVision.tagAngle;
+import static frc.robot.vision.ConstantsVision.TAG_ANGLE;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.vision.utils.ConstantsVision;
+import frc.robot.vision.ConstantsVision;
 import frc.robot.vision.utils.TagPoseCalc;
 
 public class VisionByTag extends SubsystemBase {
@@ -43,6 +43,7 @@ public class VisionByTag extends SubsystemBase {
   NetworkTableEntry txEntry;
   NetworkTableEntry tyEntry;
   NetworkTableEntry tidEntry;
+  NetworkTableEntry pipelineEntry;
   
 
 
@@ -51,15 +52,16 @@ public class VisionByTag extends SubsystemBase {
 
     // Initialize Field2d for visualization
     
-    this.x_offset = ConstantsVision.TagLimelightXOfset;
-    this.y_offset = ConstantsVision.TagLimelightYOfset;    
+    this.x_offset = ConstantsVision.TAG_LIMELIGHT_X_OFEST;
+    this.y_offset = ConstantsVision.TAG_LIMELIGHT_Y_OFEST;    
 
     // Get the Limelight NetworkTable
-    table = NetworkTableInstance.getDefault().getTable(ConstantsVision.TagTable);
+    table = NetworkTableInstance.getDefault().getTable(ConstantsVision.TAG_TABLE);
     tvEntry = table.getEntry("tv");
     txEntry = table.getEntry("tx");
     tyEntry = table.getEntry("ty");
     tidEntry = table.getEntry("tid");
+    pipelineEntry = table.getEntry("pipeline");
 
     Pose = new TagPoseCalc(tagYaw, tagPitch, x_offset, y_offset, id,Rotation2d.fromDegrees(gyro.getAngle()));
 
@@ -77,7 +79,7 @@ public class VisionByTag extends SubsystemBase {
       tagYaw = txEntry.getDouble(0);
       tagPitch = tyEntry.getDouble(0);
       id = tidEntry.getDouble(0);
-      if(id > 0 && id < tagAngle.length) {
+      if(id > 0 && id < TAG_ANGLE.length) {
         Pose.updatePosValues(tagYaw, tagPitch, x_offset, y_offset, id,
           RobotContainer.chassis.getAngle());
         Pose2d pose = getRobotPose();
@@ -123,6 +125,10 @@ public class VisionByTag extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     SmartDashboard.putData("field-tag", field);
     builder.addDoubleProperty("dist from cam", ()->Pose.GetDistFromCamera(), null);
+  }
+
+  public void setPipeline(int pipeline) {
+    pipelineEntry.setNumber(pipeline);
   }
 
 }

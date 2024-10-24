@@ -3,29 +3,24 @@ package frc.robot.vision.utils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import static frc.robot.vision.utils.ConstantsVision.*;
 
 
 public class NotePoseCalc {
     private double x_offset;
     private double y_offset;
-    private double angleYaw;
     private double noteYaw;
-    private Pose2d pose;
     private Rotation2d gyroYaw;
 
 
     public NotePoseCalc(double noteYaw, double x_offset, double y_offset,Pose2d pose) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
-        this.pose = pose;
         this.gyroYaw = pose.getRotation();
     }
     public void update(double noteYaw,double x_offset, double y_offset,Pose2d pose) {
         this.x_offset = x_offset;
         this.y_offset = y_offset;
 
-        this.pose = pose;
         this.gyroYaw = pose.getRotation();
     }
 
