@@ -41,6 +41,7 @@ import frc.robot.auto.ShootAndLeave;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.commands.DriveToNote;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.dayC.DayC;
 import frc.robot.utils.LogManager;
 import frc.robot.utils.Utils;
 
@@ -237,7 +238,8 @@ public class RobotContainer implements Sendable{
   public Command getAutonomousCommand() {
     // return calibration;
     // return new DistroyMid(chassis, angleChanging);
-    return new ShootAndLeave(chassis, shooter, angleChanging, intake);
+    // return new ShootAndLeave(chassis, shooter, angleChanging, intake);
+    return DayC.getCommand(chassis);
   }
 
   // public Command calibration() {

@@ -27,7 +27,7 @@ public class MoveY extends Command {
 
   @Override
   public void execute() {
-    chassis.setVelocitiesRobotRel(new ChassisSpeeds(0, dis >= 0 ? 1 : -1, 0));
+    chassis.setVelocitiesRobotRel(new ChassisSpeeds(0, dis >= 0 ? -1 : 1, 0));
   }
 
   @Override
@@ -37,6 +37,6 @@ public class MoveY extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(chassis.getPoseY() - startingPos) >= dis;
+    return Math.abs(chassis.getPoseY() - startingPos) >= Math.abs(dis);
   }
 }

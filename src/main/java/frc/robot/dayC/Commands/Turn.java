@@ -27,7 +27,7 @@ public class Turn extends Command {
 
   @Override
   public void execute() {
-    chassis.setVelocitiesRobotRel(new ChassisSpeeds(0, 0, angle >= 0 ? Math.PI / 2 : -1 * Math.PI / 2));
+    chassis.setVelocitiesRobotRel(new ChassisSpeeds(0, 0, angle >= 0 ? Math.PI / 4 : -1 * Math.PI / 4));
   }
 
   @Override
@@ -37,6 +37,6 @@ public class Turn extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(chassis.getAngle().getRadians() - startingAngle) >= angle;
+    return Math.abs(chassis.getAngle().getRadians() - startingAngle) >= Math.abs(angle);
   }
 }

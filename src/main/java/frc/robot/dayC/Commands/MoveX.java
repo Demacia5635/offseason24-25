@@ -37,6 +37,6 @@ public class MoveX extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(chassis.getPoseX() - startingPos) >= dis;
+    return Math.abs(chassis.getPoseX() - startingPos) >= Math.abs(dis);
   }
 }
