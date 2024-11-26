@@ -159,11 +159,11 @@ public class RobotContainer implements Sendable{
     }).ignoringDisable(true));
 
     driverController.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
-    driverController.povUp().onTrue(new InstantCommand(()->{
-      mainLeds.amp();
-      angleChanging.angleState = STATE.SUBWOFFER;
-      shooter.shooterState = STATE.SUBWOFFER;
-    }));
+    driverController.povLeft().onTrue(new RunCommand(()-> {
+      intake.setPowerToMotors(-1);
+      intake.isNoteInIntake = false;
+    }, intake));
+    driverController.povUp().onTrue(calibration);
 
     driverController.leftBumper().onTrue(stopAll());
     
