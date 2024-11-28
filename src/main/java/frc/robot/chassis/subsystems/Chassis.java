@@ -6,9 +6,6 @@ import static frc.robot.chassis.ChassisConstants.*;
 import java.util.Arrays;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -118,26 +115,6 @@ public class Chassis extends SubsystemBase {
     //   }});
 
     
-    var e = ntTab.add("Set Steer Rot", 0.5).getEntry();
-    ntTab.add("Set Steer CMD", new RunCommand(()->modules[1].setSteerPosition(
-      e.getDouble(0)),this));
-    
-    AutoBuilder.configureHolonomic(
-      this::getPose, 
-      this::setPose, 
-      this::getChassisSpeeds,
-      this::setVelRobot, 
-      new HolonomicPathFollowerConfig(
-        MAX_DRIVE_VELOCITY, 
-        DRIVE_BASE_RADIUS, 
-        new ReplanningConfig(
-          true, 
-          true
-          )
-        ),
-      this::isRed, 
-      this
-    );
   }
 
   public void setVelRobot(ChassisSpeeds speeds){
@@ -251,14 +228,13 @@ public class Chassis extends SubsystemBase {
   }
 
 
-  public void setVelocitiesRobotRel(ChassisSpeeds speeds){
-    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_DRIVE_VELOCITY);
+  /*public void setVelocitiesRobotRel(ChassisSpeeds speeds){
+    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStatesWithAccel(speeds, getVelocity());
     targetVelocity = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm();
     currentVelocity = getVelocity().getNorm();
     
     setModuleStates(states);
-  }
+  }*/
 
   /**
    * Sets the velocity of the chassis
@@ -266,8 +242,9 @@ public class Chassis extends SubsystemBase {
    * @param speeds In m/s and rad/s
    */
   public void setVelocities(ChassisSpeeds speeds) {
-    ChassisSpeeds relativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
-    setVelocitiesRobotRel(relativeSpeeds);
+    ChassisSpeeds relSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getAngle());
+    SwerveModuleState[] states = KINEMATICS_DEMACIA.toSwerveModuleStates(relSpeeds, getVelocity());
+    setModuleStates(states);
   }
 
 

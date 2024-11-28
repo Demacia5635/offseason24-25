@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.WheelPositions;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import frc.robot.Odometry.DemaciaKinematics;
 import frc.robot.chassis.ChassisConstants;
 import frc.robot.chassis.subsystems.Chassis;
 
@@ -34,7 +35,7 @@ public class DemaciaOdometry {
 
     private Pose2d pose;
     private final int wheelCount;
-    private SwerveKinematics kinematics;
+    private DemaciaKinematics kinematics;
     private Rotation2d m_gyroOffset;
     private Rotation2d m_previousAngle;
     private SwerveDriveWheelPositions m_previousWheelPositions;

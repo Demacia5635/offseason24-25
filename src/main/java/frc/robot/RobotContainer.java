@@ -6,9 +6,8 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -36,8 +35,6 @@ import frc.robot.Shooter.Commands.WaitUntilShooterReady;
 import frc.robot.Shooter.Subsystems.AngleChanger;
 import frc.robot.Shooter.Subsystems.Shooter;
 import frc.robot.Shooter.utils.Ready;
-import frc.robot.auto.DistroyMid;
-import frc.robot.auto.ShootAndLeave;
 import frc.robot.chassis.commands.DriveCommand;
 import frc.robot.chassis.commands.DriveToNote;
 import frc.robot.chassis.subsystems.Chassis;
@@ -80,7 +77,6 @@ public class RobotContainer implements Sendable{
   VisionByTag pose;
   Field2d field;
 
-  private final SendableChooser<Command> autoChooser;
 
 
   public RobotContainer() {
@@ -116,17 +112,10 @@ public class RobotContainer implements Sendable{
     angleChanging.setDefaultCommand(gotoAngleCommand);
     
 
-    NamedCommands.registerCommand("shoot", shootCommand);
-    NamedCommands.registerCommand("intake", intakeCommand);
-//    NamedCommands.registerCommand("goToAngle", gotoAngleCommand);
-//    NamedCommands.registerCommand("calibration", calibration);
-    NamedCommands.registerCommand("shooterReady", waitUntilShooterReady);
-
-    autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+
 
     configureBindings();
   }
@@ -237,7 +226,7 @@ public class RobotContainer implements Sendable{
   public Command getAutonomousCommand() {
     // return calibration;
     // return new DistroyMid(chassis, angleChanging);
-    return new ShootAndLeave(chassis, shooter, angleChanging, intake);
+    return new RunCommand(()-> chassis.setVelocities(new ChassisSpeeds(0,0,1)), chassis);
   }
 
   // public Command calibration() {

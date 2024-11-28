@@ -99,60 +99,9 @@ public class DriveCommand extends Command  implements Sendable{
       velRot /= 4;
     }
     ChassisSpeeds speeds = new ChassisSpeeds(velX, velY, velRot);
-    ChassisSpeeds robotSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, chassis.getAngle());
 
-    // LogManager.log("-----------------------\nvx=" + 
-    //     robotSpeed.vxMetersPerSecond + 
-    //     " isNote " + !intake.isNote() + 
-    //     " see=" + note.seeNote() + 
-    //     " auto=" + isAutoIntake + 
-    //     "\n------------------------------");
-    if ((robotSpeed.vxMetersPerSecond < 0 &&
-        !intake.isNote() &&
-        note.seeNote() &&
-        isAutoIntake &&
-        !isNoteInIntake)) {
-      
-      chassis.setAutoIntake(true);
-      double angle = note.getNoteYaw();
-      double vectorAngle = angle * 2 + 180;
-      double v = Math.hypot(velX, velY);
-      if(v > 3) {
-        v = 3;
-      }
-      Translation2d robotToNote = new Translation2d(v, Rotation2d.fromDegrees(vectorAngle));
-      chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0));
-      
-      RobotContainer.robotContainer.intakeCommand.schedule();
-      isNoteInIntake = true;
-      continu = 10;
-    }
-    else if(continu>0 && !intake.isNote()){
-      chassis.setAutoIntake(true);
-      isNoteInIntake = false;
-      double vectorAngle = 180;
-      double v = Math.hypot(velX, velY);
-      Translation2d robotToNote = new Translation2d(v, Rotation2d.fromDegrees(vectorAngle));
-      chassis.setVelocitiesRobotRel(new ChassisSpeeds(robotToNote.getX(), robotToNote.getY(), 0));
-      continu --;
-    }
-    else {
-      chassis.setAutoIntake(false);
-      Command c = RobotContainer.shooter.getCurrentCommand();
-      if (c != null && c instanceof Shoot && RobotContainer.shooter.shooterState == STATE.SPEAKER && RobotContainer.isTurningToSpeaker) {
-        chassis.setVelocitiesRotateToSpeaker(speeds);
-      } else {
-        if (timerIsRotateToMinus90.hasElapsed(2)) {
-          timerIsRotateToMinus90.stop();
-          timerIsRotateToMinus90.reset();
-          isRotateToMinus90 = false;
-        } else if (isRotateToMinus90) {
-          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(90));
-        } else {
-          chassis.setVelocities(speeds);
-        }
-      }
-    }
+    chassis.setVelocities(speeds);
+
   }
 
   @Override

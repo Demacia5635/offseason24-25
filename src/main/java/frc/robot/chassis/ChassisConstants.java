@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.chassis.utils.SwerveKinematics;
 import frc.robot.utils.TalonConfig;
 import frc.robot.Constants;
+import frc.robot.Odometry.DemaciaKinematics;
 
 public final class ChassisConstants {
 
@@ -120,7 +121,7 @@ public final static SwerveModuleConstants FRONT_LEFT = new SwerveModuleConstants
       BACK_RIGHT.moduleTranslationOffset);
   
 
-  public static final SwerveKinematics KINEMATICS_DEMACIA = new SwerveKinematics(
+  public static final DemaciaKinematics KINEMATICS_DEMACIA = new DemaciaKinematics(
       FRONT_LEFT.moduleTranslationOffset,
       FRONT_RIGHT.moduleTranslationOffset,
       BACK_LEFT.moduleTranslationOffset,
