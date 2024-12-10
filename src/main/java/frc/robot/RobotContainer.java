@@ -22,6 +22,7 @@ import frc.robot.leds.strips.RSLStrip;
 import frc.robot.leds.strips.MainLeds;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.vision.subsystem.VisionByTag;
@@ -127,6 +128,7 @@ public class RobotContainer implements Sendable{
     SmartDashboard.putData("RobotContainer", this);
     SmartDashboard.putData("fiset gyro", new InstantCommand(()->gyro.setYaw(0)));
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
     configureBindings();
   }
