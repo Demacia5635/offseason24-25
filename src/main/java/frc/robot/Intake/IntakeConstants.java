@@ -10,7 +10,7 @@ public class IntakeConstants {
    */
   public static class IdOfMotors{
     public static final int MOTOR_PICKUP_ID = 40;
-    public static final int MOTOR_MOVE_ID = 42;
+    public static final int MOTOR_MOVE_ID = 41;
     public static final int IR_SENSOR = 3;
 
     public static final String CANBUS = "rio"; // Constants.CANBUS;
