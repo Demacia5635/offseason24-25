@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.leds.LedManager;
 import frc.robot.leds.LedStrip;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.vision.subsystem.VisionByTag;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Intake.Command.IntakeCommand;
 import frc.robot.Intake.Subsystem.Intake;
 import frc.robot.Shooter.ShooterConstants.STATE;
@@ -136,43 +138,84 @@ public class RobotContainer implements Sendable{
 
 
   private void configureBindings() {
-    if (driverController.getCircleButtonPressed())
+    Trigger circle = new Trigger(driverController::getCircleButtonPressed);
+    Trigger square = new Trigger(driverController::getSquareButtonPressed);
+    Trigger triangle = new Trigger(driverController::getTriangleButtonPressed);
+    Trigger cross = new Trigger(driverController::getCrossButtonPressed);
+    Trigger r1 = new Trigger(driverController::getR1ButtonPressed);
+    Trigger r3 = new Trigger(driverController::getR3ButtonPressed);
+    Trigger povUp = new Trigger(()-> driverController.getPOV() == 0);
+    Trigger povRight = new Trigger(()-> driverController.getPOV() == 90);
+    Trigger povDown = new Trigger(()-> driverController.getPOV() == 180);
+    Trigger povLeft = new Trigger(()-> driverController.getPOV() == 270);
+    Trigger l1 = new Trigger(driverController::getL1ButtonPressed);
+    Trigger options = new Trigger(driverController::getOptionsButtonPressed);
+    
+    
+    circle.onTrue(
       new InstantCommand(()->{ 
       mainLeds.amp(); 
       angleChanging.angleState = STATE.DELIVERY; 
       shooter.shooterState = STATE.DELIVERY; 
-      }).schedule();
-  
+      })
+    );
     
-    if (driverController.getTriangleButtonPressed())new InstantCommand(()-> {
+    triangle.onTrue(
+      new InstantCommand(()-> {
       mainLeds.autoIntake();
       driveCommand.setAutoIntake();
-    }).schedule();
-    if (driverController.getCrossButtonPressed())new IntakeCommand(intake, shooter).schedule();
-    if (driverController.getSquareButtonPressed())shootCommand.schedule();
-    if (driverController.getR1ButtonPressed())new InstantCommand(()->isDriverOverwriteShooter = true).schedule();
-    if (driverController.getR3ButtonPressed())(new InstantCommand(()->{
+      })
+    );
+
+    cross.onTrue(
+      new IntakeCommand(intake, shooter)
+    );
+    
+    square.onTrue(
+      shootCommand
+    );
+
+    r1.onTrue(
+      new InstantCommand(()->isDriverOverwriteShooter = true)
+    );
+
+    r3.onTrue(
+      new InstantCommand(()->{
       mainLeds.amp();
       angleChanging.angleState = STATE.SPEAKER;
       shooter.shooterState = STATE.SPEAKER;
-    })).schedule();
-    
-    // driverController.start().onTrue(new InstantCommand(()-> {
-    //   mainLeds.amp();
-    //   angleChanging.angleState = STATE.AMP;
-    //   shooter.shooterState = STATE.AMP;
-    // }).ignoringDisable(true));
+      })
+    );
+    options.onTrue(
+      new InstantCommand(()-> {
+      mainLeds.amp();
+      angleChanging.angleState = STATE.AMP;
+      shooter.shooterState = STATE.AMP;
+      }).ignoringDisable(true)
+    );
 
-    if(driverController.povRight(null).getAsBoolean())new InstantCommand(()->driveCommand.setPrecision()).schedule();
-    if(driverController.povLeft(null).getAsBoolean())new RunCommand(()-> {
+    povRight.onTrue(
+      new InstantCommand(()->driveCommand.setPrecision())
+    );
+    
+    povLeft.onTrue(
+      new RunCommand(()-> {
       intake.setPowerToMotors(-1);
       intake.isNoteInIntake = false;
-    }, intake).schedule();
-    if(driverController.povUp(null).getAsBoolean())calibration.schedule();
+      }, intake)
+    );
 
-    if(driverController.getL1ButtonPressed())stopAll().schedule();
+    povUp.onTrue(
+      calibration
+    );
+
+    l1.onTrue(
+      stopAll()
+    );
     
-    if(driverController.povDown(null).getAsBoolean())new InstantCommand(()-> driveCommand.rototeToAmp()).schedule();
+    povDown.onTrue(
+      new InstantCommand(()-> driveCommand.rototeToAmp())
+    );
     
     operatorController.a().onTrue(new RunCommand(()-> {
       intake.setPowerToMotors(-1);
