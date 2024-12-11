@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.leds.LedManager;
 import frc.robot.leds.LedStrip;
@@ -51,7 +52,7 @@ import static frc.robot.Constants.*;
 public class RobotContainer implements Sendable{
   public static RobotContainer robotContainer;
   public static Boolean isRed = false;
-  CommandXboxController driverController;
+  PS5Controller driverController;
   CommandXboxController operatorController;
 
   public LogManager logManager = new LogManager();
@@ -89,7 +90,7 @@ public class RobotContainer implements Sendable{
     robotContainer = this;
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-    driverController = new CommandXboxController(DRIVER_CONTROLLER_PORT);
+    driverController = new PS5Controller(DRIVER_CONTROLLER_PORT);
     operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
     operatorController = new CommandXboxController(1);
 
@@ -135,41 +136,43 @@ public class RobotContainer implements Sendable{
 
 
   private void configureBindings() {
-    driverController.b().onTrue(new InstantCommand(()->{
-      mainLeds.amp();
-      angleChanging.angleState = STATE.DELIVERY;
-      shooter.shooterState = STATE.DELIVERY;
-    }));
+    if (driverController.getCircleButtonPressed())
+      new InstantCommand(()->{ 
+      mainLeds.amp(); 
+      angleChanging.angleState = STATE.DELIVERY; 
+      shooter.shooterState = STATE.DELIVERY; 
+      }).schedule();
+  
     
-    driverController.y().onTrue(new InstantCommand(()-> {
+    if (driverController.getTriangleButtonPressed())new InstantCommand(()-> {
       mainLeds.autoIntake();
       driveCommand.setAutoIntake();
-    }));
-    driverController.a().onTrue(new IntakeCommand(intake, shooter));
-    driverController.x().onTrue(shootCommand);
-    driverController.rightBumper().onTrue(new InstantCommand(()->isDriverOverwriteShooter = true));
-    driverController.rightStick().onTrue(new InstantCommand(()->{
+    }).schedule();
+    if (driverController.getCrossButtonPressed())new IntakeCommand(intake, shooter).schedule();
+    if (driverController.getSquareButtonPressed())shootCommand.schedule();
+    if (driverController.getR1ButtonPressed())new InstantCommand(()->isDriverOverwriteShooter = true).schedule();
+    if (driverController.getR3ButtonPressed())(new InstantCommand(()->{
       mainLeds.amp();
       angleChanging.angleState = STATE.SPEAKER;
       shooter.shooterState = STATE.SPEAKER;
-    }));
+    })).schedule();
     
-    driverController.start().onTrue(new InstantCommand(()-> {
-      mainLeds.amp();
-      angleChanging.angleState = STATE.AMP;
-      shooter.shooterState = STATE.AMP;
-    }).ignoringDisable(true));
+    // driverController.start().onTrue(new InstantCommand(()-> {
+    //   mainLeds.amp();
+    //   angleChanging.angleState = STATE.AMP;
+    //   shooter.shooterState = STATE.AMP;
+    // }).ignoringDisable(true));
 
-    driverController.povRight().onTrue(new InstantCommand(()->driveCommand.setPrecision()));
-    driverController.povLeft().onTrue(new RunCommand(()-> {
+    if(driverController.povRight(null).getAsBoolean())new InstantCommand(()->driveCommand.setPrecision()).schedule();
+    if(driverController.povLeft(null).getAsBoolean())new RunCommand(()-> {
       intake.setPowerToMotors(-1);
       intake.isNoteInIntake = false;
-    }, intake));
-    driverController.povUp().onTrue(calibration);
+    }, intake).schedule();
+    if(driverController.povUp(null).getAsBoolean())calibration.schedule();
 
-    driverController.leftBumper().onTrue(stopAll());
+    if(driverController.getL1ButtonPressed())stopAll().schedule();
     
-    driverController.povDown().onTrue(new InstantCommand(()-> driveCommand.rototeToAmp()));
+    if(driverController.povDown(null).getAsBoolean())new InstantCommand(()-> driveCommand.rototeToAmp()).schedule();
     
     operatorController.a().onTrue(new RunCommand(()-> {
       intake.setPowerToMotors(-1);

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,7 +27,7 @@ public class DriveCommand extends Command  implements Sendable{
   private final Chassis chassis;
   VisionByNote note;
   Intake intake;
-  private final CommandXboxController commandXboxController;
+  private final PS5Controller controller;
 
   private double direction;
 
@@ -44,11 +45,11 @@ public class DriveCommand extends Command  implements Sendable{
   // boolean rotateToApriltag = false;
   // PIDController rotationPidController = new PIDController(0.03, 0, 0.0008);
 
-  public DriveCommand(Chassis chassis, CommandXboxController commandXboxController) {
+  public DriveCommand(Chassis chassis, PS5Controller controller) {
     this.chassis = chassis;
     note = chassis.visionByNote;
     intake = RobotContainer.intake;
-    this.commandXboxController = commandXboxController;
+    this.controller = controller;
     timerIsRotateToMinus90 = new Timer();
     addRequirements(chassis);
     // commandXboxController.b().onTrue(new InstantCommand(() -> precisionDrive =
@@ -83,10 +84,10 @@ public class DriveCommand extends Command  implements Sendable{
     isRed = chassis.isRed();
     direction = isRed ? 1 : -1;
 
-    double joyX = deadband(commandXboxController.getLeftY(), 0.13) * direction;
-    double joyY = deadband(commandXboxController.getLeftX(), 0.13) * direction;
-    double rot = (deadband(commandXboxController.getRightTriggerAxis(), 0.003)
-        - deadband(commandXboxController.getLeftTriggerAxis(), 0.003));
+    double joyX = deadband(controller.getLeftY(), 0.13) * direction;
+    double joyY = deadband(controller.getLeftX(), 0.13) * direction;
+    double rot = -(deadband((controller.getR2Axis() + 1) / 2, 0.13)
+    - deadband((controller.getL2Axis() + 1) / 2, 0.13));
 
     double velX = Math.pow(joyX, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyX);
     double velY = Math.pow(joyY, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyY);
