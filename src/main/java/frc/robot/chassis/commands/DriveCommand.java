@@ -86,8 +86,8 @@ public class DriveCommand extends Command  implements Sendable{
 
     double joyX = deadband(controller.getLeftY(), 0.13) * direction;
     double joyY = deadband(controller.getLeftX(), 0.13) * direction;
-    double rot = -(deadband((controller.getR2Axis() + 1) / 2, 0.13)
-    - deadband((controller.getL2Axis() + 1) / 2, 0.13));
+    double rot = (deadband((controller.getR2Axis() + 1) / 2, 0.05)
+    - deadband((controller.getL2Axis() + 1) / 2, 0.07));
 
     double velX = Math.pow(joyX, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyX);
     double velY = Math.pow(joyY, 2) * MAX_DRIVE_VELOCITY * Math.signum(joyY);
@@ -148,7 +148,7 @@ public class DriveCommand extends Command  implements Sendable{
           timerIsRotateToMinus90.reset();
           isRotateToMinus90 = false;
         } else if (isRotateToMinus90) {
-          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(90));
+          chassis.setVelocitiesRotateToAngle(speeds, Rotation2d.fromDegrees(180));
         } else {
           chassis.setVelocities(speeds);
         }
